@@ -2,9 +2,6 @@
 
 'use strict';
 
-var _ = wTools;
-var _hasOwnProperty = Object.hasOwnProperty;
-
 if( typeof module !== 'undefined' )
 {
 
@@ -22,6 +19,9 @@ if( typeof module !== 'undefined' )
   _.include( 'wProto' );
 
 }
+
+var _ = wTools;
+var _hasOwnProperty = Object.hasOwnProperty;
 
 //
 

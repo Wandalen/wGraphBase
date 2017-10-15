@@ -1,5 +1,5 @@
 
 if( typeof module !== 'undefined' )
-require( 'wgraph' );
+require( 'wgraphbase' );
 
 wTools.assert( wGraphSystem );
