@@ -1,0 +1,45 @@
+{
+  "name": "wgraphbase",
+  "version": "0.3.1",
+  "engine": "node >= 6.0.0",
+  "description": "Manipulations with graph",
+  "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
+  "contributors": [
+    {
+      "name": "Kostiantyn Wandalen",
+      "email": "wtory.net@domainsbyproxy.com>"
+    }
+  ],
+  "license": "MIT",
+  "main": "staging/dwtools/amid/agraph/GraphSystem.s",
+  "files": [
+    "staging/dwtools/amid/agraph",
+    "production"
+  ],
+  "scripts": {
+    "test": "wtest staging",
+    "make_doc": "./doc.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wGraph.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Wandalen/wGraph/issues"
+  },
+  "dependencies": {
+    "wTools": "",
+    "wCopyable": ""
+  },
+  "devDependencies": {
+    "wTesting": "",
+    "wgraphbase": "."
+  },
+  "keywords": [
+    "Template tree",
+    "Template tree resolver",
+    "wTools",
+    "JSON",
+    "YAML"
+  ]
+}
