@@ -2,22 +2,32 @@
 
 'use strict';
 
-var _ = wTools;
+var _ = _global_.wTools;
 var _hasOwnProperty = Object.hasOwnProperty;
 
 if( typeof module !== 'undefined' )
 {
 
-  try
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
-    require( '../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
+    let toolsPath = '../../../../dwtools/Base.s';
+    let toolsExternal = 0;
+    try
+    {
+      require.resolve( toolsPath )/*hhh*/;
+    }
+    catch( err )
+    {
+      toolsExternal = 1;
+      require( 'wTools' );
+    }
+    if( !toolsExternal )
+    require( toolsPath )/*hhh*/;
   }
 
-  wTools.include( 'wProto' );
+  var _ = _global_.wTools;
+
+  _.include( 'wProto' );
 
 }
 
@@ -213,6 +223,6 @@ var Self =
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = _.mixinMake( Self );
+_global_[ Self.name ] = _[ Self.nameShort ] = _.mixinMake( Self );
 
 })();
