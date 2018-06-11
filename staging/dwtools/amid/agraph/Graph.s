@@ -283,7 +283,7 @@ function goRelative( o )
   if( l || r )
   if( o.allowHorizontalDuringVertical )
   {
-    var optionsForRelative = _.mapExtend( Object.create( null ),o );
+    var optionsForRelative = _.mapExtend( null,o );
     optionsForRelative.node = down;
     optionsForRelative.offset = l ? newIndex + 1 : newIndex - elements.length + 1;
     return goRelative( optionsForRelative );
