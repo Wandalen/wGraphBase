@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 
   if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
-    let toolsPath = '../../../../dwtools/Base.s';
+    let toolsPath = '../../../dwtools/Base.s';
     let toolsExternal = 0;
     try
     {
@@ -22,7 +22,7 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-var _ = _global_.wTools;
+  var _ = _global_.wTools;
 
   _.include( 'wProto' );
 
@@ -238,7 +238,7 @@ var Restricts =
 {
 }
 
-var Optional =
+var Optionals =
 {
 
   collectionMap : Object.create( null ),
@@ -278,7 +278,7 @@ var Supplement =
   Aggregates : Aggregates,
   Associates : Associates,
   Restricts : Restricts,
-  Optional  : Optional,
+  Optionals  : Optionals,
   Statics : Statics,
 
 }
