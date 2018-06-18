@@ -388,7 +388,7 @@ var Statics =
 }
 
 // --
-// proto
+// define class
 // --
 
 var Functor =
@@ -443,7 +443,7 @@ var Self =
   _mixin : _mixin,
 
   functor : Functor,
-  stretch : ExtendDstNotOwn,
+  supplementOwn : ExtendDstNotOwn,
   supplement : Supplement,
 
   name : 'wGraphBranch',
