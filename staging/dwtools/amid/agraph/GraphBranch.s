@@ -107,6 +107,7 @@ function _equalAre( original )
 
     for( var e = 0 ; e < src2.elements.length ; e++ )
     {
+      debugger; xxx
       if( !src1.elements[ e ]._equalAre( src1.elements[ e ],src2.elements[ e ],o ) )
       return false;
     }
@@ -194,7 +195,7 @@ function elementsAppend( element )
   var system = self.system;
   var elements = self.elements.slice();
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( element instanceof self.Node || _.arrayIs( element ) );
 
   _.arrayAppendArraysOnce( elements,[ element ] );
@@ -210,7 +211,7 @@ function elementsAppend( element )
 //
 //   _.assert( !self.instanceIs() );
 //   _.assert( _.arrayLike( src ) );
-//   _.assert( arguments.length === 1 );
+//   _.assert( arguments.length === 1, 'expects single argument' );
 //
 //   for( var s = 0 ; s < src.length ; s++ )
 //   {
@@ -256,7 +257,7 @@ function elementsDetach( elements )
 //
 //   _.assert( !self.instanceIs() );
 //   _.assert( _.arrayLike( src ) );
-//   _.assert( arguments.length === 1 );
+//   _.assert( arguments.length === 1, 'expects single argument' );
 //
 //   for( var s = 0 ; s < src.length ; s++ )
 //   {
