@@ -5,26 +5,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof _global_ === 'undefined' || !_global_.wBase )
-  {
-    let toolsPath = '../../../dwtools/Base.s';
-    let toolsExternal = 0;
-    try
-    {
-      toolsPath = require.resolve( toolsPath );
-    }
-    catch( err )
-    {
-      toolsExternal = 1;
-      require( 'wTools' );
-    }
-    if( !toolsExternal )
-    require( toolsPath );
-  }
-
-  var _ = _global_.wTools;
-
-  _.include( 'wProto' );
+  require( './Base.s' );
 
 }
 
@@ -38,7 +19,7 @@ function _mixin( cls )
 
   var proto = cls.prototype;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.routineIs( cls ) );
 
   _.mixinApply
@@ -56,7 +37,7 @@ function systemMakeNodeAfter( node )
   var system = this;
 
   _.assert( node instanceof system.Node );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( node.down === null );
   _.assert( _.strIs( node.uniq ),'expects string { uniq }' );
 
@@ -94,7 +75,7 @@ function systemUnmakeNodeAfter( node )
   var system = this;
 
   _.assert( node instanceof system.Node );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( node.uniq !== undefined );
 
   if( system.collectionMap )
@@ -133,7 +114,7 @@ function systemAttachNodesAfter( down,up )
   _.assert( down === null || down instanceof system.Node );
   _.assert( up instanceof system.Node );
   _.assert( up.uniq !== undefined );
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   _.assert( down === null || down.elements.indexOf( up ) !== -1 );
   _.assert( up.down === down );
@@ -160,7 +141,7 @@ function systemDetachNodesBefore( down,up )
 
   _.assert( down === null || down instanceof system.Node );
   _.assert( up instanceof system.Node );
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( up.uniq !== undefined );
 
   _.assert( up.down === down );
@@ -186,7 +167,7 @@ function elementsDetach( src )
 
   _.assert( system.instanceIs() );
   _.assert( _.arrayLike( src ) );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   for( var s = 0 ; s < src.length ; s++ )
   {
@@ -207,7 +188,7 @@ function elementsFinit( src )
 
   _.assert( system.instanceIs() );
   _.assert( _.arrayLike( src ) );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   for( var s = 0 ; s < src.length ; s++ )
   {
@@ -256,7 +237,7 @@ var Statics =
 }
 
 // --
-// proto
+// define class
 // --
 
 var Supplement =

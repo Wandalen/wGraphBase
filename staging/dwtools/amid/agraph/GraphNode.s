@@ -8,26 +8,7 @@ var _hasOwnProperty = Object.hasOwnProperty;
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof _global_ === 'undefined' || !_global_.wBase )
-  {
-    let toolsPath = '../../../dwtools/Base.s';
-    let toolsExternal = 0;
-    try
-    {
-      toolsPath = require.resolve( toolsPath );
-    }
-    catch( err )
-    {
-      toolsExternal = 1;
-      require( 'wTools' );
-    }
-    if( !toolsExternal )
-    require( toolsPath );
-  }
-
-  var _ = _global_.wTools;
-
-  _.include( 'wProto' );
+  require( './Base.s' );
 
 }
 
@@ -48,7 +29,7 @@ function _mixin( cls )
 
   var proto = cls.prototype;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.routineIs( cls ) );
   _.assert( _.mixinHas( proto,'wCopyable' ),'wGraphNode : wCopyable should be mixed in first' );
 
@@ -117,7 +98,7 @@ function downAttachAfter( down )
   var self = this;
   var system = self.system;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( !self.down );
   _.assert( down );
   _.assert( !self.finitedIs() );
@@ -182,7 +163,7 @@ var Statics =
 }
 
 // --
-// proto
+// define class
 // --
 
 var Supplement =
