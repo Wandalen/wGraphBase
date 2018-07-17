@@ -1,6 +1,6 @@
 {
   "name": "wgraphbase",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "engine": "node >= 6.0.0",
   "description": "Manipulations with graph",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
