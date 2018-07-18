@@ -1,6 +1,6 @@
 ( function _GraphBranch_s_( ) {
 
-'use strict'; /**/
+'use strict';
 
 var _ = _global_.wTools;
 var _hasOwnProperty = Object.hasOwnProperty;
