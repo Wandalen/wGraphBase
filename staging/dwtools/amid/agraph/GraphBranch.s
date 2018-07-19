@@ -102,14 +102,14 @@ function _elementsSet( src )
 {
   var self = this;
 
-  _.assert( _.arrayLike( src ) || src === null );
+  _.assert( _.longIs( src ) || src === null );
 
   self.elementsDetach();
 
   /* */
 
   if( src !== null )
-  src = _.arraySlice( src );
+  src = _.longSlice( src );
 
   // var validator =
   // {
@@ -189,7 +189,7 @@ function elementsAppend( element )
 //   var self = this;
 //
 //   _.assert( !self.instanceIs() );
-//   _.assert( _.arrayLike( src ) );
+//   _.assert( _.longIs( src ) );
 //   _.assert( arguments.length === 1, 'expects single argument' );
 //
 //   for( var s = 0 ; s < src.length ; s++ )
@@ -235,7 +235,7 @@ function elementsDetach( elements )
 //   var self = this;
 //
 //   _.assert( !self.instanceIs() );
-//   _.assert( _.arrayLike( src ) );
+//   _.assert( _.longIs( src ) );
 //   _.assert( arguments.length === 1, 'expects single argument' );
 //
 //   for( var s = 0 ; s < src.length ; s++ )

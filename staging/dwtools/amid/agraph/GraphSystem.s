@@ -166,7 +166,7 @@ function elementsDetach( src )
   var system = this;
 
   _.assert( system.instanceIs() );
-  _.assert( _.arrayLike( src ) );
+  _.assert( _.longIs( src ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
   for( var s = 0 ; s < src.length ; s++ )
@@ -187,7 +187,7 @@ function elementsFinit( src )
   var system = this;
 
   _.assert( system.instanceIs() );
-  _.assert( _.arrayLike( src ) );
+  _.assert( _.longIs( src ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
   for( var s = 0 ; s < src.length ; s++ )
