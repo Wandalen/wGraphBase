@@ -371,7 +371,7 @@ var Statics =
 // define class
 // --
 
-var Functor =
+var Functors =
 {
 
   _equalAre : _equalAre,
@@ -422,7 +422,7 @@ var Self =
 
   _mixin : _mixin,
 
-  functor : Functor,
+  functors : Functors,
   supplementOwn : ExtendDstNotOwn,
   supplement : Supplement,
 
