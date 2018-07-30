@@ -14,19 +14,20 @@ var _hasOwnProperty = Object.hasOwnProperty;
 
 //
 
-function _mixin( cls )
+function onMixin( dstClass )
 {
 
-  var proto = cls.prototype;
+  var dstPrototype = dstClass.prototype;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.routineIs( cls ) );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( _.routineIs( dstClass ) );
 
-  _.mixinApply
-  ({
-    dstProto : proto,
-    descriptor : Self,
-  });
+  _.mixinApply( this, dstPrototype );
+  // _.mixinApply
+  // ({
+  //   dstPrototype : dstPrototype,
+  //   descriptor : Self,
+  // });
 
 }
 
@@ -200,7 +201,7 @@ function elementsFinit( src )
 }
 
 // --
-// relationships
+// relations
 // --
 
 var Composes =
@@ -269,10 +270,10 @@ var Supplement =
 var Self =
 {
 
-  _mixin : _mixin,
+  onMixin : onMixin,
   supplement : Supplement,
   name : 'wGraphSystem',
-  nameShort : 'GraphSystem',
+  shortName : 'GraphSystem',
 
 }
 
@@ -280,6 +281,6 @@ var Self =
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = _[ Self.nameShort ] = _.mixinMake( Self );
+_global_[ Self.name ] = _[ Self.shortName ] = _.mixinMake( Self );
 
 })();

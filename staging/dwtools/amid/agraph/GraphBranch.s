@@ -14,22 +14,24 @@ if( typeof module !== 'undefined' )
 
 //
 
-function _mixin( cls )
+function onMixin( dstClass )
 {
 
-  var proto = cls.prototype;
+  var dstPrototype = dstClass.prototype;
 
-  _.assert( _.mixinHas( proto,_.Copyable ) && _.mixinHas( proto,wGraphNode ),'wGraphBranch : wCopyable and wGraphNode should be mixed in first' );
+  _.assert( _.mixinHas( dstPrototype,_.Copyable ) && _.mixinHas( dstPrototype,wGraphNode ),'wGraphBranch : wCopyable and wGraphNode should be mixed in first' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  _.mixinApply
-  ({
-    dstProto : proto,
-    descriptor : Self,
-  });
+  _.mixinApply( this, dstPrototype );
+  // _.mixinApply
+  // ({
+  //   dstPrototype : dstPrototype,
+  //   descriptor : Self,
+  // });
 
-  _.assert( Object.hasOwnProperty.call( proto,'cloneEmpty' ) );
+  _.assert( Object.hasOwnProperty.call( dstPrototype,'cloneEmpty' ) );
 
-  _.accessor( proto,
+  _.accessor( dstPrototype,
   {
     elements : 'elements',
   });
@@ -340,7 +342,7 @@ nucleusOfTypeGet.defaults =
 }
 
 // --
-// relationships
+// relations
 // --
 
 var elementsSymbol = Symbol.for( 'elements' );
@@ -420,14 +422,14 @@ var Supplement =
 var Self =
 {
 
-  _mixin : _mixin,
+  onMixin : onMixin,
 
   functors : Functors,
   supplementOwn : ExtendDstNotOwn,
   supplement : Supplement,
 
   name : 'wGraphBranch',
-  nameShort : 'GraphBranch',
+  shortName : 'GraphBranch',
 
 }
 
@@ -435,6 +437,6 @@ var Self =
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = _[ Self.nameShort ] = _.mixinMake( Self );
+_global_[ Self.name ] = _[ Self.shortName ] = _.mixinMake( Self );
 
 })();
