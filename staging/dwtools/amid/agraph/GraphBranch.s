@@ -14,7 +14,7 @@ if( typeof module !== 'undefined' )
 
 //
 
-function onMixin( dstClass )
+function onMixin( mixinDescriptor, dstClass )
 {
 
   var dstPrototype = dstClass.prototype;
