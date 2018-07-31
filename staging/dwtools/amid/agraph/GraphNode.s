@@ -101,7 +101,7 @@ function downAttachAfter( down )
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( !self.down );
-  _.assert( down );
+  _.assert( _.objectIs( down ) );
   _.assert( !self.finitedIs() );
 
   //console.log( 'down added',self.nickName,'to',down.nickName );
