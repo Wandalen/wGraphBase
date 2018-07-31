@@ -73,7 +73,7 @@ function _equalAre( original )
   if( !original )
   original = wCopyable._equalAre;
 
-  _.assert( _.routineIs( original ) );
+  _.assert( !!original );
 
   return function _equalAre( src1,src2,o )
   {
