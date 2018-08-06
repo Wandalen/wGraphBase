@@ -223,13 +223,13 @@ var Restricts =
 var Optionals =
 {
 
-  collectionMap : Object.create( null ),
+  collectionMap : _.define.own( {} ),
 
-  roots : [],
-  rootsMap : Object.create( null ),
+  roots : _.define.own( [] ),
+  rootsMap : _.define.own( {} ),
 
-  nodes : [],
-  nodesMap : Object.create( null ),
+  nodes : _.define.own( [] ),
+  nodesMap : _.define.own( {} ),
 
 }
 
@@ -281,6 +281,6 @@ var Self =
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = _[ Self.shortName ] = _.mixinMake( Self );
+_global_[ Self.name ] = _[ Self.shortName ] = _.mixinDelcare( Self );
 
 })();
