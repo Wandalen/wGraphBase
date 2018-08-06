@@ -2,6 +2,14 @@
 
 'use strict';
 
+/**
+  @module Tools/amid/graph/Graph - Sketch. Collection of routines and classes to operate graphs. 
+*/
+
+/**
+ * @file graph/Graph.s.
+ */
+
 if( typeof module !== 'undefined' )
 {
 
