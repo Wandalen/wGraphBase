@@ -8,7 +8,7 @@ var _ObjectHasOwnProperty = Object.hasOwnProperty;
 if( typeof module !== 'undefined' )
 {
 
-  require( './UseBase.s' );
+  require( './aUseBase.s' );
 
 }
 
@@ -357,7 +357,7 @@ var Aggregates =
 
 var Associates =
 {
-  elements : [],
+  elements : _.define.own([]),
 }
 
 var Restricts =
