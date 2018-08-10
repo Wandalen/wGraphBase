@@ -238,7 +238,7 @@ var Statics =
 }
 
 // --
-// define class
+// declare
 // --
 
 var Supplement =
