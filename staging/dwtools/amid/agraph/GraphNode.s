@@ -8,7 +8,7 @@ var _ObjectHasOwnProperty = Object.hasOwnProperty;
 if( typeof module !== 'undefined' )
 {
 
-  require( './aUseBase.s' );
+  require( '../UseBase.s' );
 
 }
 
