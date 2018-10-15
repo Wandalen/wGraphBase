@@ -31,7 +31,7 @@ function onMixin( mixinDescriptor, dstClass )
 
   _.assert( Object.hasOwnProperty.call( dstPrototype,'cloneEmpty' ) );
 
-  _.accessor( dstPrototype,
+  _.accessor.declare( dstPrototype,
   {
     elements : 'elements',
   });
