@@ -29,7 +29,7 @@ function onMixin( mixinDescriptor, dstClass )
 
   var dstPrototype = dstClass.prototype;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.routineIs( dstClass ) );
   _.assert( _.mixinHas( dstPrototype,'wCopyable' ),'wGraphNode : wCopyable should be mixed in first' );
 

@@ -158,7 +158,7 @@ function _eachNodeAct( iterator,iteration )
   var node = iteration.node;
   var name = iterator.nameGet.call( node,node,iteration,iterator );
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( name ) );
   iteration.path += '/' + name;
   iteration.visited = 1;

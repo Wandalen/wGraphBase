@@ -19,7 +19,7 @@ function onMixin( mixinDescriptor, dstClass )
 
   var dstPrototype = dstClass.prototype;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.routineIs( dstClass ) );
 
   _.mixinApply( this, dstPrototype );
@@ -115,7 +115,7 @@ function systemAttachNodesAfter( down,up )
   _.assert( down === null || down instanceof system.Node );
   _.assert( up instanceof system.Node );
   _.assert( up.uniq !== undefined );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   _.assert( down === null || down.elements.indexOf( up ) !== -1 );
   _.assert( up.down === down );
@@ -142,7 +142,7 @@ function systemDetachNodesBefore( down,up )
 
   _.assert( down === null || down instanceof system.Node );
   _.assert( up instanceof system.Node );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( up.uniq !== undefined );
 
   _.assert( up.down === down );
