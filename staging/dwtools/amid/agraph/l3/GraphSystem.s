@@ -38,9 +38,9 @@ function systemMakeNodeAfter( node )
   var system = this;
 
   _.assert( node instanceof system.Node );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( node.down === null );
-  _.assert( _.strIs( node.uniq ),'expects string { uniq }' );
+  _.assert( _.strIs( node.uniq ),'Expects string { uniq }' );
 
   if( system.collectionMap )
   _.prototypeEach( node.Self.prototype, function( proto )
@@ -76,7 +76,7 @@ function systemUnmakeNodeAfter( node )
   var system = this;
 
   _.assert( node instanceof system.Node );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( node.uniq !== undefined );
 
   if( system.collectionMap )
@@ -168,7 +168,7 @@ function elementsDetach( src )
 
   _.assert( system.instanceIs() );
   _.assert( _.longIs( src ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( var s = 0 ; s < src.length ; s++ )
   {
@@ -189,7 +189,7 @@ function elementsFinit( src )
 
   _.assert( system.instanceIs() );
   _.assert( _.longIs( src ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( var s = 0 ; s < src.length ; s++ )
   {

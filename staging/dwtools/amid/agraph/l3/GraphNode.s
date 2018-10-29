@@ -99,7 +99,7 @@ function downAttachAfter( down )
   var self = this;
   var system = self.system;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( !self.down );
   _.assert( _.objectIs( down ) );
   _.assert( !self.finitedIs() );

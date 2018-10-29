@@ -112,7 +112,7 @@ function _simpleTreeIterationMake( iterator,iteration )
 function eachNode( o )
 {
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.routineIs( o.elementsGet ) );
   _.assert( _.routineIs( o.nameGet ) );
   _.routineOptions( eachNode,o );
@@ -239,7 +239,7 @@ function goRelative( o )
 
   _.routineOptions( goRelative,o );
   _.assert( _.numberIs( o.offset ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.axis === 'vertical' || o.axis === 'horizontal' );
 
   if( !o.offset )

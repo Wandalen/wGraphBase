@@ -176,7 +176,7 @@ function elementsAppend( element )
   var system = self.system;
   var elements = self.elements.slice();
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( element instanceof self.Node || _.arrayIs( element ) );
 
   _.arrayAppendArraysOnce( elements,[ element ] );
@@ -192,7 +192,7 @@ function elementsAppend( element )
 //
 //   _.assert( !self.instanceIs() );
 //   _.assert( _.longIs( src ) );
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //
 //   for( var s = 0 ; s < src.length ; s++ )
 //   {
@@ -238,7 +238,7 @@ function elementsDetach( elements )
 //
 //   _.assert( !self.instanceIs() );
 //   _.assert( _.longIs( src ) );
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //
 //   for( var s = 0 ; s < src.length ; s++ )
 //   {
