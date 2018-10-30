@@ -84,7 +84,7 @@ function systemUnmakeNodeAfter( node )
   {
 
     var n = proto.constructor.name;
-    _.arrayRemoveOnceStrictly( system.collectionMap[ n ],node );
+    _.arrayRemoveElementOnceStrictly( system.collectionMap[ n ],node );
 
   });
 
@@ -96,7 +96,7 @@ function systemUnmakeNodeAfter( node )
   }
 
   if( system.nodes )
-  _.arrayRemoveOnceStrictly( system.nodes,node );
+  _.arrayRemoveElementOnceStrictly( system.nodes,node );
 
   system.systemAttachNodesAfter( null,node );
 
@@ -121,7 +121,7 @@ function systemAttachNodesAfter( down,up )
   _.assert( up.down === down );
 
   if( system.roots )
-  _.arrayRemoveOnceStrictly( system.roots,up );
+  _.arrayRemoveElementOnceStrictly( system.roots,up );
 
   if( system.rootsMap )
   {

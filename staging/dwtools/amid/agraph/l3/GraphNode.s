@@ -68,7 +68,7 @@ function detach()
 
   self.downDetachBefore();
 
-  down[ elementsSymbol ] = _.arrayRemoveOnceStrictly( down[ elementsSymbol ].slice(),self );
+  down[ elementsSymbol ] = _.arrayRemoveElementOnceStrictly( down[ elementsSymbol ].slice(),self );
 
   return self;
 }
