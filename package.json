@@ -14,7 +14,7 @@
   "main": "proto/dwtools/amid/agraph/UsaTop.s",
   "files": [
     "proto/dwtools/amid/agraph",
-    "production"
+    "proto/dwtools/Tools.s", "production"
   ],
   "scripts": {
     "test": "wtest staging",
