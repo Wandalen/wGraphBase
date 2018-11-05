@@ -11,14 +11,14 @@
     }
   ],
   "license": "MIT",
-  "main": "staging/dwtools/amid/agraph/UsaTop.s",
+  "main": "proto/dwtools/amid/agraph/UsaTop.s",
   "files": [
-    "staging/dwtools/amid/agraph",
+    "proto/dwtools/amid/agraph",
     "production"
   ],
   "scripts": {
     "test": "wtest staging",
-    "make_doc": "./doc.sh"
+    "docgen": "wdocgen proto"
   },
   "repository": {
     "type": "git",
