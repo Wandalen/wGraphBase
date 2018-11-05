@@ -1,6 +1,6 @@
 {
   "name": "wgraphbase",
-  "version": "0.3.40",
+  "version": "0.3.41",
   "engine": "node >= 6.0.0",
   "description": "Sketch. Collection of routines and classes to operate graphs.",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
@@ -14,7 +14,8 @@
   "main": "proto/dwtools/amid/agraph/UsaTop.s",
   "files": [
     "proto/dwtools/amid/agraph",
-    "proto/dwtools/Tools.s", "production"
+    "proto/dwtools/Tools.s",
+    "production"
   ],
   "scripts": {
     "test": "wtest staging",
