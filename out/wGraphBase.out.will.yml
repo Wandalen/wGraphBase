@@ -2,7 +2,7 @@ format: willfile-1.0.0
 about:
   name: wGraphBase
   description: Sketch. Collection of routines and classes to operate graphs.
-  version: 0.3.45
+  version: 0.3.46
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -104,7 +104,7 @@ path:
 submodule: {}
 reflector:
   reflect.proto.0:
-    reflectMap:
+    filePath:
       ./proto: ./out.release
     srcFilter:
       maskAll:
@@ -128,7 +128,7 @@ reflector:
     inherit:
       - predefined.*
   reflect.proto.1:
-    reflectMap:
+    filePath:
       ./proto: ./out.debug
     srcFilter:
       maskAll:
@@ -174,15 +174,14 @@ reflector:
     inherit:
       - predefined.*
   exported.0:
-    reflectMap:
-      ./proto: true
+    filePath: ./proto
     srcFilter:
       prefixPath: .
     dstFilter:
       prefixPath: .
   exportedFiles.0:
     recursive: 0
-    reflectMap:
+    filePath:
       ./dwtools/Tools.s: true
       ./dwtools/amid/.DS_Store: true
       ./dwtools/amid/-agraph/.DS_Store: true
@@ -304,7 +303,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.3.45
+    version: 0.3.46
     criterion:
       default: 1
       debug: 1

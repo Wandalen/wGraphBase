@@ -1,9 +1,9 @@
 
 about :
 
-  name : wGraphBase
-  description : 'Sketch. Collection of routines and classes to operate graphs.'
-  version : 0.3.45
+  name : "wGraphBase"
+  description : "Sketch. Collection of routines and classes to operate graphs."
+  version : "0.3.46"
   enabled : 1
   interpreters :
   - nodejs >= 6.0.0
