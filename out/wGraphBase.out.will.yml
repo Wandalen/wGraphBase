@@ -198,7 +198,7 @@ reflector:
       ./dwtools/amid/agraph/l5/SimpleTree.s: true
     srcFilter:
       basePath: ./proto
-      prefixPath: proto
+      prefixPath: .
     dstFilter:
       basePath: .
       prefixPath: .
