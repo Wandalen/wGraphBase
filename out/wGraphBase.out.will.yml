@@ -52,9 +52,7 @@ path:
       - ./dwtools/Tools.s
       - ./dwtools/abase
       - ./dwtools/amid
-      - ./dwtools/amid/.DS_Store
       - ./dwtools/amid/-agraph
-      - ./dwtools/amid/-agraph/.DS_Store
       - ./dwtools/amid/-agraph/Graph.s
       - ./dwtools/amid/-agraph/GraphBranch.s
       - ./dwtools/amid/-agraph/GraphNode.s
@@ -83,8 +81,6 @@ path:
   exportedTerminals.0:
     path:
       - ./dwtools/Tools.s
-      - ./dwtools/amid/.DS_Store
-      - ./dwtools/amid/-agraph/.DS_Store
       - ./dwtools/amid/-agraph/Graph.s
       - ./dwtools/amid/-agraph/GraphBranch.s
       - ./dwtools/amid/-agraph/GraphNode.s
@@ -179,8 +175,6 @@ reflector:
     recursive: 0
     filePath:
       ./dwtools/Tools.s: true
-      ./dwtools/amid/.DS_Store: true
-      ./dwtools/amid/-agraph/.DS_Store: true
       ./dwtools/amid/-agraph/Graph.s: true
       ./dwtools/amid/-agraph/GraphBranch.s: true
       ./dwtools/amid/-agraph/GraphNode.s: true
@@ -316,8 +310,6 @@ exported:
     exportedTerminalsPath:
       path:
         - ./dwtools/Tools.s
-        - ./dwtools/amid/.DS_Store
-        - ./dwtools/amid/-agraph/.DS_Store
         - ./dwtools/amid/-agraph/Graph.s
         - ./dwtools/amid/-agraph/GraphBranch.s
         - ./dwtools/amid/-agraph/GraphNode.s
