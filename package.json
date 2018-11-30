@@ -1,6 +1,6 @@
 {
   "name": "wgraphbase",
-  "version": "0.3.29",
+  "version": "0.3.54",
   "engine": "node >= 6.0.0",
   "description": "Sketch. Collection of routines and classes to operate graphs.",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
@@ -11,14 +11,15 @@
     }
   ],
   "license": "MIT",
-  "main": "staging/dwtools/amid/agraph/GraphSystem.s",
+  "main": "proto/dwtools/amid/agraph/UsaTop.s",
   "files": [
-    "staging/dwtools/amid/agraph",
+    "proto/dwtools/amid/agraph",
+    "proto/dwtools/Tools.s",
     "production"
   ],
   "scripts": {
     "test": "wtest staging",
-    "make_doc": "./doc.sh"
+    "docgen": "wdocgen proto"
   },
   "repository": {
     "type": "git",

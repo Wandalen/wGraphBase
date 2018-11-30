@@ -20,7 +20,7 @@ function onMixin( mixinDescriptor, dstClass )
   var dstPrototype = dstClass.prototype;
 
   _.assert( _.mixinHas( dstPrototype,_.Copyable ) && _.mixinHas( dstPrototype,wGraphNode ),'wGraphBranch : wCopyable and wGraphNode should be mixed in first' );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   _.mixinApply( this, dstPrototype );
   // _.mixinApply
@@ -31,7 +31,7 @@ function onMixin( mixinDescriptor, dstClass )
 
   _.assert( Object.hasOwnProperty.call( dstPrototype,'cloneEmpty' ) );
 
-  _.accessor( dstPrototype,
+  _.accessor.declare( dstPrototype,
   {
     elements : 'elements',
   });
@@ -47,7 +47,7 @@ function clone()
   _.assert( arguments.length === 0 );
 
   var elements = _.methodsCall( self.elements,'clone' );
-  var result = self.cloneOverriding({ elements : elements });
+  var result = self.cloneExtending({ elements : elements });
 
   return result;
 }
@@ -60,7 +60,7 @@ function cloneEmpty()
 
   _.assert( arguments.length === 0 );
 
-  var result = self.cloneOverriding({ elements : [] });
+  var result = self.cloneExtending({ elements : [] });
 
   return result;
 }
@@ -176,7 +176,7 @@ function elementsAppend( element )
   var system = self.system;
   var elements = self.elements.slice();
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( element instanceof self.Node || _.arrayIs( element ) );
 
   _.arrayAppendArraysOnce( elements,[ element ] );
@@ -192,7 +192,7 @@ function elementsAppend( element )
 //
 //   _.assert( !self.instanceIs() );
 //   _.assert( _.longIs( src ) );
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //
 //   for( var s = 0 ; s < src.length ; s++ )
 //   {
@@ -238,7 +238,7 @@ function elementsDetach( elements )
 //
 //   _.assert( !self.instanceIs() );
 //   _.assert( _.longIs( src ) );
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //
 //   for( var s = 0 ; s < src.length ; s++ )
 //   {

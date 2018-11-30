@@ -29,7 +29,7 @@ function onMixin( mixinDescriptor, dstClass )
 
   var dstPrototype = dstClass.prototype;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.routineIs( dstClass ) );
   _.assert( _.mixinHas( dstPrototype,'wCopyable' ),'wGraphNode : wCopyable should be mixed in first' );
 
@@ -68,7 +68,7 @@ function detach()
 
   self.downDetachBefore();
 
-  down[ elementsSymbol ] = _.arrayRemoveOnceStrictly( down[ elementsSymbol ].slice(),self );
+  down[ elementsSymbol ] = _.arrayRemoveElementOnceStrictly( down[ elementsSymbol ].slice(),self );
 
   return self;
 }
@@ -99,7 +99,7 @@ function downAttachAfter( down )
   var self = this;
   var system = self.system;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( !self.down );
   _.assert( _.objectIs( down ) );
   _.assert( !self.finitedIs() );

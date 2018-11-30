@@ -1,14 +1,6 @@
-( function _Graph_s_( ) {
+( function _SimpleTree_s_( ) {
 
 'use strict';
-
-/**
-  @module Tools/amid/graph/Graph - Sketch. Collection of routines and classes to operate graphs. 
-*/
-
-/**
- * @file graph/Graph.s.
- */
 
 if( typeof module !== 'undefined' )
 {
@@ -30,9 +22,10 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-var _ = _global_.wTools;
+  var _ = _global_.wTools;
 
-  _.include( 'wProto' );
+  _.include( 'wGraph' );
+  // require( '../UseBase.s' );
 
 }
 
@@ -55,7 +48,7 @@ var NodeGetters =
 
 //
 
-function _iteratorMake()
+function _simpleTreeIteratorMake()
 {
   var iterator = Object.create( null );
 
@@ -75,7 +68,7 @@ function _iteratorMake()
 
   iterator.iterationMake = function iterationMake( iteration )
   {
-    return _iterationMake( this,iteration );
+    return _simpleTreeIterationMake( this,iteration );
   }
 
   /*Object.freeze( iterator );*/
@@ -85,7 +78,7 @@ function _iteratorMake()
 
 //
 
-function _iterationMake( iterator,iteration )
+function _simpleTreeIterationMake( iterator,iteration )
 {
   var newIteration = Object.create( null );
 
@@ -119,12 +112,12 @@ function _iterationMake( iterator,iteration )
 function eachNode( o )
 {
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.routineIs( o.elementsGet ) );
   _.assert( _.routineIs( o.nameGet ) );
   _.routineOptions( eachNode,o );
 
-  var iterator = _iteratorMake();
+  var iterator = _simpleTreeIteratorMake();
   iterator.root = o.node;
   iterator.result = o.result;
   iterator.onUp = o.onUp;
@@ -137,7 +130,7 @@ function eachNode( o )
   iterator = o.onIterator( iterator,o );
   _.assert( _.objectIs( iterator ) );
 
-  var iteration = _iterationMake( iterator );
+  var iteration = _simpleTreeIterationMake( iterator );
   iteration.node = o.node;
 
   _eachNodeAct( iterator,iteration );
@@ -165,7 +158,7 @@ function _eachNodeAct( iterator,iteration )
   var node = iteration.node;
   var name = iterator.nameGet.call( node,node,iteration,iterator );
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( name ) );
   iteration.path += '/' + name;
   iteration.visited = 1;
@@ -225,7 +218,7 @@ function _eachNodeAct( iterator,iteration )
     var elements = iterator.elementsGet.call( node,node,iteration,iterator );
     for( var e = 0 ; e < elements.length ; e++ )
     {
-      var newIteration = _iterationMake( iterator,iteration );
+      var newIteration = _simpleTreeIterationMake( iterator,iteration );
       newIteration.key = e;
       newIteration.index = e;
       newIteration.node = elements[ e ];
@@ -246,7 +239,7 @@ function goRelative( o )
 
   _.routineOptions( goRelative,o );
   _.assert( _.numberIs( o.offset ) );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.axis === 'vertical' || o.axis === 'horizontal' );
 
   if( !o.offset )
@@ -315,14 +308,14 @@ goRelative.defaults =
 _.mapExtend( goRelative.defaults,NodeGetters );
 
 // --
-// proto
+// declare
 // --
 
 var Proto =
 {
 
-  _iteratorMake : _iteratorMake,
-  _iterationMake : _iterationMake,
+  _simpleTreeIteratorMake : _simpleTreeIteratorMake,
+  _simpleTreeIterationMake : _simpleTreeIterationMake,
 
   eachNode : eachNode,
   _eachNodeAct : _eachNodeAct,
@@ -335,17 +328,5 @@ var Proto =
 
 _.mapExtend( Self, Proto );
 wTools[ 'graph' ] = Self;
-
-//
-
-if( typeof module !== 'undefined' )
-{
-
-  require( './Graph.s' );
-  require( './GraphBranch.s' );
-  require( './GraphNode.s' );
-  require( './GraphSystem.s' );
-
-}
 
 })();
