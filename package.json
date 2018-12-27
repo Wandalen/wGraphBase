@@ -33,8 +33,7 @@
     "wCopyable": ""
   },
   "devDependencies": {
-    "wTesting": "",
-    "wgraphbase": "."
+    "wTesting": ""
   },
   "keywords": [
     "Template tree",
