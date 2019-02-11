@@ -2,7 +2,7 @@ format: willfile-1.0.0
 about:
   name: wGraphBase
   description: Sketch. Collection of routines and classes to operate graphs.
-  version: 0.3.61
+  version: 0.3.62
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -22,11 +22,11 @@ path:
   out:
     path: out
   out.debug:
-    path: ./out.debug
+    path: ./out/debug
     criterion:
       debug: 1
   out.release:
-    path: ./out.release
+    path: ./out/release
     criterion:
       debug: 0
   repository:
@@ -45,24 +45,24 @@ path:
       public: 1
   exportedFiles.proto.export:
     path:
-      - .
-      - ./dwtools
-      - ./dwtools/Tools.s
-      - ./dwtools/abase
-      - ./dwtools/amid
-      - ./dwtools/amid/agraph
-      - ./dwtools/amid/agraph/UseBase.s
-      - ./dwtools/amid/agraph/UseTop.s
-      - ./dwtools/amid/agraph/l1
-      - ./dwtools/amid/agraph/l1/Common.s
-      - ./dwtools/amid/agraph/l3
-      - ./dwtools/amid/agraph/l3/GraphBranch.s
-      - ./dwtools/amid/agraph/l3/GraphNode.s
-      - ./dwtools/amid/agraph/l3/GraphSystem.s
-      - ./dwtools/amid/agraph/l5
-      - ./dwtools/amid/agraph/l5/SimpleTree.s
-      - ./dwtools/amid/agraph.test
-      - ./dwtools/atop
+      - proto
+      - proto/dwtools
+      - proto/dwtools/Tools.s
+      - proto/dwtools/abase
+      - proto/dwtools/amid
+      - proto/dwtools/amid/agraph
+      - proto/dwtools/amid/agraph/UseBase.s
+      - proto/dwtools/amid/agraph/UseTop.s
+      - proto/dwtools/amid/agraph/l1
+      - proto/dwtools/amid/agraph/l1/Common.s
+      - proto/dwtools/amid/agraph/l3
+      - proto/dwtools/amid/agraph/l3/GraphBranch.s
+      - proto/dwtools/amid/agraph/l3/GraphNode.s
+      - proto/dwtools/amid/agraph/l3/GraphSystem.s
+      - proto/dwtools/amid/agraph/l5
+      - proto/dwtools/amid/agraph/l5/SimpleTree.s
+      - proto/dwtools/amid/agraph.test
+      - proto/dwtools/atop
     criterion:
       default: 1
       debug: 1
@@ -76,7 +76,7 @@ reflector:
   reflect.proto.:
     srcFilter:
       filePath:
-        ./proto: ./out.release
+        ./proto: ./out/release
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -97,7 +97,7 @@ reflector:
   reflect.proto.debug:
     srcFilter:
       filePath:
-        ./proto: ./out.debug
+        ./proto: ./out/debug
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -132,32 +132,49 @@ reflector:
       - predefined.*
   exported.proto.export:
     srcFilter:
-      filePath: ./proto
+      filePath:
+        ./proto: true
       prefixPath: .
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
   exportedFiles.proto.export:
     recursive: 0
     srcFilter:
       filePath:
         .: true
-        ./dwtools: true
-        ./dwtools/Tools.s: true
-        ./dwtools/abase: true
-        ./dwtools/amid: true
-        ./dwtools/amid/agraph: true
-        ./dwtools/amid/agraph/UseBase.s: true
-        ./dwtools/amid/agraph/UseTop.s: true
-        ./dwtools/amid/agraph/l1: true
-        ./dwtools/amid/agraph/l1/Common.s: true
-        ./dwtools/amid/agraph/l3: true
-        ./dwtools/amid/agraph/l3/GraphBranch.s: true
-        ./dwtools/amid/agraph/l3/GraphNode.s: true
-        ./dwtools/amid/agraph/l3/GraphSystem.s: true
-        ./dwtools/amid/agraph/l5: true
-        ./dwtools/amid/agraph/l5/SimpleTree.s: true
-        ./dwtools/amid/agraph.test: true
-        ./dwtools/atop: true
+        dwtools: true
+        dwtools/Tools.s: true
+        dwtools/abase: true
+        dwtools/amid: true
+        dwtools/amid/agraph: true
+        dwtools/amid/agraph/UseBase.s: true
+        dwtools/amid/agraph/UseTop.s: true
+        dwtools/amid/agraph/l1: true
+        dwtools/amid/agraph/l1/Common.s: true
+        dwtools/amid/agraph/l3: true
+        dwtools/amid/agraph/l3/GraphBranch.s: true
+        dwtools/amid/agraph/l3/GraphNode.s: true
+        dwtools/amid/agraph/l3/GraphSystem.s: true
+        dwtools/amid/agraph/l5: true
+        dwtools/amid/agraph/l5/SimpleTree.s: true
+        dwtools/amid/agraph.test: true
+        dwtools/atop: true
       basePath: .
       prefixPath: proto
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
 step:
   clean.out.:
     criterion:
@@ -278,7 +295,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.3.61
+    version: 0.3.62
     criterion:
       default: 1
       debug: 1
