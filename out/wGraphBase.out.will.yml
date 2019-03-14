@@ -79,6 +79,7 @@ reflector:
     src:
       filePath:
         .: .
+      prefixPath: proto
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -91,7 +92,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /\.debug($|\.|\/)/i
           - !<tag:yaml.org,2002:js/regexp> /\.test($|\.|\/)/i
           - !<tag:yaml.org,2002:js/regexp> /\.experiment($|\.|\/)/i
-      prefixPath: proto
     dst:
       prefixPath: out/release
     criterion:
@@ -102,6 +102,7 @@ reflector:
     src:
       filePath:
         .: .
+      prefixPath: proto
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -112,7 +113,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /\.DS_Store$/
           - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
           - !<tag:yaml.org,2002:js/regexp> /\.release($|\.|\/)/i
-      prefixPath: proto
     dst:
       prefixPath: out/debug
     criterion:
@@ -138,7 +138,7 @@ reflector:
   exported.proto.export:
     src:
       filePath:
-        .: true
+        .: null
       prefixPath: proto
     criterion:
       default: 1
@@ -152,24 +152,24 @@ reflector:
     recursive: 0
     src:
       filePath:
-        .: true
-        dwtools: true
-        dwtools/Tools.s: true
-        dwtools/abase: true
-        dwtools/amid: true
-        dwtools/amid/agraph: true
-        dwtools/amid/agraph/UseBase.s: true
-        dwtools/amid/agraph/UseTop.s: true
-        dwtools/amid/agraph/l1: true
-        dwtools/amid/agraph/l1/Common.s: true
-        dwtools/amid/agraph/l3: true
-        dwtools/amid/agraph/l3/GraphBranch.s: true
-        dwtools/amid/agraph/l3/GraphNode.s: true
-        dwtools/amid/agraph/l3/GraphSystem.s: true
-        dwtools/amid/agraph/l5: true
-        dwtools/amid/agraph/l5/SimpleTree.s: true
-        dwtools/amid/agraph.test: true
-        dwtools/atop: true
+        .: null
+        dwtools: null
+        dwtools/Tools.s: null
+        dwtools/abase: null
+        dwtools/amid: null
+        dwtools/amid/agraph: null
+        dwtools/amid/agraph/UseBase.s: null
+        dwtools/amid/agraph/UseTop.s: null
+        dwtools/amid/agraph/l1: null
+        dwtools/amid/agraph/l1/Common.s: null
+        dwtools/amid/agraph/l3: null
+        dwtools/amid/agraph/l3/GraphBranch.s: null
+        dwtools/amid/agraph/l3/GraphNode.s: null
+        dwtools/amid/agraph/l3/GraphSystem.s: null
+        dwtools/amid/agraph/l5: null
+        dwtools/amid/agraph/l5/SimpleTree.s: null
+        dwtools/amid/agraph.test: null
+        dwtools/atop: null
       basePath: .
       prefixPath: proto
     criterion:
