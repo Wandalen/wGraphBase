@@ -21,8 +21,8 @@ execution :
 
 path :
 
-  repository : git+https://github.com/Wandalen/wGraphBase.git
-  bugs : https://github.com/Wandalen/wGraphBase/issues
+  repository : git+https:///github.com/Wandalen/wGraphBase.git
+  bugs : https:///github.com/Wandalen/wGraphBase/issues
 
 step :
 
