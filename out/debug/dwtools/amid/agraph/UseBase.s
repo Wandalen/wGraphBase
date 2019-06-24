@@ -11,6 +11,8 @@ if( typeof module !== 'undefined' )
   _.include( 'wCopyable' );
   // _.include( 'wMathSpace' );
 
+  require( './UseAbstractBase.s' );
+
 }
 
 //

@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 
   var _ = _global_.wTools;
 
-  require( './l1/Common.s' );
+  require( './UseAbstractMid.s' );
 
   require( './l3/GraphBranch.s' );
   require( './l3/GraphNode.s' );
