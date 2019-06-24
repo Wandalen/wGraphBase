@@ -1,4 +1,4 @@
-( function _Common_s_( ) {
+( function _Abstract_s_( ) {
 
 'use strict';
 
@@ -16,8 +16,6 @@ var Parent = null;
 var Self = _global_.wTools.graph;
 _.assert( !!Self );
 
-// var Self = _global_.wTools.graph = _global_.wTools.graph || Object.create( null );
-
 // --
 // inter
 // --
@@ -26,12 +24,12 @@ _.assert( !!Self );
 // declare
 // --
 
-var Proto =
+var Extend =
 {
 }
 
 //
 
-_.mapExtend( Self, Proto );
+_.mapExtend( Self, Extend );
 
 })();
