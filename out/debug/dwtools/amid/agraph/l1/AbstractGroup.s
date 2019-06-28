@@ -1509,8 +1509,8 @@ function stronglyConnectedTreeForDfs( /**/nodes )
   ({
     onOutNodesFor : group.fromOutNodesIdsOnOutNodesFor,
     onInNodesFor : group.fromInNodesIdsOnInNodesFor,
-    onOutNodesIdsFor : group.fromOutNodesIdsOnOutNodesIdsFor,
-    onInNodesIdsFor : group.fromInNodesIdsOnInNodesIdsFor,
+    onOutNodesIdsFor : group.defaultOnOutNodesIdsForFromOutNodesIds,
+    onInNodesIdsFor : group.defaultOnInNodesIdsForFromInNodesIds,
   });
 
   for( let l = 0 ; l < layers.length ; l++ )
@@ -1693,7 +1693,7 @@ function fromNodesIdsOnOutNodesIdsFor( nodeHandle )
 
 //
 
-function fromOutNodesIdsOnOutNodesIdsFor( nodeHandle )
+function defaultOnOutNodesIdsForFromOutNodesIds( nodeHandle )
 {
   let group = this;
   return nodeHandle.outNodes;
@@ -1701,7 +1701,7 @@ function fromOutNodesIdsOnOutNodesIdsFor( nodeHandle )
 
 //
 
-function fromInNodesIdsOnInNodesIdsFor( nodeHandle )
+function defaultOnInNodesIdsForFromInNodesIds( nodeHandle )
 {
   let group = this;
   return nodeHandle.inNodes;
@@ -1889,8 +1889,8 @@ let Extend =
   fromOutNodesOnOutNodesIdsFor,
   fromInNodesOnInNodesIdsFor,
   fromNodesIdsOnOutNodesIdsFor,
-  fromOutNodesIdsOnOutNodesIdsFor,
-  fromInNodesIdsOnInNodesIdsFor,
+  defaultOnOutNodesIdsForFromOutNodesIds,
+  defaultOnInNodesIdsForFromInNodesIds,
 
   // relations
 
