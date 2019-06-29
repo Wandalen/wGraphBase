@@ -85,6 +85,9 @@ function groupMake( o )
   o = o || Object.create( null );
   if( !o.sys )
   o.sys = sys;
+
+  _.mapSupplement( o, _.mapButNulls( _.mapOnly( sys, sys.FieldsForGroup ) ) );
+
   return sys.Group( o );
 }
 
@@ -163,7 +166,7 @@ function nodeToId( nodeHandle )
 
 //
 
-function idToNodesTry( nodeId )
+function idToNodeTry( nodeId )
 {
   let sys = this;
   let nodeHandle = sys.idToNodeHash.get( nodeId );
@@ -172,7 +175,7 @@ function idToNodesTry( nodeId )
 
 //
 
-function idToNodes( nodeId )
+function idToNode( nodeId )
 {
   let sys = this;
   let nodeHandle = sys.idToNodeHash.get( nodeId );
@@ -185,11 +188,27 @@ function idToNodes( nodeId )
 /**
  * @summary Returns descriptor of node with id `nodeId`
  * @param {Number} nodeId Id of target node.
- * @function nodeDescriptorGet
+ * @function nodeDescriptorWithId
  * @memberof module:Tools/mid/AbstractGraphs.wTools.graph.wAbstractGraphSystem
  */
 
-function nodeDescriptorGet( nodeId )
+function nodeDescriptorWithId( nodeId )
+{
+  let sys = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( sys.idIs( nodeId ) );
+
+  let descriptor = sys.nodeDescriptorsHash.get( nodeId );
+  if( descriptor === undefined )
+  descriptor = null;
+
+  return descriptor;
+}
+
+//
+
+function nodeDescriptorWith( nodeId )
 {
   let sys = this;
 
@@ -198,9 +217,7 @@ function nodeDescriptorGet( nodeId )
   if( !sys.idIs( nodeId ) )
   nodeId = sys.nodeToId( nodeId );
 
-  let descriptor = sys.nodeDescriptorsHash.get( nodeId );
-
-  return descriptor;
+  return sys.nodeDescriptorWithId( nodeId );
 }
 
 //
@@ -208,11 +225,11 @@ function nodeDescriptorGet( nodeId )
 /**
  * @summary Returns descriptor of node with id `nodeId`. Creates new descriptor if needed.
  * @param {Number} nodeId Id of target node.
- * @function nodeDescriptorGet
+ * @function nodeDescriptorObtain
  * @memberof module:Tools/mid/AbstractGraphs.wTools.graph.wAbstractGraphSystem
  */
 
-function nodeDescriptorProduce( nodeId )
+function nodeDescriptorObtain( nodeId )
 {
   let sys = this;
 
@@ -221,32 +238,58 @@ function nodeDescriptorProduce( nodeId )
   if( !sys.idIs( nodeId ) )
   nodeId = sys.nodeToId( nodeId );
 
-  debugger;
   let descriptor = sys.nodeDescriptorsHash.get( nodeId );
-  debugger;
-
-  _.assert( 'not tested' );
 
   if( descriptor === undefined )
   {
     descriptor = Object.create( null );
+    descriptor.count = 1;
     sys.nodeDescriptorsHash.set( nodeId, descriptor );
   }
 
   return descriptor;
 }
 
+//
+
+function nodeDescriptorDelete( nodeId )
+{
+  let sys = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( sys.idIs( nodeId ) );
+
+  let r = sys.nodeDescriptorsHash.delete( nodeId );
+
+  return r;
+}
+
 // --
 // relations
 // --
 
+let FieldsForGroup =
+{
+  onNodeNameGet : null,
+  onNodeIs : null,
+  onOutNodesFor : null,
+  onInNodesFor : null,
+  // onOutNodesIdsFor : null,
+  // onInNodesIdsFor : null,
+}
+
 let Composes =
 {
-  // onNodeNeighboursGet,
 }
 
 let Aggregates =
 {
+  onNodeNameGet : null,
+  onNodeIs : null,
+  onOutNodesFor : null,
+  onInNodesFor : null,
+  // onOutNodesIdsFor : null,
+  // onInNodesIdsFor : null,
 }
 
 let Associates =
@@ -265,6 +308,13 @@ let Restricts =
 let Statics =
 {
   Group : _.graph.AbstractGraphGroup,
+  FieldsForGroup,
+}
+
+let Forbids =
+{
+  onOutNodesIdsFor : 'onOutNodesIdsFor',
+  onInNodesIdsFor : 'onInNodesIdsFor',
 }
 
 // --
@@ -299,13 +349,15 @@ let Extend =
   nodesToIdsTry : _.vectorize( nodeToIdTry ),
   nodeToId,
   nodesToIds : _.vectorize( nodeToId ),
-  idToNodesTry,
-  idsToNodesTry : _.vectorize( idToNodesTry ),
-  idToNodes,
-  idsToNodes : _.vectorize( idToNodes ),
+  idToNodeTry,
+  idsToNodesTry : _.vectorize( idToNodeTry ),
+  idToNode,
+  idsToNodes : _.vectorize( idToNode ),
 
-  nodeDescriptorGet,
-  nodeDescriptorProduce,
+  nodeDescriptorWithId,
+  nodeDescriptorWith,
+  nodeDescriptorObtain,
+  nodeDescriptorDelete,
 
   // relations
 
@@ -314,6 +366,7 @@ let Extend =
   Associates,
   Restricts,
   Statics,
+  Forbids,
 
 }
 
