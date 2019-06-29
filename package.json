@@ -36,10 +36,8 @@
     "wTesting": ""
   },
   "keywords": [
-    "Template tree",
-    "Template tree resolver",
-    "wTools",
-    "JSON",
-    "YAML"
+    "Graph",
+    "Abstract graph",
+    "wTools"
   ]
 }

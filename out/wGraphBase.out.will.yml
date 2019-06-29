@@ -88,6 +88,7 @@ path:
       - ../proto/dwtools/amid/agraph/l5
       - ../proto/dwtools/amid/agraph/l5/SimpleTree.s
       - ../proto/dwtools/amid/agraph.test
+      - ../proto/dwtools/amid/agraph.test/AbstractGraph.test.s
       - ../proto/dwtools/atop
     criterion:
       default: 1
@@ -384,6 +385,7 @@ module:
           - proto/dwtools/amid/agraph/l5
           - proto/dwtools/amid/agraph/l5/SimpleTree.s
           - proto/dwtools/amid/agraph.test
+          - proto/dwtools/amid/agraph.test/AbstractGraph.test.s
           - proto/dwtools/atop
         criterion:
           default: 1
