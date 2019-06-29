@@ -1,4 +1,5 @@
 
+// require( 'wgraphbase' );
 require( '..' );
 
 let _ = wTools;
