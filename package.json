@@ -11,7 +11,7 @@
     }
   ],
   "license": "MIT",
-  "main": "proto/dwtools/amid/agraph/UsaTop.s",
+  "main": "proto/dwtools/amid/agraph/UseTop.s",
   "files": [
     "proto/dwtools/amid/agraph",
     "proto/dwtools/Tools.s",

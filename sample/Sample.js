@@ -1,6 +1,6 @@
 
-if( typeof module !== 'undefined' )
 require( '..' );
+
 let _ = wTools;
 
 var a = { name : 'a', nodes : [] } // 1
@@ -29,12 +29,11 @@ var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.nam
 var group = sys.groupMake();
 group.nodesAdd([ a, b, c, d, e, f, g, h, i, j ]);
 
-var infoAsTree = group.nodesInfoExportAsTree([ a ]);
-
 console.log( 'Tree' );
-console.log( infoAsTree );
+console.log( group.nodesInfoExportAsTree([ a ]) );
 
 /* output :
+
 Tree
  +-- a
    +-- b
