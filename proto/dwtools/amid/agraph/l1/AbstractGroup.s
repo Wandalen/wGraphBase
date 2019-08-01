@@ -12,7 +12,7 @@ let _ = _global_.wTools;
 let Parent = null;
 let Self = function wAbstractGraphGroup( o )
 {
-  return _.instanceConstructor( Self, this, arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 Self.shortName = 'AbstractGraphGroup';
@@ -27,7 +27,7 @@ function init( o )
 
   group[ nodesSymbol ] = [];
 
-  _.instanceInit( group );
+  _.workpiece.initFields( group );
   Object.preventExtensions( group );
 
   _.assert( _.arrayIs( group.nodes ) && group.nodes.length === 0 );

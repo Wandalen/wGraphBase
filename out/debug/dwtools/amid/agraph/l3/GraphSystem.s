@@ -14,7 +14,7 @@ var _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 //
 
-function onMixin( mixinDescriptor, dstClass )
+function onMixinApply( mixinDescriptor, dstClass )
 {
 
   var dstPrototype = dstClass.prototype;
@@ -270,7 +270,7 @@ var Supplement =
 var Self =
 {
 
-  onMixin : onMixin,
+  onMixinApply : onMixinApply,
   supplement : Supplement,
   name : 'wGraphSystem',
   shortName : 'GraphSystem',
