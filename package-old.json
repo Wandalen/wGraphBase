@@ -1,7 +1,7 @@
 {
   "name": "wgraphbase",
   "version": "0.3.85",
-  "engine": "node >= 6.0.0",
+  "engine": "node >= 8.0.0",
   "description": "Sketch. Collection of routines and classes to operate graphs.",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
   "contributors": [
