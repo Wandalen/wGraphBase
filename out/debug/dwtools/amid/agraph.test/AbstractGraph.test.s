@@ -5,11 +5,11 @@
 if( typeof module !== 'undefined' )
 {
 
-  var _ = require( '../../Tools.s' );
+  var _ = require( '../../../Tools.s' );
 
   _.include( 'wTesting' );
 
-  require( '../agraph/UseAbstractMid.s' );
+  require( '../graphBasic/IncludeTop.s' );
 
 }
 
@@ -286,7 +286,6 @@ function clone( test )
   var group = sys.groupMake();
   group.nodesAdd([ a, b, c, d, e ]);
   var group2 = group.clone();
-  debugger;
 
   test.identical( sys.nodeDescriptorsHash.size, 5 );
   test.identical( sys.idToNodeHash.size, 5 );
@@ -740,136 +739,47 @@ function leastMostDegreeAmong( test )
 
 //
 
-function lookDfs( test )
-{
-
-  var ups = [];
-  var downs = [];
-
-  function handleUp( nodeHandle, it )
-  {
-    ups.push( nodeHandle );
-  }
-
-  function handleDown( nodeHandle, it )
-  {
-    downs.push( nodeHandle );
-  }
-
-/*
-  1 : 2
-  2 : 6
-  3 : 2
-  4 : 1 7
-  5 : 1 3 8
-  6 :
-  7 : 8
-  8 : 9
-  9 : 6 8
-  10 :
-*/
-
-  test.case = 'setup';
-
-  var a = { name : 'a', nodes : [] } // 1
-  var b = { name : 'b', nodes : [] } // 2
-  var c = { name : 'c', nodes : [] } // 3
-  var d = { name : 'd', nodes : [] } // 4
-  var e = { name : 'e', nodes : [] } // 5
-  var f = { name : 'f', nodes : [] } // 6
-  var g = { name : 'g', nodes : [] } // 7
-  var h = { name : 'h', nodes : [] } // 8
-  var i = { name : 'i', nodes : [] } // 9
-  var j = { name : 'j', nodes : [] } // 10
-
-  a.nodes.push( b ); // 1
-  b.nodes.push( e, f ); // 2
-  c.nodes.push( b ); // 3
-  d.nodes.push( a, g ); // 4
-  e.nodes.push( a, c, h ); // 5
-  f.nodes.push(); // 6
-  g.nodes.push( h ); // 7
-  h.nodes.push( i ); // 8
-  i.nodes.push( f, h ); // 9
-  j.nodes.push(); // 10
-
-  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
-  var group = sys.groupMake();
-
-  group.nodesAdd([ a, b, c, d, e, f, g, h, i, j ]);
-  test.identical( group.nodes.length, 10 );
-  logger.log( group.exportInfo() );
-
-  test.case = 'all'; /* */
-
-  var ups = [];
-  var downs = [];
-  group.lookDfs({ nodes : group.nodes, onUp : handleUp, onDown : handleDown });
-
-  //                  a  b  e  c  h  i  f  d  g  j
-  var expectedUps = [ 1, 2, 5, 3, 8, 9, 6, 4, 7, 10 ];
-  var expectedDws = [ 3, 6, 9, 8, 5, 2, 1, 7, 4, 10 ];
-  //                  c  f  i  h  e  b  a  g  d  j
-
-  test.identical( group.nodesToIds( ups ), expectedUps );
-  test.identical( group.nodesToIds( downs ), expectedDws );
-
-  test.case = 'only a'; /* */
-
-  var ups = [];
-  var downs = [];
-  group.lookDfs({ nodes : a, onUp : handleUp, onDown : handleDown });
-
-  //                  a  b  e  c  h  i  f
-  var expectedUps = [ 1, 2, 5, 3, 8, 9, 6 ];
-  var expectedDws = [ 3, 6, 9, 8, 5, 2, 1 ];
-  //                  c  f  i  h  e  b  a
-
-  test.identical( group.nodesToIds( ups ), expectedUps );
-  test.identical( group.nodesToIds( downs ), expectedDws );
-
-  test.case = 'only d'; /* */
-
-  var ups = [];
-  var downs = [];
-  group.lookDfs({ nodes : d, onUp : handleUp, onDown : handleDown });
-
-  //                  d  a  b  e  c  h  i  f  g
-  var expectedUps = [ 4, 1, 2, 5, 3, 8, 9, 6, 7 ];
-  var expectedDws = [ 3, 6, 9, 8, 5, 2, 1, 7, 4 ];
-  //                  c  f  i  h  e  b  a  g  d
-
-  test.identical( group.nodesToIds( ups ), expectedUps );
-  test.identical( group.nodesToIds( downs ), expectedDws );
-
-  /* */
-
-  sys.finit();
-
-}
-
-//
-
 function lookBfs( test )
 {
 
+  var nds = [];
   var ups = [];
-  var downs = [];
-  var nodes = [];
+  var dws = [];
+  var lups = [];
+  var ldws = [];
 
-  function handleUp( nodes, it )
+  function clean()
   {
-    ups.push( group.nodesToNames( nodes ) );
+    nds = [];
+    ups = [];
+    dws = [];
+    lups = [];
+    ldws = [];
   }
 
-  function handleDown( nodes, it )
+  function onNode( node, it )
   {
-    downs.push( group.nodesToNames( nodes ) );
+    nds.push( group.nodesToNames( node ) );
   }
 
-  function handleNode( node, it )
+  function onUp( node, it )
   {
-    nodes.push( group.nodesToNames( node ) );
+    ups.push( group.nodesToNames( node ) );
+  }
+
+  function onDown( node, it )
+  {
+    dws.push( group.nodesToNames( node ) );
+  }
+
+  function onLayerUp( nodes, it )
+  {
+    lups.push( group.nodesToNames( nodes ) );
+  }
+
+  function onLayerDown( nodes, it )
+  {
+    ldws.push( group.nodesToNames( nodes ) );
   }
 
 /*
@@ -920,43 +830,46 @@ function lookBfs( test )
 
   test.case = 'all';
 
-  var ups = [];
-  var downs = [];
-  var nodes = [];
-  var layers = group.lookBfs({ nodes : group.nodes, onUp : handleUp, onDown : handleDown, onNode : handleNode });
+  clean();
+  var layers = group.lookBfs({ nodes : group.nodes, onNode, onUp, onDown, onLayerUp, onLayerDown });
 
   var expected = [ [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' ] ];
   test.identical( layers.map( ( nodes ) => group.nodesToNames( nodes ) ), expected );
 
-  var expectedUps =
+  var expectedNds = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' ];
+  var expectedUps = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' ];
+  var expectedDws = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' ];
+  var expectedLups =
   [
     [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' ],
     [ 'b', 'e', 'f', 'b', 'a', 'g', 'a', 'c', 'h', 'h', 'i', 'f', 'h' ],
   ];
-  var expectedDws =
+  var expectedLdws =
   [
     [],
     [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' ],
   ];
-  var expectedNodes = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j' ];
 
+  test.identical( nds, expectedNds );
   test.identical( ups, expectedUps );
-  test.identical( downs, expectedDws );
-  test.identical( nodes, expectedNodes );
+  test.identical( dws, expectedDws );
+  test.identical( lups, expectedLups );
+  test.identical( ldws, expectedLdws );
 
   /* */
 
   test.case = 'only a';
 
-  var ups = [];
-  var downs = [];
-  var nodes = [];
-  var layers = group.lookBfs({ nodes : a, onUp : handleUp, onDown : handleDown, onNode : handleNode });
+  clean();
+  var layers = group.lookBfs({ nodes : a, onNode, onUp, onDown, onLayerUp, onLayerDown });
 
   var expected = [ [ 'a' ], [ 'b' ], [ 'e', 'f' ], [ 'c', 'h' ], [ 'i' ] ];
   test.identical( layers.map( ( nodes ) => group.nodesToNames( nodes ) ), expected );
 
-  var expectedUps =
+  var expectedNds = [ 'a', 'b', 'e', 'f', 'c', 'h', 'i' ];
+  var expectedUps = [ 'a', 'b', 'e', 'f', 'c', 'h', 'i' ];
+  var expectedDws = [ 'i', 'c', 'h', 'e', 'f', 'b', 'a' ];
+  var expectedLups =
   [
     [ 'a' ],
     [ 'b' ],
@@ -965,7 +878,7 @@ function lookBfs( test )
     [ 'b', 'i' ],
     [ 'f', 'h' ]
   ];
-  var expectedDws =
+  var expectedLdws =
   [
     [],
     [ 'i' ],
@@ -974,20 +887,19 @@ function lookBfs( test )
     [ 'b' ],
     [ 'a' ]
   ];
-  var expectedNodes = [ 'a', 'b', 'e', 'f', 'c', 'h', 'i' ];
 
+  test.identical( nds, expectedNds );
   test.identical( ups, expectedUps );
-  test.identical( downs, expectedDws );
-  test.identical( nodes, expectedNodes );
+  test.identical( dws, expectedDws );
+  test.identical( lups, expectedLups );
+  test.identical( ldws, expectedLdws );
 
   /* */
 
   test.case = 'only d';
 
-  var ups = [];
-  var downs = [];
-  var nodes = [];
-  var layers = group.lookBfs({ nodes : d, onUp : handleUp, onDown : handleDown, onNode : handleNode });
+  clean();
+  var layers = group.lookBfs({ nodes : d, onNode, onUp, onDown, onLayerUp, onLayerDown });
 
   var expected =
   [
@@ -999,7 +911,10 @@ function lookBfs( test )
   ]
   test.identical( layers.map( ( nodes ) => group.nodesToNames( nodes ) ), expected );
 
-  var expectedUps =
+  var expectedNds = [ 'd', 'a', 'g', 'b', 'h', 'e', 'f', 'i', 'c' ];
+  var expectedUps = [ 'd', 'a', 'g', 'b', 'h', 'e', 'f', 'i', 'c' ];
+  var expectedDws = [ 'c', 'e', 'f', 'i', 'b', 'h', 'a', 'g', 'd' ];
+  var expectedLups =
   [
     [ 'd' ],
     [ 'a', 'g' ],
@@ -1008,7 +923,7 @@ function lookBfs( test )
     [ 'a', 'c', 'h', 'f', 'h' ],
     [ 'b' ]
   ]
-  var expectedDws =
+  var expectedLdws =
   [
     [],
     [ 'c' ],
@@ -1017,20 +932,19 @@ function lookBfs( test )
     [ 'a', 'g' ],
     [ 'd' ]
   ]
-  var expectedNodes = [ 'd', 'a', 'g', 'b', 'h', 'e', 'f', 'i', 'c' ];
 
+  test.identical( nds, expectedNds );
   test.identical( ups, expectedUps );
-  test.identical( downs, expectedDws );
-  test.identical( nodes, expectedNodes );
+  test.identical( dws, expectedDws );
+  test.identical( lups, expectedLups );
+  test.identical( ldws, expectedLdws );
 
   /* */
 
   test.case = 'd and a';
 
-  var ups = [];
-  var downs = [];
-  var nodes = [];
-  var layers = group.lookBfs({ nodes : [ d, a ], onUp : handleUp, onDown : handleDown, onNode : handleNode });
+  clean();
+  var layers = group.lookBfs({ nodes : [ d, a ], onNode, onUp, onDown, onLayerUp, onLayerDown });
 
   var expected =
   [
@@ -1041,7 +955,10 @@ function lookBfs( test )
   ]
   test.identical( layers.map( ( nodes ) => group.nodesToNames( nodes ) ), expected );
 
-  var expectedUps =
+  var expectedNds = [ 'd', 'a', 'g', 'b', 'h', 'e', 'f', 'i', 'c' ];
+  var expectedUps = [ 'd', 'a', 'g', 'b', 'h', 'e', 'f', 'i', 'c' ];
+  var expectedDws = [ 'i', 'c', 'h', 'e', 'f', 'g', 'b', 'd', 'a' ];
+  var expectedLups =
   [
     [ 'd', 'a' ],
     [ 'a', 'g', 'b' ],
@@ -1049,7 +966,7 @@ function lookBfs( test )
     [ 'i', 'a', 'c', 'h' ],
     [ 'f', 'h', 'b' ]
   ]
-  var expectedDws =
+  var expectedLdws =
   [
     [],
     [ 'i', 'c' ],
@@ -1057,17 +974,4257 @@ function lookBfs( test )
     [ 'g', 'b' ],
     [ 'd', 'a' ]
   ]
-  var expectedNodes = [ 'd', 'a', 'g', 'b', 'h', 'e', 'f', 'i', 'c' ];
 
+  test.identical( nds, expectedNds );
   test.identical( ups, expectedUps );
-  test.identical( downs, expectedDws );
-  test.identical( nodes, expectedNodes );
+  test.identical( dws, expectedDws );
+  test.identical( lups, expectedLups );
+  test.identical( ldws, expectedLdws );
 
   /* */
 
   sys.finit();
 
-}
+} /* end of lookBfs */
+
+//
+
+function lookBfsRevisiting( test )
+{
+
+  var nds = [];
+  var ups = [];
+  var dws = [];
+  var lups = [];
+  var ldws = [];
+
+  function clean()
+  {
+    nds = [];
+    ups = [];
+    dws = [];
+    lups = [];
+    ldws = [];
+  }
+
+  function onNode( node, it )
+  {
+    nds.push( group.nodesToNames( node ) );
+  }
+
+  function onUp( node, it )
+  {
+    if( it.level > 4 )
+    it.continueUp = 0;
+    ups.push( group.nodesToNames( node ) );
+  }
+
+  function onUp2( node, it )
+  {
+    ups.push( group.nodesToNames( node ) );
+  }
+
+  function onDown( node, it )
+  {
+    dws.push( group.nodesToNames( node ) );
+  }
+
+  function onLayerUp( nodes, it )
+  {
+    lups.push( group.nodesToNames( nodes ) );
+  }
+
+  function onLayerUp2( nodes, it )
+  {
+    if( it.level > 4 )
+    it.continueUp = 0;
+    lups.push( group.nodesToNames( nodes ) );
+  }
+
+  function onLayerDown( nodes, it )
+  {
+    ldws.push( group.nodesToNames( nodes ) );
+  }
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+
+  a.nodes.push( b, d ); // 1
+  b.nodes.push( c, d, b ); // 2
+  c.nodes.push( a ); // 3
+  d.nodes.push( c, e, f ); // 4
+  e.nodes.push(); // 5
+  f.nodes.push( f ); // 6
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  run({ fast : 0 });
+  run({ fast : 1 });
+
+  /* - */
+
+  sys.finit();
+
+  function run( o )
+  {
+
+    test.open( 'fast : ' + o.fast );
+
+    test.open( 'revisiting : 0' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : a,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+    var expectedUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+    var expectedDws = [ 'c', 'e', 'f', 'b', 'd', 'a' ];
+
+    var expectedLups =
+    [
+      [ 'a' ],
+      [ 'b', 'd' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f' ],
+      [ 'a', 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'c', 'e', 'f' ],
+      [ 'b', 'd' ],
+      [ 'a' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : b,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+    var expectedUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+    var expectedDws = [ 'a', 'e', 'f', 'c', 'd', 'b' ];
+
+    var expectedLups =
+    [
+      [ 'b' ],
+      [ 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f' ],
+      [ 'b', 'd', 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'a', 'e', 'f' ],
+      [ 'c', 'd' ],
+      [ 'b' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : e,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'e' ];
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    var expectedLups =
+    [
+      [ 'e' ],
+      []
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'e' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : f,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'f' ];
+    var expectedUps = [ 'f' ];
+    var expectedDws = [ 'f' ];
+
+    var expectedLups =
+    [
+      [ 'f' ],
+      [ 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'f' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* - */
+
+    test.close( 'revisiting : 0' );
+
+    test.open( 'revisiting : 1' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : a,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+    var expectedUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+    var expectedDws = [ 'c', 'e', 'f', 'b', 'd', 'a' ];
+
+    var expectedLups =
+    [
+      [ 'a' ],
+      [ 'b', 'd' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f' ],
+      [ 'a', 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'c', 'e', 'f' ],
+      [ 'b', 'd' ],
+      [ 'a' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : b,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+    var expectedUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+    var expectedDws = [ 'a', 'e', 'f', 'c', 'd', 'b' ];
+
+    var expectedLups =
+    [
+      [ 'b' ],
+      [ 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f' ],
+      [ 'b', 'd', 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'a', 'e', 'f' ],
+      [ 'c', 'd' ],
+      [ 'b' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : e,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'e' ];
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    var expectedLups =
+    [
+      [ 'e' ],
+      []
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'e' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : f,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'f' ];
+    var expectedUps = [ 'f' ];
+    var expectedDws = [ 'f' ];
+
+    var expectedLups =
+    [
+      [ 'f' ],
+      [ 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'f' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* - */
+
+    test.close( 'revisiting : 1' );
+
+    test.open( 'revisiting : 2' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : a,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'f' ];
+    var expectedUps = [ 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'f' ];
+    var expectedDws = [ 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'a' ];
+
+    var expectedLups =
+    [
+      [ 'a' ],
+      [ 'b', 'd' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f' ],
+      [ 'a', 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'c', 'e', 'f' ],
+      [ 'b', 'd' ],
+      [ 'a' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : b,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'd', 'f' ];
+    var expectedUps = [ 'b', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'd', 'f' ];
+    var expectedDws = [ 'd', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b' ];
+
+    var expectedLups =
+    [
+      [ 'b' ],
+      [ 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f' ],
+      [ 'b', 'd', 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'a', 'e', 'f' ],
+      [ 'c', 'd' ],
+      [ 'b' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : e,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'e' ];
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    var expectedLups =
+    [
+      [ 'e' ],
+      []
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'e' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : f,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'f', 'f' ];
+    var expectedUps = [ 'f', 'f' ];
+    var expectedDws = [ 'f', 'f' ];
+
+    var expectedLups =
+    [
+      [ 'f' ],
+      [ 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'f' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* - */
+
+    test.close( 'revisiting : 2' );
+
+    test.open( 'revisiting : 3' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : a,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'f' ];
+    var expectedUps = [ 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'f' ];
+    var expectedDws = [ 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'a' ];
+
+    var expectedLups =
+    [
+      [ 'a' ],
+      [ 'b', 'd' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f' ],
+      [ 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f' ],
+      [ 'b', 'd' ],
+      [ 'a' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : b,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ];
+    var expectedUps = [ 'b', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ];
+    var expectedDws = [ 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'b' ];
+
+    var expectedLups =
+    [
+      [ 'b' ],
+      [ 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'c', 'd', 'b' ],
+      [ 'b' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : e,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'e' ];
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    var expectedLups =
+    [
+      [ 'e' ],
+      []
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'e' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : f,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'f', 'f', 'f', 'f', 'f', 'f' ];
+    var expectedUps = [ 'f', 'f', 'f', 'f', 'f', 'f' ];
+    var expectedDws = [ 'f', 'f', 'f', 'f', 'f', 'f' ];
+
+    var expectedLups =
+    [
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ]
+    ]
+
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* - */
+
+    test.close( 'revisiting : 3' );
+
+    test.open( 'revisiting : 3, with onLayerUp' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : a,
+      onNode,
+      onUp : onUp2,
+      onDown,
+      onLayerUp : onLayerUp2,
+      onLayerDown,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'f' ];
+    var expectedUps = [ 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'f' ];
+    var expectedDws = [ 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'a' ];
+
+    var expectedLups =
+    [
+      [ 'a' ],
+      [ 'b', 'd' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f' ],
+      [ 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'f' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f' ],
+      [ 'b', 'd' ],
+      [ 'a' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : b,
+      onNode,
+      onUp : onUp2,
+      onDown,
+      onLayerUp : onLayerUp2,
+      onLayerDown,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ];
+    var expectedUps = [ 'b', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ];
+    var expectedDws = [ 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'd', 'b', 'b' ];
+
+    var expectedLups =
+    [
+      [ 'b' ],
+      [ 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'a', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'c', 'd', 'b', 'c', 'e', 'f', 'b', 'd', 'f', 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'b', 'd', 'a', 'f', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f', 'c', 'd', 'b' ],
+      [ 'c', 'd', 'b' ],
+      [ 'b' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : e,
+      onNode,
+      onUp : onUp2,
+      onDown,
+      onLayerUp : onLayerUp2,
+      onLayerDown,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'e' ];
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    var expectedLups =
+    [
+      [ 'e' ],
+      []
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'e' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    var got = group.lookBfs
+    ({
+      nodes : f,
+      onNode,
+      onUp : onUp2,
+      onDown,
+      onLayerUp : onLayerUp2,
+      onLayerDown,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'f', 'f', 'f', 'f', 'f', 'f' ];
+    var expectedUps = [ 'f', 'f', 'f', 'f', 'f', 'f' ];
+    var expectedDws = [ 'f', 'f', 'f', 'f', 'f', 'f' ];
+
+    var expectedLups =
+    [
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ],
+      [ 'f' ]
+    ]
+
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* - */
+
+    test.close( 'revisiting : 3, with onLayerUp' );
+
+    test.close( 'fast : ' + o.fast );
+  }
+
+} /* end of lookBfsRevisiting */
+
+//
+
+function lookBfsExcluding( test )
+{
+
+  var nds = [];
+  var ups = [];
+  var dws = [];
+  var lups = [];
+  var ldws = [];
+
+  function clean()
+  {
+    nds = [];
+    ups = [];
+    dws = [];
+    lups = [];
+    ldws = [];
+  }
+
+  function onNode( node, it )
+  {
+    nds.push( group.nodesToNames( node ) );
+  }
+
+  function onUp( node, it )
+  {
+    if( it.level > 1 )
+    it.continueNode = 0;
+    if( it.continueNode )
+    ups.push( group.nodesToNames( node ) );
+  }
+
+  function onUp2( node, it )
+  {
+    if( it.level > 0 )
+    it.continueUp = 0;
+    ups.push( group.nodesToNames( node ) );
+  }
+
+  function onDown( node, it )
+  {
+    if( it.continueNode )
+    dws.push( group.nodesToNames( node ) );
+  }
+
+  function onDown2( node, it )
+  {
+    dws.push( group.nodesToNames( node ) );
+  }
+
+  function onLayerUp( nodes, it )
+  {
+    lups.push( group.nodesToNames( nodes ) );
+  }
+
+  function onLayerUp3( nodes, it )
+  {
+    if( it.level > 1 )
+    it.continueNode = 0;
+    if( it.continueNode )
+    lups.push( group.nodesToNames( nodes ) );
+  }
+
+  function onLayerUp4( nodes, it )
+  {
+    if( it.level > 0 )
+    it.continueUp = 0;
+    lups.push( group.nodesToNames( nodes ) );
+  }
+
+  function onLayerDown( nodes, it )
+  {
+    ldws.push( group.nodesToNames( nodes ) );
+  }
+
+  function onLayerDown3( nodes, it )
+  {
+    if( it.continueNode )
+    ldws.push( group.nodesToNames( nodes ) );
+  }
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+
+  a.nodes.push( b, d ); // 1
+  b.nodes.push( c, d, b ); // 2
+  c.nodes.push( a ); // 3
+  d.nodes.push( c, e, f ); // 4
+  e.nodes.push(); // 5
+  f.nodes.push( f ); // 6
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  run({ fast : 1 });
+  run({ fast : 0 });
+
+  /* - */
+
+  sys.finit();
+
+  function run( o )
+  {
+
+    test.open( 'fast : ' + o.fast );
+
+    /* - */
+
+    test.case = 'only a, excluding elements';
+
+    clean();
+    group.lookBfs
+    ({
+      nodes : a,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd' ];
+    var expectedUps = [ 'a', 'b', 'd' ];
+    var expectedDws = [ 'b', 'd', 'a' ];
+    var expectedLups =
+    [
+      [ 'a' ],
+      [ 'b', 'd' ],
+      [ 'c', 'd', 'b', 'c', 'e', 'f' ],
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'b', 'd' ],
+      [ 'a' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only b, excluding elements';
+
+    clean();
+    group.lookBfs
+    ({
+      nodes : b,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp,
+      onLayerDown,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd' ];
+    var expectedUps = [ 'b', 'c', 'd' ];
+    var expectedDws = [ 'c', 'd', 'b' ];
+    var expectedLups =
+    [
+      [ 'b' ],
+      [ 'c', 'd', 'b' ],
+      [ 'a', 'c', 'e', 'f' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'c', 'd' ],
+      [ 'b' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only a, not visiting elements';
+
+    clean();
+    group.lookBfs
+    ({
+      nodes : a,
+      onNode,
+      onUp : onUp2,
+      onDown : onDown2,
+      onLayerUp,
+      onLayerDown,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd' ];
+    var expectedUps = [ 'a', 'b', 'd' ];
+    var expectedDws = [ 'b', 'd', 'a' ];
+    var expectedLups =
+    [
+      [ 'a' ],
+      [ 'b', 'd' ],
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'a' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only b, not visiting elements';
+
+    clean();
+    group.lookBfs
+    ({
+      nodes : b,
+      onNode,
+      onUp : onUp2,
+      onDown : onDown2,
+      onLayerUp,
+      onLayerDown,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd' ];
+    var expectedUps = [ 'b', 'c', 'd' ];
+    var expectedDws = [ 'c', 'd', 'b' ];
+    var expectedLups =
+    [
+      [ 'b' ],
+      [ 'c', 'd', 'b' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'b' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only a, excluding layers';
+
+    clean();
+    group.lookBfs
+    ({
+      nodes : a,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp : onLayerUp3,
+      onLayerDown : onLayerDown3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd' ];
+    var expectedUps = [ 'a', 'b', 'd' ];
+    var expectedDws = [ 'b', 'd', 'a' ];
+    var expectedLups =
+    [
+      [ 'a' ],
+      [ 'b', 'd' ],
+    ]
+    var expectedLdws =
+    [
+      [ 'b', 'd' ],
+      [ 'a' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only b, excluding layers';
+
+    clean();
+    group.lookBfs
+    ({
+      nodes : b,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp : onLayerUp3,
+      onLayerDown : onLayerDown3,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd' ];
+    var expectedUps = [ 'b', 'c', 'd' ];
+    var expectedDws = [ 'c', 'd', 'b' ];
+    var expectedLups =
+    [
+      [ 'b' ],
+      [ 'c', 'd', 'b' ],
+    ]
+    var expectedLdws =
+    [
+      [ 'c', 'd' ],
+      [ 'b' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only a, not visiting layers';
+
+    clean();
+    group.lookBfs
+    ({
+      nodes : a,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp : onLayerUp4,
+      onLayerDown,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd' ];
+    var expectedUps = [ 'a', 'b', 'd' ];
+    var expectedDws = [ 'b', 'd', 'a' ];
+    var expectedLups =
+    [
+      [ 'a' ],
+      [ 'b', 'd' ],
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'a' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* */
+
+    test.case = 'only b, not visiting layers';
+
+    clean();
+    group.lookBfs
+    ({
+      nodes : b,
+      onNode,
+      onUp,
+      onDown,
+      onLayerUp : onLayerUp4,
+      onLayerDown,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd' ];
+    var expectedUps = [ 'b', 'c', 'd' ];
+    var expectedDws = [ 'c', 'd', 'b' ];
+    var expectedLups =
+    [
+      [ 'b' ],
+      [ 'c', 'd', 'b' ]
+    ]
+    var expectedLdws =
+    [
+      [],
+      [ 'b' ]
+    ]
+
+    test.identical( nds, expectedNds );
+    test.identical( ups, expectedUps );
+    test.identical( dws, expectedDws );
+    test.identical( lups, expectedLups );
+    test.identical( ldws, expectedLdws );
+
+    /* - */
+
+    test.close( 'fast : ' + o.fast );
+  }
+
+} /* end of lookBfsExcluding */
+
+//
+
+function lookDfs( test )
+{
+
+  var ups = [];
+  var dws = [];
+  var nds = [];
+
+  function clean()
+  {
+    ups = [];
+    dws = [];
+    nds = [];
+  }
+
+  function onUp( nodeHandle, it )
+  {
+    ups.push( nodeHandle );
+  }
+
+  function onDown( nodeHandle, it )
+  {
+    dws.push( nodeHandle );
+  }
+
+  function onNode( nodeHandle, it )
+  {
+    nds.push( nodeHandle );
+  }
+
+/*
+  1 : 2
+  2 : 6
+  3 : 2
+  4 : 1 7
+  5 : 1 3 8
+  6 :
+  7 : 8
+  8 : 9
+  9 : 6 8
+  10 :
+*/
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+  var g = { name : 'g', nodes : [] } // 7
+  var h = { name : 'h', nodes : [] } // 8
+  var i = { name : 'i', nodes : [] } // 9
+  var j = { name : 'j', nodes : [] } // 10
+
+  a.nodes.push( b ); // 1
+  b.nodes.push( e, f ); // 2
+  c.nodes.push( b ); // 3
+  d.nodes.push( a, g ); // 4
+  e.nodes.push( a, c, h ); // 5
+  f.nodes.push(); // 6
+  g.nodes.push( h ); // 7
+  h.nodes.push( i ); // 8
+  i.nodes.push( f, h ); // 9
+  j.nodes.push(); // 10
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  group.nodesAdd([ a, b, c, d, e, f, g, h, i, j ]);
+  test.identical( group.nodes.length, 10 );
+  logger.log( group.exportInfo() );
+
+  test.case = 'all'; /* */
+
+  clean();
+  group.lookDfs({ nodes : group.nodes, onUp : onUp, onDown : onDown, onNode : onNode });
+
+  //                  a  b  e  c  h  i  f  d  g  j
+  var expectedUps = [ 1, 2, 5, 3, 8, 9, 6, 4, 7, 10 ];
+  var expectedDws = [ 3, 6, 9, 8, 5, 2, 1, 7, 4, 10 ];
+  //                  c  f  i  h  e  b  a  g  d  j
+
+  test.identical( group.nodesToIds( ups ), expectedUps );
+  test.identical( group.nodesToIds( dws ), expectedDws );
+
+  test.case = 'only a'; /* */
+
+  clean();
+  group.lookDfs({ nodes : a, onUp : onUp, onDown : onDown, onNode : onNode });
+
+  //                  a  b  e  c  h  i  f
+  var expectedUps = [ 1, 2, 5, 3, 8, 9, 6 ];
+  var expectedDws = [ 3, 6, 9, 8, 5, 2, 1 ];
+  //                  c  f  i  h  e  b  a
+
+  test.identical( group.nodesToIds( ups ), expectedUps );
+  test.identical( group.nodesToIds( dws ), expectedDws );
+
+  test.case = 'only d'; /* */
+
+  clean();
+  group.lookDfs({ nodes : d, onUp : onUp, onDown : onDown, onNode : onNode });
+
+  //                  d  a  b  e  c  h  i  f  g
+  var expectedUps = [ 4, 1, 2, 5, 3, 8, 9, 6, 7 ];
+  var expectedDws = [ 3, 6, 9, 8, 5, 2, 1, 7, 4 ];
+  //                  c  f  i  h  e  b  a  g  d
+
+  test.identical( group.nodesToIds( ups ), expectedUps );
+  test.identical( group.nodesToIds( dws ), expectedDws );
+
+  /* */
+
+  sys.finit();
+
+} /* end of lookDfs */
+
+//
+
+function lookDfsRevisiting( test )
+{
+
+  var ups = [];
+  var dws = [];
+  var nds = [];
+
+  function clean()
+  {
+    ups = [];
+    dws = [];
+    nds = [];
+  }
+
+  function onUp( nodeHandle, it )
+  {
+    if( it.level > 7 )
+    it.continueUp = 0;
+    ups.push( nodeHandle );
+  }
+
+  function onDown( nodeHandle, it )
+  {
+    dws.push( nodeHandle );
+  }
+
+  function onNode( nodeHandle, it )
+  {
+    nds.push( nodeHandle );
+  }
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+
+  a.nodes.push( b, d ); // 1
+  b.nodes.push( c, d, b ); // 2
+  c.nodes.push( a ); // 3
+  d.nodes.push( c, e, f ); // 4
+  e.nodes.push(); // 5
+  f.nodes.push( f ); // 6
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  // group.nodesAdd([ a, b, c, d, e ]);
+  // test.identical( group.nodes.length, 10 );
+  // logger.log( group.exportInfo() );
+
+  run({ fast : 0 });
+  run({ fast : 1 });
+
+  /* - */
+
+  sys.finit();
+
+  function run( o )
+  {
+
+    test.open( 'fast : ' + o.fast );
+
+    test.open( 'revisiting : 0' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+    var expectedDws = [ 'c', 'e', 'f', 'd', 'b', 'a' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+    var expectedDws = [ 'e', 'f', 'd', 'a', 'c', 'b' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : e,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : f,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'f' ];
+    var expectedDws = [ 'f' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* - */
+
+    test.close( 'revisiting : 0' );
+    test.open( 'revisiting : 1' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'a', 'b', 'c', 'd', 'c', 'e', 'f', 'd', 'c', 'e', 'f' ];
+    var expectedDws = [ 'c', 'c', 'e', 'f', 'd', 'b', 'c', 'e', 'f', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'b', 'c', 'a', 'd', 'e', 'f', 'd', 'c', 'a', 'e', 'f' ];
+    var expectedDws = [ 'e', 'f', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'd', 'b' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : e,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : f,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'f' ];
+    var expectedDws = [ 'f' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* - */
+
+    test.close( 'revisiting : 1' );
+
+    test.open( 'revisiting : 2' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+ /* var expectedUps = [ 'a', 'b', 'c',      'd', 'c',      'e', 'f',           'd', 'c',      'e', 'f'      ]; */
+    var expectedUps = [ 'a', 'b', 'c', 'a', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'd', 'c', 'a', 'e', 'f', 'f' ];
+    var expectedDws = [ 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'b', 'c', 'a', 'b', 'd', 'c', 'e', 'f', 'f', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'b' ];
+    var expectedDws = [ 'b', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'd', 'b', 'b' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : e,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : f,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'f', 'f' ];
+    var expectedDws = [ 'f', 'f' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* - */
+
+    test.close( 'revisiting : 2' );
+
+    test.open( 'revisiting : 3' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'a', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'e', 'f', 'f', 'f', 'f', 'd', 'c', 'a', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'd', 'c', 'a', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'e', 'f', 'f', 'e', 'f', 'f', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'e', 'f', 'f', 'd', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'e', 'f', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'e', 'f', 'f', 'f', 'f', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'f' ]
+    var expectedDws = [ 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'a', 'c', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+    test.identical( expectedUps.length, expectedDws.length );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'e', 'f', 'f', 'd', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'e', 'f', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'e', 'f', 'f', 'e', 'f', 'f', 'f', 'f', 'f', 'd', 'c', 'a', 'b', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'e', 'f', 'f', 'f', 'f', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'e', 'f', 'f', 'f', 'f', 'd', 'c', 'a', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'd', 'c', 'a', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'e', 'f', 'f', 'e', 'f', 'f', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b', 'd', 'c', 'a', 'e', 'f', 'f', 'd', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'e', 'f', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'c', 'd', 'b', 'd', 'c', 'e', 'f', 'd', 'c', 'a', 'b', 'd', 'e', 'f', 'f', 'f', 'b', 'c', 'a', 'b', 'd', 'd', 'c', 'a', 'e', 'f', 'f', 'b', 'c', 'a', 'd', 'c', 'e', 'f', 'b', 'c', 'd', 'b' ];
+    var expectedDws = [ 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'b', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'd', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'a', 'c', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+    test.identical( expectedUps.length, expectedDws.length );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : e,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+    test.identical( expectedUps.length, expectedDws.length );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : f,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f' ];
+    var expectedDws = [ 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+    test.identical( expectedUps.length, expectedDws.length );
+
+    /* - */
+
+    test.close( 'revisiting : 3' );
+
+    test.close( 'fast : ' + o.fast );
+  }
+
+} /* end of lookDfsRevisiting */
+
+//
+
+function lookDfsExcluding( test )
+{
+
+  var ups = [];
+  var dws = [];
+  var nds = [];
+
+  function clean()
+  {
+    ups = [];
+    dws = [];
+    nds = [];
+  }
+
+  function onUp( nodeHandle, it )
+  {
+    if( it.level > 1 )
+    it.continueNode = 0;
+    if( it.continueNode )
+    ups.push( nodeHandle );
+  }
+
+  function onDown( nodeHandle, it )
+  {
+    if( it.continueNode )
+    dws.push( nodeHandle );
+  }
+
+  function handleUp2( nodeHandle, it )
+  {
+    if( it.level > 0 )
+    it.continueUp = 0;
+    ups.push( nodeHandle );
+  }
+
+  function handleDown2( nodeHandle, it )
+  {
+    dws.push( nodeHandle );
+  }
+
+  function onNode( nodeHandle, it )
+  {
+    nds.push( nodeHandle );
+  }
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+
+  a.nodes.push( b, d ); // 1
+  b.nodes.push( c, d, b ); // 2
+  c.nodes.push( a ); // 3
+  d.nodes.push( c, e, f ); // 4
+  e.nodes.push(); // 5
+  f.nodes.push( f ); // 6
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  run({ fast : 1 });
+  run({ fast : 0 });
+
+  /* - */
+
+  sys.finit();
+
+  function run( o )
+  {
+
+    test.open( 'fast : ' + o.fast );
+
+    /* - */
+
+    test.case = 'only a, excluding';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd' ];
+    var expectedUps = [ 'a', 'b', 'd' ];
+    var expectedDws = [ 'b', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( nds ), expectedNds );
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b, excluding';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd' ];
+    var expectedUps = [ 'b', 'c', 'd' ];
+    var expectedDws = [ 'c', 'd', 'b' ];
+
+    test.identical( group.nodesToNames( nds ), expectedNds );
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only a, not visiting';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : a,
+      onUp : handleUp2,
+      onDown : handleDown2,
+      onNode : onNode,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd' ];
+    var expectedUps = [ 'a', 'b', 'd' ];
+    var expectedDws = [ 'b', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( nds ), expectedNds );
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b, not visiting';
+
+    clean();
+    group.lookDfs
+    ({
+      nodes : b,
+      onUp : handleUp2,
+      onDown : handleDown2,
+      onNode : onNode,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd' ];
+    var expectedUps = [ 'b', 'c', 'd' ];
+    var expectedDws = [ 'c', 'd', 'b' ];
+
+    test.identical( group.nodesToNames( nds ), expectedNds );
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* - */
+
+    test.close( 'fast : ' + o.fast );
+  }
+
+} /* end of lookDfsExcluding */
+
+//
+
+function lookDbfsRevisiting( test )
+{
+
+  var ups = [];
+  var dws = [];
+  var nds = [];
+
+  function clean()
+  {
+    ups = [];
+    dws = [];
+    nds = [];
+  }
+
+  function onUp( nodeHandle, it )
+  {
+    if( it.level > 7 )
+    it.continueUp = 0;
+    ups.push( nodeHandle );
+  }
+
+  function onDown( nodeHandle, it )
+  {
+    dws.push( nodeHandle );
+  }
+
+  function onNode( nodeHandle, it )
+  {
+    nds.push( nodeHandle );
+  }
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+
+  a.nodes.push( b, d ); // 1
+  b.nodes.push( c, d, b ); // 2
+  c.nodes.push( a ); // 3
+  d.nodes.push( c, e, f ); // 4
+  e.nodes.push(); // 5
+  f.nodes.push( f ); // 6
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  // group.nodesAdd([ a, b, c, d, e ]);
+  // test.identical( group.nodes.length, 10 );
+  // logger.log( group.exportInfo() );
+
+  run({ fast : 0 });
+  run({ fast : 1 });
+
+  /* - */
+
+  sys.finit();
+
+  function run( o )
+  {
+
+    test.open( 'fast : ' + o.fast );
+
+    test.open( 'revisiting : 0' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+    var expectedDws = [ 'c', 'b', 'e', 'f', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+    var expectedDws = [ 'a', 'c', 'e', 'f', 'd', 'b' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : e,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : f,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 0,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'f' ];
+    var expectedDws = [ 'f' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* - */
+
+    test.close( 'revisiting : 0' );
+
+    test.open( 'revisiting : 1' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'a', 'b', 'd', 'c', 'd', 'c', 'e', 'f', 'c', 'e', 'f' ];
+    var expectedDws = [ 'c', 'c', 'e', 'f', 'd', 'b', 'c', 'e', 'f', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'b', 'c', 'd', 'a', 'd', 'e', 'f', 'c', 'e', 'f', 'a' ];
+    var expectedDws = [ 'e', 'f', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'd', 'b' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : e,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : f,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 1,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'f' ];
+    var expectedDws = [ 'f' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* - */
+
+    test.close( 'revisiting : 1' );
+
+    test.open( 'revisiting : 2' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'a', 'f', 'c', 'e', 'f', 'a', 'f' ];
+    var expectedDws = [ 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'b', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'f' ];
+    var expectedDws = [ 'b', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'd', 'b', 'b' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : e,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : f,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 2,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'f', 'f' ];
+    var expectedDws = [ 'f', 'f' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* - */
+
+    test.close( 'revisiting : 2' );
+
+    test.open( 'revisiting : 3' );
+
+    /* - */
+
+    test.case = 'only a';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'f', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'f', 'f', 'f', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f' ];
+    var expectedDws = [ 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'a', 'c', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'd', 'a' ];
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+    test.identical( expectedUps.length, expectedDws.length );
+
+    /* */
+
+    test.case = 'only b';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'b', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'f', 'f', 'f', 'f', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'f', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'f', 'f', 'f', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b', 'c', 'e', 'f', 'a', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'f', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'd', 'b', 'c', 'e', 'f', 'c', 'e', 'f', 'a', 'b', 'd', 'f', 'f', 'c', 'd', 'b', 'a', 'b', 'd', 'c', 'e', 'f', 'a', 'f', 'c', 'd', 'b', 'a', 'c', 'e', 'f', 'c', 'd', 'b' ];
+    var expectedDws = [ 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'b', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'd', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'a', 'c', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'f', 'd', 'c', 'd', 'b', 'b', 'c', 'e', 'f', 'd', 'a', 'c', 'b', 'd', 'a', 'c', 'e', 'f', 'f', 'f', 'd', 'b', 'd', 'a', 'c', 'a', 'c', 'e', 'f', 'f', 'd', 'a', 'c', 'c', 'e', 'f', 'd', 'c', 'd', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+    test.identical( expectedUps.length, expectedDws.length );
+
+    /* */
+
+    test.case = 'only e';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : e,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'e' ];
+    var expectedDws = [ 'e' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+    test.identical( expectedUps.length, expectedDws.length );
+
+    /* */
+
+    test.case = 'only f';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : f,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      revisiting : 3,
+      fast : o.fast,
+    });
+
+    var expectedUps = [ 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f' ];
+    var expectedDws = [ 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f' ];
+
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+    test.identical( expectedUps.length, expectedDws.length );
+
+    /* - */
+
+    test.close( 'revisiting : 3' );
+
+    test.close( 'fast : ' + o.fast );
+  }
+
+} /* end of lookDbfsRevisiting */
+
+//
+
+function lookDbfsExcluding( test )
+{
+
+  var ups = [];
+  var dws = [];
+  var nds = [];
+
+  function clean()
+  {
+    ups = [];
+    dws = [];
+    nds = [];
+  }
+
+  function onUp( nodeHandle, it )
+  {
+    if( it.level > 1 )
+    it.continueNode = 0;
+    if( it.continueNode )
+    ups.push( nodeHandle );
+  }
+
+  function onDown( nodeHandle, it )
+  {
+    if( it.continueNode )
+    dws.push( nodeHandle );
+  }
+
+  function handleUp2( nodeHandle, it )
+  {
+    if( it.level > 0 )
+    it.continueUp = 0;
+    ups.push( nodeHandle );
+  }
+
+  function handleDown2( nodeHandle, it )
+  {
+    dws.push( nodeHandle );
+  }
+
+  function onNode( nodeHandle, it )
+  {
+    nds.push( nodeHandle );
+  }
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+
+  a.nodes.push( b, d ); // 1
+  b.nodes.push( c, d, b ); // 2
+  c.nodes.push( a ); // 3
+  d.nodes.push( c, e, f ); // 4
+  e.nodes.push(); // 5
+  f.nodes.push( f ); // 6
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  run({ fast : 1 });
+  run({ fast : 0 });
+
+  /* - */
+
+  sys.finit();
+
+  function run( o )
+  {
+
+    test.open( 'fast : ' + o.fast );
+
+    /* - */
+
+    test.case = 'only a, excluding';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : a,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd' ];
+    var expectedUps = [ 'a', 'b', 'd' ];
+    var expectedDws = [ 'b', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( nds ), expectedNds );
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b, excluding';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : b,
+      onUp : onUp,
+      onDown : onDown,
+      onNode : onNode,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd' ];
+    var expectedUps = [ 'b', 'c', 'd' ];
+    var expectedDws = [ 'c', 'd', 'b' ];
+
+    test.identical( group.nodesToNames( nds ), expectedNds );
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only a, not visiting';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : a,
+      onUp : handleUp2,
+      onDown : handleDown2,
+      onNode : onNode,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'a', 'b', 'd' ];
+    var expectedUps = [ 'a', 'b', 'd' ];
+    var expectedDws = [ 'b', 'd', 'a' ];
+
+    test.identical( group.nodesToNames( nds ), expectedNds );
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* */
+
+    test.case = 'only b, not visiting';
+
+    clean();
+    group.lookDbfs
+    ({
+      nodes : b,
+      onUp : handleUp2,
+      onDown : handleDown2,
+      onNode : onNode,
+      fast : o.fast,
+    });
+
+    var expectedNds = [ 'b', 'c', 'd' ];
+    var expectedUps = [ 'b', 'c', 'd' ];
+    var expectedDws = [ 'c', 'd', 'b' ];
+
+    test.identical( group.nodesToNames( nds ), expectedNds );
+    test.identical( group.nodesToNames( ups ), expectedUps );
+    test.identical( group.nodesToNames( dws ), expectedDws );
+
+    /* - */
+
+    test.close( 'fast : ' + o.fast );
+  }
+
+} /* end of lookDbfsExcluding */
+
+//
+
+function eachBfs( test )
+{
+
+  var ups = [];
+  var dws = [];
+  var nds = [];
+
+  function clean()
+  {
+    ups = [];
+    dws = [];
+    nds = [];
+  }
+
+  function onUp( node, it )
+  {
+    ups.push( group.nodesToNames( node ) );
+  }
+
+  function onDown( node, it )
+  {
+    dws.push( group.nodesToNames( node ) );
+  }
+
+  function onNode( node, it )
+  {
+    nds.push( group.nodesToNames( node ) );
+  }
+
+  /* - */
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+
+  a.nodes.push( b, d ); // 1
+  b.nodes.push( c, d, b ); // 2
+  c.nodes.push( a ); // 3
+  d.nodes.push( c, e, f ); // 4
+  e.nodes.push(); // 5
+  f.nodes.push( f ); // 6
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  /* */
+
+  test.case = 'default, a';
+  clean();
+  var exp = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'b', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : a });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'default, b';
+  clean();
+  var exp = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'e', 'f', 'c', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : b });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'default, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : e });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'default, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : f });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, a';
+  clean();
+  var exp = [ 'b', 'd', 'c', 'e', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'b', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : a, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, b';
+  clean();
+  var exp = [ 'c', 'd', 'a', 'e', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'e', 'f', 'c', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : b, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, e';
+  clean();
+  var exp = [];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : e, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, f';
+  clean();
+  var exp = [];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : f, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, a';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'b', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : a, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, b';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'e', 'f', 'c', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : b, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : e, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, f';
+  clean();
+  var exp = [];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : f, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, a';
+  clean();
+  var exp = [ 'a', 'b', 'd', 'c', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'b', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : a, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, b';
+  clean();
+  var exp = [ 'b', 'c', 'd', 'a', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'e', 'f', 'c', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : b, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, e';
+  clean();
+  var exp = [];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : e, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : f, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, a';
+  clean();
+  var exp = [ 'b', 'd', 'c', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'b', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : a, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, b';
+  clean();
+  var exp = [ 'c', 'd', 'a', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'e', 'f', 'c', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : b, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, e';
+  clean();
+  var exp = [];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : e, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, f';
+  clean();
+  var exp = [];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : f, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'mandatory : 1, a';
+  clean();
+  var exp = [ 'b', 'd', 'c', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'b', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : a, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'mandatory : 1, b';
+  clean();
+  var exp = [ 'c', 'd', 'a', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'e', 'f', 'c', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : b, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'mandatory : 1, e';
+  clean();
+  var exp = [ 'c', 'a', 'd', 'f' ];
+  var expNds = [ 'c', 'a', 'd', 'f' ];
+  var expUps = [ 'c', 'a', 'd', 'f' ];
+  var expDws = [ 'c', 'a', 'd', 'f' ];
+  test.shouldThrowErrorSync( () =>
+  {
+    var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : e, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+    test.identical( group.nodesToNames( got ), exp );
+    test.identical( nds, expNds );
+    test.identical( ups, expUps );
+    test.identical( dws, expDws );
+  });
+
+  /* */
+
+  test.case = 'mandatory : 1, f';
+  clean();
+  var exp = [];
+  var expNds = [];
+  var expUps = [];
+  var expDws = [];
+  test.shouldThrowErrorSync( () =>
+  {
+    var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : f, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+    test.identical( group.nodesToNames( got ), exp );
+    test.identical( nds, expNds );
+    test.identical( ups, expUps );
+    test.identical( dws, expDws );
+  });
+
+  /* */
+
+  test.case = 'recursive : 1, a';
+  clean();
+  var exp = [ 'a', 'b', 'd' ];
+  var expNds = [ 'a', 'b', 'd' ];
+  var expUps = [ 'a', 'b', 'd' ];
+  var expDws = [ 'b', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : a, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 1, b';
+  clean();
+  var exp = [ 'b', 'c', 'd' ];
+  var expNds = [ 'b', 'c', 'd' ];
+  var expUps = [ 'b', 'c', 'd' ];
+  var expDws = [ 'c', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : b, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 1, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : e, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 1, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : f, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, a';
+  clean();
+  var exp = [ 'a' ];
+  var expNds = [ 'a' ];
+  var expUps = [ 'a' ];
+  var expDws = [ 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : a, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, b';
+  clean();
+  var exp = [ 'b' ];
+  var expNds = [ 'b' ];
+  var expUps = [ 'b' ];
+  var expDws = [ 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : b, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : e, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookBfs', nodes : f, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+} /* end of eachBfs */
+
+//
+
+function eachDfs( test )
+{
+
+  var ups = [];
+  var dws = [];
+  var nds = [];
+
+  function clean()
+  {
+    ups = [];
+    dws = [];
+    nds = [];
+  }
+
+  function onUp( node, it )
+  {
+    ups.push( group.nodesToNames( node ) );
+  }
+
+  function onDown( node, it )
+  {
+    dws.push( group.nodesToNames( node ) );
+  }
+
+  function onNode( node, it )
+  {
+    nds.push( group.nodesToNames( node ) );
+  }
+
+  /* - */
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+
+  a.nodes.push( b, d ); // 1
+  b.nodes.push( c, d, b ); // 2
+  c.nodes.push( a ); // 3
+  d.nodes.push( c, e, f ); // 4
+  e.nodes.push(); // 5
+  f.nodes.push( f ); // 6
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  /* */
+
+  test.case = 'default, a';
+  clean();
+  var exp = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expNds = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'd', 'b', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : a });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'default, b';
+  clean();
+  var exp = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expNds = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expDws = [ 'e', 'f', 'd', 'a', 'c', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : b });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'default, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : e });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'default, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : f });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, a';
+  clean();
+  var exp = [ 'b', 'c', 'd', 'e', 'f' ];
+  var expNds = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'd', 'b', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : a, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, b';
+  clean();
+  var exp = [ 'c', 'a', 'd', 'e', 'f' ];
+  var expNds = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expDws = [ 'e', 'f', 'd', 'a', 'c', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : b, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, e';
+  clean();
+  var exp = [];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : e, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, f';
+  clean();
+  var exp = [];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : f, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, a';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'd', 'b', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : a, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, b';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expDws = [ 'e', 'f', 'd', 'a', 'c', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : b, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : e, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, f';
+  clean();
+  var exp = [];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : f, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, a';
+  clean();
+  var exp = [ 'a', 'b', 'c', 'd', 'f' ];
+  var expNds = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'd', 'b', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : a, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, b';
+  clean();
+  var exp = [ 'b', 'c', 'a', 'd', 'f' ];
+  var expNds = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expDws = [ 'e', 'f', 'd', 'a', 'c', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : b, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, e';
+  clean();
+  var exp = [];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : e, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : f, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, a';
+  clean();
+  var exp = [ 'b', 'c', 'd', 'f' ];
+  var expNds = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'd', 'b', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : a, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, b';
+  clean();
+  var exp = [ 'c', 'a', 'd', 'f' ];
+  var expNds = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expDws = [ 'e', 'f', 'd', 'a', 'c', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : b, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, e';
+  clean();
+  var exp = [];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : e, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, f';
+  clean();
+  var exp = [];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : f, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'mandatory : 1, a';
+  clean();
+  var exp = [ 'b', 'c', 'd', 'f' ];
+  var expNds = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+  var expDws = [ 'c', 'e', 'f', 'd', 'b', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : a, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'mandatory : 1, b';
+  clean();
+  var exp = [ 'c', 'a', 'd', 'f' ];
+  var expNds = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'a', 'd', 'e', 'f' ];
+  var expDws = [ 'e', 'f', 'd', 'a', 'c', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : b, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'mandatory : 1, e';
+  clean();
+  var exp = [ 'c', 'a', 'd', 'f' ];
+  var expNds = [ 'c', 'a', 'd', 'f' ];
+  var expUps = [ 'c', 'a', 'd', 'f' ];
+  var expDws = [ 'c', 'a', 'd', 'f' ];
+  test.shouldThrowErrorSync( () =>
+  {
+    var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : e, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+    test.identical( group.nodesToNames( got ), exp );
+    test.identical( nds, expNds );
+    test.identical( ups, expUps );
+    test.identical( dws, expDws );
+  });
+
+  /* */
+
+  test.case = 'mandatory : 1, f';
+  clean();
+  var exp = [];
+  var expNds = [];
+  var expUps = [];
+  var expDws = [];
+  test.shouldThrowErrorSync( () =>
+  {
+    var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : f, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+    test.identical( group.nodesToNames( got ), exp );
+    test.identical( nds, expNds );
+    test.identical( ups, expUps );
+    test.identical( dws, expDws );
+  });
+
+  /* */
+
+  test.case = 'recursive : 1, a';
+  clean();
+  var exp = [ 'a', 'b', 'd' ];
+  var expNds = [ 'a', 'b', 'd' ];
+  var expUps = [ 'a', 'b', 'd' ];
+  var expDws = [ 'b', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : a, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 1, b';
+  clean();
+  var exp = [ 'b', 'c', 'd' ];
+  var expNds = [ 'b', 'c', 'd' ];
+  var expUps = [ 'b', 'c', 'd' ];
+  var expDws = [ 'c', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : b, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 1, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : e, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 1, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : f, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, a';
+  clean();
+  var exp = [ 'a' ];
+  var expNds = [ 'a' ];
+  var expUps = [ 'a' ];
+  var expDws = [ 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : a, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, b';
+  clean();
+  var exp = [ 'b' ];
+  var expNds = [ 'b' ];
+  var expUps = [ 'b' ];
+  var expDws = [ 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : b, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : e, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDfs', nodes : f, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+} /* end of eachDfs */
+
+//
+
+function eachDbfs( test )
+{
+
+  var ups = [];
+  var dws = [];
+  var nds = [];
+
+  function clean()
+  {
+    ups = [];
+    dws = [];
+    nds = [];
+  }
+
+  function onUp( node, it )
+  {
+    ups.push( group.nodesToNames( node ) );
+  }
+
+  function onDown( node, it )
+  {
+    dws.push( group.nodesToNames( node ) );
+  }
+
+  function onNode( node, it )
+  {
+    nds.push( group.nodesToNames( node ) );
+  }
+
+  /* - */
+
+  test.case = 'setup';
+
+  var a = { name : 'a', nodes : [] } // 1
+  var b = { name : 'b', nodes : [] } // 2
+  var c = { name : 'c', nodes : [] } // 3
+  var d = { name : 'd', nodes : [] } // 4
+  var e = { name : 'e', nodes : [] } // 5
+  var f = { name : 'f', nodes : [] } // 6
+
+  a.nodes.push( b, d ); // 1
+  b.nodes.push( c, d, b ); // 2
+  c.nodes.push( a ); // 3
+  d.nodes.push( c, e, f ); // 4
+  e.nodes.push(); // 5
+  f.nodes.push( f ); // 6
+
+  var sys = new _.graph.AbstractGraphSystem({ onNodeNameGet : ( node ) => node.name });
+  var group = sys.groupMake();
+
+  /* */
+
+  test.case = 'default, a';
+  clean();
+  var exp = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'b', 'e', 'f', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : a });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'default, b';
+  clean();
+  var exp = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'c', 'e', 'f', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : b });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'default, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : e });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'default, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : f });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, a';
+  clean();
+  var exp = [ 'b', 'd', 'c', 'e', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'b', 'e', 'f', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : a, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, b';
+  clean();
+  var exp = [ 'c', 'd', 'a', 'e', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'c', 'e', 'f', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : b, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, e';
+  clean();
+  var exp = [];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : e, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withStem/*maybe withTransient*/ : 0, f';
+  clean();
+  var exp = [];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : f, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, a';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'b', 'e', 'f', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : a, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, b';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'c', 'e', 'f', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : b, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : e, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'includingBranches : 0, f';
+  clean();
+  var exp = [];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : f, includingBranches : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, a';
+  clean();
+  var exp = [ 'a', 'b', 'd', 'c', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'b', 'e', 'f', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : a, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, b';
+  clean();
+  var exp = [ 'b', 'c', 'd', 'a', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'c', 'e', 'f', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : b, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, e';
+  clean();
+  var exp = [];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : e, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : f, withTerminals : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, a';
+  clean();
+  var exp = [ 'b', 'd', 'c', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'b', 'e', 'f', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : a, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, b';
+  clean();
+  var exp = [ 'c', 'd', 'a', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'c', 'e', 'f', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : b, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, e';
+  clean();
+  var exp = [];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : e, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'withTerminals : 0, withStem/*maybe withTransient*/ : 0, f';
+  clean();
+  var exp = [];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : f, withTerminals : 0, withStem/*maybe withTransient*/ : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'mandatory : 1, a';
+  clean();
+  var exp = [ 'b', 'd', 'c', 'f' ];
+  var expNds = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expUps = [ 'a', 'b', 'd', 'c', 'e', 'f' ];
+  var expDws = [ 'c', 'b', 'e', 'f', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : a, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'mandatory : 1, b';
+  clean();
+  var exp = [ 'c', 'd', 'a', 'f' ];
+  var expNds = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expUps = [ 'b', 'c', 'd', 'a', 'e', 'f' ];
+  var expDws = [ 'a', 'c', 'e', 'f', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : b, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'mandatory : 1, e';
+  clean();
+  var exp = [ 'c', 'a', 'd', 'f' ];
+  var expNds = [ 'c', 'a', 'd', 'f' ];
+  var expUps = [ 'c', 'a', 'd', 'f' ];
+  var expDws = [ 'c', 'a', 'd', 'f' ];
+  test.shouldThrowErrorSync( () =>
+  {
+    var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : e, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+    test.identical( group.nodesToNames( got ), exp );
+    test.identical( nds, expNds );
+    test.identical( ups, expUps );
+    test.identical( dws, expDws );
+  });
+
+  /* */
+
+  test.case = 'mandatory : 1, f';
+  clean();
+  var exp = [];
+  var expNds = [];
+  var expUps = [];
+  var expDws = [];
+  test.shouldThrowErrorSync( () =>
+  {
+    var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : f, withTerminals : 0, withStem/*maybe withTransient*/ : 0, mandatory : 1 });
+    test.identical( group.nodesToNames( got ), exp );
+    test.identical( nds, expNds );
+    test.identical( ups, expUps );
+    test.identical( dws, expDws );
+  });
+
+  /* */
+
+  test.case = 'recursive : 1, a';
+  clean();
+  var exp = [ 'a', 'b', 'd' ];
+  var expNds = [ 'a', 'b', 'd' ];
+  var expUps = [ 'a', 'b', 'd' ];
+  var expDws = [ 'b', 'd', 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : a, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 1, b';
+  clean();
+  var exp = [ 'b', 'c', 'd' ];
+  var expNds = [ 'b', 'c', 'd' ];
+  var expUps = [ 'b', 'c', 'd' ];
+  var expDws = [ 'c', 'd', 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : b, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 1, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : e, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 1, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : f, recursive : 1 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, a';
+  clean();
+  var exp = [ 'a' ];
+  var expNds = [ 'a' ];
+  var expUps = [ 'a' ];
+  var expDws = [ 'a' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : a, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, b';
+  clean();
+  var exp = [ 'b' ];
+  var expNds = [ 'b' ];
+  var expUps = [ 'b' ];
+  var expDws = [ 'b' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : b, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, e';
+  clean();
+  var exp = [ 'e' ];
+  var expNds = [ 'e' ];
+  var expUps = [ 'e' ];
+  var expDws = [ 'e' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : e, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+  test.case = 'recursive : 0, f';
+  clean();
+  var exp = [ 'f' ];
+  var expNds = [ 'f' ];
+  var expUps = [ 'f' ];
+  var expDws = [ 'f' ];
+  var got = group.each({ onNode, onUp, onDown, method : 'lookDbfs', nodes : f, recursive : 0 });
+  test.identical( group.nodesToNames( got ), exp );
+  test.identical( nds, expNds );
+  test.identical( ups, expUps );
+  test.identical( dws, expDws );
+
+  /* */
+
+} /* end of eachDbfs */
 
 //
 
@@ -1661,7 +5818,7 @@ function stronglyConnectedTreeForDfs( test )
 
 //
 
-function nodesInfoExportAsTree( test )
+function nodesExportInfoTree( test )
 {
 
   test.case = 'trivial';
@@ -1706,7 +5863,7 @@ function nodesInfoExportAsTree( test )
        |     +-- f
        +-- f
   `
-  var infoAsTree = group.nodesInfoExportAsTree([ a ]);
+  var infoAsTree = group.nodesExportInfoTree([ a ]);
   test.equivalent( infoAsTree, expected );
   logger.log( 'Tree' );
   logger.log( infoAsTree );
@@ -1722,7 +5879,7 @@ function nodesInfoExportAsTree( test )
      |     +-- f
      +-- f
   `
-  var infoAsTree = group.nodesInfoExportAsTree([ b ]);
+  var infoAsTree = group.nodesExportInfoTree([ b ]);
   test.equivalent( infoAsTree, expected );
   logger.log( 'Tree' );
   logger.log( infoAsTree );
@@ -1756,7 +5913,7 @@ function nodesInfoExportAsTree( test )
          |     +-- f
          +-- f
   `
-  var infoAsTree = group.nodesInfoExportAsTree([ a, b, c ]);
+  var infoAsTree = group.nodesExportInfoTree([ a, b, c ]);
   test.equivalent( infoAsTree, expected );
   logger.log( 'Tree' );
   logger.log( infoAsTree );
@@ -1788,7 +5945,7 @@ function nodesInfoExportAsTree( test )
          |     +-- f
          +-- f
   `
-  var infoAsTree = group.nodesInfoExportAsTree( [ a, b, c ], { topsDelimiting : 0 } );
+  var infoAsTree = group.nodesExportInfoTree( [ a, b, c ], { topsDelimiting : 0 } );
   test.equivalent( infoAsTree, expected );
   logger.log( 'Tree' );
   logger.log( infoAsTree );
@@ -1800,7 +5957,7 @@ function nodesInfoExportAsTree( test )
 var Self =
 {
 
-  name : 'Tools/mid/AbstractGraph',
+  name : 'Tools.mid.AbstractGraph',
   silencing : 1,
 
   tests :
@@ -1815,8 +5972,20 @@ var Self =
     sourcesOnlyAmong,
     leastMostDegreeAmong,
 
-    lookDfs,
     lookBfs,
+    lookBfsRevisiting,
+    lookBfsExcluding,
+
+    lookDfs,
+    lookDfsRevisiting,
+    lookDfsExcluding,
+
+    lookDbfsRevisiting,
+    lookDbfsExcluding,
+
+    eachBfs,
+    eachDfs,
+    eachDbfs,
 
     topologicalSortDfs,
     topologicalSortSourceBasedBfs,
@@ -1827,7 +5996,7 @@ var Self =
     groupByStrongConnectivityDfs,
     stronglyConnectedTreeForDfs,
 
-    nodesInfoExportAsTree,
+    nodesExportInfoTree,
 
   },
 

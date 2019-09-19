@@ -5,12 +5,12 @@
 var _ = _global_.wTools;
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 
-if( typeof module !== 'undefined' )
-{
-
-  require( '../UseBase.s' );
-
-}
+// if( typeof module !== 'undefined' )
+// {
+//
+//   require( '../UseBase.s' );
+//
+// }
 
 /*
 
@@ -87,7 +87,7 @@ function nodeEach( o )
   o.node = self;
 
   o.elementsGet = function( node ){ return node.elements || []; };
-  o.nameGet = function( node ){ return node.nickName; };
+  o.nameGet = function( node ){ return node.qualifiedName; };
 
   return _.graph.eachNode( o );
 }
@@ -104,7 +104,7 @@ function downAttachAfter( down )
   _.assert( _.objectIs( down ) );
   _.assert( !self.finitedIs() );
 
-  //console.log( 'down added',self.nickName,'to',down.nickName );
+  //console.log( 'down added',self.qualifiedName,'to',down.qualifiedName );
 
   self.down = down;
 
@@ -122,7 +122,7 @@ function downDetachBefore()
   var self = this;
   var system = self.system;
 
-  //console.log( 'down removed',self.nickName,'from',( self.down ? self.down.nickName : '' ) );
+  //console.log( 'down removed',self.qualifiedName,'from',( self.down ? self.down.qualifiedName : '' ) );
 
   _.assert( arguments.length === 0 );
   _.assert( self.down );
@@ -204,6 +204,6 @@ var Self =
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = _[ Self.shortName ] = _.mixinDelcare( Self );
+_.graph[ Self.shortName ] = _.mixinDelcare( Self );
 
 })();

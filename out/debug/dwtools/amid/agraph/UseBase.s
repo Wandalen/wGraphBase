@@ -1,17 +1,17 @@
-( function _UseBase_s_( ) {
+( function _IncludeBase_s_( ) {
 
 'use strict';
 
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../Tools.s' );
+  let _ = require( '../../../Tools.s' );
 
   _.include( 'wProto' );
   _.include( 'wCopyable' );
   // _.include( 'wMathSpace' );
 
-  require( './UseAbstractBase.s' );
+  // require( './UseAbstractBase.s' );
 
 }
 

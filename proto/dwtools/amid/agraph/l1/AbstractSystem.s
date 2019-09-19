@@ -1,4 +1,4 @@
-( function _AbstractSystem_s_( ) {
+( function _System_s_( ) {
 
 'use strict';
 
@@ -72,7 +72,7 @@ function finit()
 //
 
 /**
- * @summary Declares group of nodes. Returns instance of {@link module:Tools/mid/AbstractGraphs.wTools.graph.wAbstractGraphGroup wTools.graph.AbstractGraphGroup}
+ * @summary Declares group of nodes. Returns instance of {@link module:Tools/mid/AbstractGraphs.wTools.graph.wAbstractNodesGroup wTools.graph.AbstractNodesGroup}
  * @param {Object} o Options for instance.
  * @function groupMake
  * @memberof module:Tools/mid/AbstractGraphs.wTools.graph.wAbstractGraphSystem
@@ -86,7 +86,8 @@ function groupMake( o )
   if( !o.sys )
   o.sys = sys;
 
-  _.mapSupplement( o, _.mapButNulls( _.mapOnly( sys, sys.FieldsForGroup ) ) );
+  debugger;
+  _.mapSupplementNulls( o, _.mapButNulls( _.mapOnly( sys, sys.FieldsForGroup ) ) );
 
   return sys.Group( o );
 }
@@ -271,11 +272,10 @@ function nodeDescriptorDelete( nodeId )
 let FieldsForGroup =
 {
   onNodeNameGet : null,
+  onNodesAreSame : null,
   onNodeIs : null,
   onOutNodesFor : null,
   onInNodesFor : null,
-  // onOutNodesIdsFor : null,
-  // onInNodesIdsFor : null,
 }
 
 let Composes =
@@ -285,11 +285,10 @@ let Composes =
 let Aggregates =
 {
   onNodeNameGet : null,
+  onNodesAreSame : null,
   onNodeIs : null,
   onOutNodesFor : null,
   onInNodesFor : null,
-  // onOutNodesIdsFor : null,
-  // onInNodesIdsFor : null,
 }
 
 let Associates =
@@ -307,7 +306,7 @@ let Restricts =
 
 let Statics =
 {
-  Group : _.graph.AbstractGraphGroup,
+  Group : _.graph.AbstractNodesGroup,
   FieldsForGroup,
 }
 
@@ -383,7 +382,7 @@ _.Copyable.mixin( Self );
 
 _.staticDeclare
 ({
-  prototype : _.graph.AbstractGraphGroup.prototype,
+  prototype : _.graph.AbstractNodesGroup.prototype,
   name : 'System',
   value : Self,
 });
