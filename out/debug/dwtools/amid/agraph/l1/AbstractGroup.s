@@ -482,7 +482,6 @@ function nodeAdd( nodeHandle )
 
   _.assert( !!group.nodeIs( nodeHandle ), 'Expects nodeHandle' );
   _.assert( !_.arrayHas( group.nodes, nodeHandle, group.onNodesAreSame || undefined ), 'The group does not have a node with such nodeHandle' );
-  debugger;
   _.arrayAppendOnceStrictly( group.nodes, nodeHandle, group.onNodesAreSame || undefined );
 
   let wasDefined = true;
@@ -526,7 +525,6 @@ function nodeDelete( nodeHandle )
   _.assert( !!group.nodeIs( nodeHandle ), 'Expects nodeHandle' );
   _.assert( descriptor === null || descriptor.count > 0, 'The system does not have information about number of the node' );
   _.assert( _.arrayHas( group.nodes, nodeHandle, group.onNodesAreSame || undefined ), 'The group does not have a node with such nodeHandle' );
-  debugger;
   _.arrayRemoveOnceStrictly( group.nodes, nodeHandle, group.onNodesAreSame || undefined );
 
   if( descriptor && descriptor.count > 1 )

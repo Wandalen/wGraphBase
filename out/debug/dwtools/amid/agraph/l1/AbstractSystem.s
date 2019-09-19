@@ -86,7 +86,6 @@ function groupMake( o )
   if( !o.sys )
   o.sys = sys;
 
-  debugger;
   _.mapSupplementNulls( o, _.mapButNulls( _.mapOnly( sys, sys.FieldsForGroup ) ) );
 
   return sys.Group( o );
