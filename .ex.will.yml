@@ -25,13 +25,16 @@ about :
 path :
 
   repository : git+https:///github.com/Wandalen/wGraph.git
+  remotes :
+   - git+https:///github.com/Wandalen/wGraphBase.git
+   - npm:///wgraphbase
   bugtracker : https:///github.com/Wandalen/wGraph/issues
 
 step :
 
   proto.export :
     inherit : module.export
-    export : path::proto
+    export : path::export
     tar : 0
     criterion :
       content : 'proto'
