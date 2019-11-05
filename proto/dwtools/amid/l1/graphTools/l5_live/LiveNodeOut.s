@@ -203,7 +203,7 @@ _.prototypeCrossRefer
   },
 });
 
-_.GraphBranch.mixin( Self );
+_.graph.GraphBranch.mixin( Self );
 
 //
 

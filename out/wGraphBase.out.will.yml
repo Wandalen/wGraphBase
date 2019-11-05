@@ -2,33 +2,37 @@ format: outwillfile-2.0
 root:
   - wGraphBase.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wGraphBase.out.will.yml: &ref_0
+    hash: 9dc583d3f6d8db15361cf6bb6f9eee4e
+    size: 39096
+  ../.ex.will.yml: &ref_1
     hash: 8d0a191ef2797afece9c92c0c5b81626
     size: 1739
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: ce193f2506add9096cfbe1982c0b9103
     size: 4935
 module:
   wGraphBase.out:
     about:
       name: wGraphBase
+      org: noorg
       description: Sketch. Collection of routines and classes to operate graphs.
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
+      interpreters: &ref_3
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords: &ref_4
         - Graph
         - Abstract graph
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors: &ref_4
+      contributors: &ref_5
         - Kostiantyn Wandalen <wanalen@willbe.so>
       npm.name: wgraphbase
-      npm.scripts: &ref_5
+      npm.scripts: &ref_6
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -155,7 +159,6 @@ module:
           - ../proto
           - ../proto/dwtools
           - ../proto/dwtools/Tools.s
-          - ../proto/dwtools/abase
           - ../proto/dwtools/amid
           - ../proto/dwtools/amid/l1
           - ../proto/dwtools/amid/l1/graph.test
@@ -176,7 +179,6 @@ module:
           - ../proto/dwtools/amid/l1/graphTools/l5_live/LiveNodeIn.s
           - ../proto/dwtools/amid/l1/graphTools/l5_live/LiveNodeOut.s
           - ../proto/dwtools/amid/l1/graphTools/l5_live/LiveSystem.s
-          - ../proto/dwtools/atop
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -711,6 +713,22 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          reflector: 'reflector::exported.proto.export*'
+        criterion:
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          reflector: 'reflector::exported.files.proto.export*'
+        criterion:
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -799,21 +817,23 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wGraphBase.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wGraphBase
+      org: noorg
       description: Sketch. Collection of routines and classes to operate graphs.
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters: *ref_3
+      keywords: *ref_4
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors: *ref_4
+      contributors: *ref_5
       npm.name: wgraphbase
-      npm.scripts: *ref_5
+      npm.scripts: *ref_6
     path:
       module.willfiles:
         criterion:
@@ -1009,8 +1029,8 @@ module:
       transpile.proto.no.tests.compiled.debug:
         src:
           filePath:
-            '**.test*': 0
-            '**.test/**': 0
+            '**.test*': false
+            '**.test/**': false
             'path::proto': '{path::out.*=1}/Main.s'
         mandatory: 1
         criterion:
@@ -1023,8 +1043,8 @@ module:
       transpile.proto.no.tests.compiled.release:
         src:
           filePath:
-            '**.test*': 0
-            '**.test/**': 0
+            '**.test*': false
+            '**.test/**': false
             'path::proto': '{path::out.*=1}/Main.s'
         mandatory: 1
         criterion:
@@ -1037,7 +1057,7 @@ module:
       transpile.proto.only.tests.compiled.debug:
         src:
           filePath:
-            '**.test*': 1
+            '**.test*': true
             'path::proto': '{path::out.*=1}/Tests.test.s'
         mandatory: 1
         criterion:
@@ -1050,7 +1070,7 @@ module:
       transpile.proto.only.tests.compiled.release:
         src:
           filePath:
-            '**.test*': 1
+            '**.test*': true
             'path::proto': '{path::out.*=1}/Tests.test.s'
         mandatory: 1
         criterion:
@@ -1486,9 +1506,6 @@ module:
           - 'build::release'
           - 'build::npm'
     consistency:
-      ../.ex.will.yml:
-        hash: 8d0a191ef2797afece9c92c0c5b81626
-        size: 1739
-      ../.im.will.yml:
-        hash: ce193f2506add9096cfbe1982c0b9103
-        size: 4935
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
+      wGraphBase.out.will.yml: *ref_0

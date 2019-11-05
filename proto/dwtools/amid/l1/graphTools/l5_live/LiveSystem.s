@@ -233,7 +233,7 @@ _.prototypeCrossRefer
 });
 
 _.Copyable.mixin( Self );
-_.GraphSystem.mixin( Self );
+_.graph.GraphSystem.mixin( Self );
 _.FieldsStack.mixin( Self );
 
 //
