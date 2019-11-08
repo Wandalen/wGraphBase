@@ -2,33 +2,37 @@ format: outwillfile-2.0
 root:
   - wGraphBase.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wGraphBase.out.will.yml: &ref_0
+    hash: 70454ee08ffc19a1675a73d71ef118b9
+    size: 39125
+  ../.ex.will.yml: &ref_1
     hash: 8d0a191ef2797afece9c92c0c5b81626
     size: 1739
-  ../.im.will.yml: &ref_1
-    hash: ce193f2506add9096cfbe1982c0b9103
-    size: 4935
+  ../.im.will.yml: &ref_2
+    hash: cd8f1973eb2d74160cb9fc872b7c856a
+    size: 5009
 module:
   wGraphBase.out:
     about:
       name: wGraphBase
+      org: noorg
       description: Sketch. Collection of routines and classes to operate graphs.
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - Graph
         - Abstract graph
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@willbe.so>
       npm.name: wgraphbase
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -59,9 +63,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wGraph.git'
       origins:
@@ -71,15 +72,15 @@ module:
       bugtracker:
         path: 'https:///github.com/Wandalen/wGraph/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: .
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - ../package-lock.json
+          - ../package.json
+          - ../node_modules
       proto:
         path: ../proto
       export:
@@ -144,11 +145,13 @@ module:
         path: '{path::out.*=}/source/Index.s'
       exported.dir.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path: ../proto
       exported.files.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path:
@@ -346,6 +349,7 @@ module:
           prefixPath: ../proto
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
       exported.files.proto.export:
@@ -358,6 +362,7 @@ module:
         recursive: 0
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
     step:
@@ -711,6 +716,24 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          reflector: 'reflector::exported.proto.export*'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          reflector: 'reflector::exported.files.proto.export*'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -799,21 +822,32 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wGraphBase.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wGraphBase
+      org: noorg
       description: Sketch. Collection of routines and classes to operate graphs.
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 8.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - Graph
+        - Abstract graph
+        - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@willbe.so>
       npm.name: wgraphbase
-      npm.scripts: *ref_5
+      npm.scripts:
+        test: wtest .run proto/**
+        docgen: wdocgen .build proto
     path:
       module.willfiles:
         criterion:
@@ -842,9 +876,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wGraph.git'
       origins:
@@ -854,21 +885,21 @@ module:
       bugtracker:
         path: 'https:///github.com/Wandalen/wGraph/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: out
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - package-lock.json
+          - package.json
+          - node_modules
       proto:
-        path: ./proto
+        path: proto
       export:
         path: '{path::proto}/**'
       doc:
-        path: ./doc
+        path: doc
       out.raw.debug:
         criterion:
           debug: debug
@@ -1490,5 +1521,8 @@ module:
         hash: 8d0a191ef2797afece9c92c0c5b81626
         size: 1739
       ../.im.will.yml:
-        hash: ce193f2506add9096cfbe1982c0b9103
-        size: 4935
+        hash: cd8f1973eb2d74160cb9fc872b7c856a
+        size: 5009
+      wGraphBase.out.will.yml:
+        hash: 70454ee08ffc19a1675a73d71ef118b9
+        size: 39125
