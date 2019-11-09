@@ -21,7 +21,7 @@
   {
     "url" : "https://github.com/Wandalen/wGraphBase/issues"
   }, 
-  "dependencies" : { "wTools" : "", "wCopyable" : "" }, 
-  "devDependencies" : { "wTesting" : "" }, 
+  "dependencies" : { "wTools" : "alpha", "wCopyable" : "alpha" }, 
+  "devDependencies" : { "wTesting" : "alpha" }, 
   "keywords" : [ "Graph", "Abstract graph", "wTools" ]
 }
