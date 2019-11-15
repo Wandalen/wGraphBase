@@ -255,7 +255,7 @@ _.prototypeCrossRefer
 });
 
 _.Copyable.mixin( Self );
-_.GraphNode.mixin( Self );
+_.graph.GraphNode.mixin( Self );
 
 //
 
