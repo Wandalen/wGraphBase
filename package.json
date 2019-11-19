@@ -1,6 +1,6 @@
 {
   "name" : "wgraphbase", 
-  "version" : "0.3.100", 
+  "version" : "0.3.101", 
   "engine" : "node >= 8.0.0", 
   "description" : "Sketch. Collection of routines and classes to operate graphs.", 
   "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
@@ -21,7 +21,7 @@
   {
     "url" : "https://github.com/Wandalen/wGraphBase/issues"
   }, 
-  "dependencies" : { "wTools" : "beta", "wCopyable" : "beta" }, 
-  "devDependencies" : { "wTesting" : "beta" }, 
+  "dependencies" : { "wTools" : "alpha", "wCopyable" : "alpha" }, 
+  "devDependencies" : { "wTesting" : "alpha" }, 
   "keywords" : [ "Graph", "Abstract graph", "wTools" ]
 }
