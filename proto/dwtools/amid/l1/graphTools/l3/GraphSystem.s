@@ -43,7 +43,7 @@ function systemMakeNodeAfter( node )
   _.assert( _.strIs( node.uniq ),'Expects string { uniq }' );
 
   if( system.collectionMap )
-  _.prototypeEach( node.Self.prototype, function( proto )
+  _.prototype.each( node.Self.prototype, function( proto )
   {
 
     var n = proto.constructor.name;
@@ -80,7 +80,7 @@ function systemUnmakeNodeAfter( node )
   _.assert( node.uniq !== undefined );
 
   if( system.collectionMap )
-  _.prototypeEach( node.Self.prototype, function( proto )
+  _.prototype.each( node.Self.prototype, function( proto )
   {
 
     var n = proto.constructor.name;
