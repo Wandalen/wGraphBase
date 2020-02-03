@@ -52,7 +52,7 @@ function _simpleTreeIteratorMake()
 {
   var iterator = Object.create( null );
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   iterator.root = null;
   iterator.visited = [];

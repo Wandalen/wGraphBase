@@ -49,7 +49,7 @@ function onMixinApply( mixinDescriptor, dstClass )
 function cloneEmpty()
 {
   var self = this;
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   var result = self.clone();
   return result;
 }
@@ -102,7 +102,7 @@ function downAttachAfter( down )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( !self.down );
   _.assert( _.objectIs( down ) );
-  _.assert( !self.finitedIs() );
+  _.assert( !self.isFinited() );
 
   //console.log( 'down added',self.qualifiedName,'to',down.qualifiedName );
 
@@ -124,7 +124,7 @@ function downDetachBefore()
 
   //console.log( 'down removed',self.qualifiedName,'from',( self.down ? self.down.qualifiedName : '' ) );
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( self.down );
   _.assert( self.down.elements.indexOf( self ) !== -1 );
 
