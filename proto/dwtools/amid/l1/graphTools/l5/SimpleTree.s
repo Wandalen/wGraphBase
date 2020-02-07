@@ -5,7 +5,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  require( '../../Tools.s' );
+  require( '../../../../Tools.s' );
   // if( typeof _global_ === 'undefined' || !_global_.wBase )
   // {
   //   let toolsPath = '../../../dwtools/Base.s';
