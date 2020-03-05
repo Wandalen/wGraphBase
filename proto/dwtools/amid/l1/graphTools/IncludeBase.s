@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wProto' );
   _.include( 'wCopyable' );
-  // _.include( 'wMathSpace' );
+  // _.include( 'wMathMatrix' );
 
   // require( './UseAbstractBase.s' );
 
