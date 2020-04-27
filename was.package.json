@@ -1,27 +1,27 @@
 {
-  "name" : "wgraphbase", 
-  "version" : "0.3.177", 
-  "engine" : "node >= 8.0.0", 
-  "description" : "Sketch. Collection of routines and classes to operate graphs.", 
-  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
-  "contributors" : 
+  "name" : "wgraphbase",
+  "version" : "0.3.178",
+  "engine" : "node >= 8.0.0",
+  "description" : "Sketch. Collection of routines and classes to operate graphs.",
+  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>",
+  "contributors" :
   [
     { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so" }
-  ], 
-  "license" : "MIT", 
-  "main" : "proto/dwtools/amid/agraph/UseTop.s", 
-  "files" : [ "proto/dwtools/amid/agraph", "proto/dwtools/Tools.s", "out" ], 
-  "scripts" : { "test" : "wtest .run proto/**", "docgen" : "wdocgen proto" }, 
-  "repository" : 
+  ],
+  "license" : "MIT",
+  "main" : "proto/dwtools/amid/agraph/UseTop.s",
+  "files" : [ "proto/dwtools/amid/agraph", "proto/dwtools/Tools.s", "out" ],
+  "scripts" : { "test" : "wtest .run proto/**", "docgen" : "wdocgen proto" },
+  "repository" :
   {
-    "type" : "git", 
+    "type" : "git",
     "url" : "https://github.com/Wandalen/wGraphBase.git"
-  }, 
-  "bugs" : 
+  },
+  "bugs" :
   {
     "url" : "https://github.com/Wandalen/wGraphBase/issues"
-  }, 
-  "dependencies" : { "wTools" : "", "wCopyable" : "" }, 
-  "devDependencies" : { "wTesting" : "" }, 
+  },
+  "dependencies" : { "wTools" : "", "wCopyable" : "" },
+  "devDependencies" : { "wTesting" : "" },
   "keywords" : [ "Graph", "Abstract graph", "wTools" ]
 }
