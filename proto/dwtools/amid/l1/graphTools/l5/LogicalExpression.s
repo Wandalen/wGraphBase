@@ -5,22 +5,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof _global_ === 'undefined' || !Object.hasOwnProperty.call( _global_, 'wBase' ) )
-  {
-    let toolsPath = '../../../dwtools/Base.s';
-    let toolsExternal = 0;
-    try
-    {
-      toolsPath = require.resolve( toolsPath );
-    }
-    catch( err )
-    {
-      toolsExternal = 1;
-      require( 'wTools' );
-    }
-    if( !toolsExternal )
-    require( toolsPath );
-  }
+  require( '../../../dwtools/Tools.s' );
 
   var _ = _global_.wTools;
 
@@ -34,7 +19,7 @@ var _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 //
 
-var _ = wTools;
+var _ = _global_.wTools;
 var Parent = null;
 var Self = function wLogicalExpression( o )
 {
@@ -87,7 +72,7 @@ function form()
   if( logic.terminalOriginalToAliasMap === null )
   logic.terminalOriginalToAliasMap = _.mapInvert( logic.terminalAliasToOriginalMap );
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assertMapHasAll( logic.branchOriginalToAliasMap, logic.DefaultBranchOriginalToAliasMap );
   _.assertMapHasOnly( logic.branchOriginalToAliasMap, logic.DefaultBranchOriginalToAliasMap );
   _.assert( !!logic.branchOriginalToAliasMap[ logic.defaultBranchType ] );
