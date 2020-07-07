@@ -91,13 +91,13 @@ function _simpleTreeIterationMake( iterator,iteration )
 
 //
 
-function eachNode( o )
+function nodeEach( o )
 {
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.routineIs( o.elementsGet ) );
   _.assert( _.routineIs( o.nameGet ) );
-  _.routineOptions( eachNode,o );
+  _.routineOptions( nodeEach,o );
 
   var iterator = _simpleTreeIteratorMake();
   iterator.root = o.node;
@@ -115,14 +115,14 @@ function eachNode( o )
   var iteration = _simpleTreeIterationMake( iterator );
   iteration.node = o.node;
 
-  _eachNodeAct( iterator,iteration );
+  _nodeEachAct( iterator,iteration );
 
   o.result = iterator.result;
 
   return iterator.result;
 }
 
-eachNode.defaults =
+nodeEach.defaults =
 {
   node : null,
   result : null,
@@ -131,11 +131,11 @@ eachNode.defaults =
   onIterator : null,
 }
 
-_.mapExtend( eachNode.defaults,NodeGetters );
+_.mapExtend( nodeEach.defaults,NodeGetters );
 
 //
 
-function _eachNodeAct( iterator,iteration )
+function _nodeEachAct( iterator,iteration )
 {
   var node = iteration.node;
   var name = iterator.nameGet.call( node,node,iteration,iterator );
@@ -204,7 +204,7 @@ function _eachNodeAct( iterator,iteration )
       newIteration.key = e;
       newIteration.index = e;
       newIteration.node = elements[ e ];
-      _eachNodeAct( iterator,newIteration );
+      _nodeEachAct( iterator,newIteration );
     }
 
   }
@@ -299,8 +299,8 @@ var Proto =
   _simpleTreeIteratorMake : _simpleTreeIteratorMake,
   _simpleTreeIterationMake : _simpleTreeIterationMake,
 
-  eachNode : eachNode,
-  _eachNodeAct : _eachNodeAct,
+  nodeEach : nodeEach,
+  _nodeEachAct : _nodeEachAct,
 
   goRelative : goRelative,
 

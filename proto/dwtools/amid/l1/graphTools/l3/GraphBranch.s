@@ -288,7 +288,7 @@ function nodeEach( o )
   o.elementsGet = function( node ){ return node.elements || []; };
   o.nameGet = function( node ){ return node.qualifiedName; };
 
-  return _.graph.eachNode( o );
+  return _.graph.nodeEach( o );
 }
 
 //
