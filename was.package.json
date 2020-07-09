@@ -9,8 +9,8 @@
     { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" }
   ],
   "license" : "MIT",
-  "main" : "proto/dwtools/amid/agraph/UseTop.s",
-  "files" : [ "proto/dwtools/amid/agraph", "proto/dwtools/Tools.s", "out" ],
+  "main" : "proto/wtools/amid/agraph/UseTop.s",
+  "files" : [ "proto/wtools/amid/agraph", "proto/wtools/Tools.s", "out" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
   "repository" :
   {

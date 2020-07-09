@@ -114,7 +114,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/amid/agraph/UseTop.s
+        path: ../proto/wtools/amid/agraph/UseTop.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -124,13 +124,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/agraph/UseTop.s'
+        path: '{path::out.*=1}/source/wtools/amid/agraph/UseTop.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/agraph/UseTop.s'
+        path: '{path::out.*=1}/source/wtools/amid/agraph/UseTop.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -157,30 +157,30 @@ module:
         path:
           - ../proto
           - ../proto/Integration.test.s
-          - ../proto/dwtools
-          - ../proto/dwtools/Tools.s
-          - ../proto/dwtools/abase
-          - ../proto/dwtools/amid
-          - ../proto/dwtools/amid/l1
-          - ../proto/dwtools/amid/l1/graph.test
-          - ../proto/dwtools/amid/l1/graph.test/LogicalExpression.test.s
-          - ../proto/dwtools/amid/l1/graphTools
-          - ../proto/dwtools/amid/l1/graphTools/IncludeBase.s
-          - ../proto/dwtools/amid/l1/graphTools/IncludeLive.s
-          - ../proto/dwtools/amid/l1/graphTools/IncludeTop.s
-          - ../proto/dwtools/amid/l1/graphTools/l3
-          - ../proto/dwtools/amid/l1/graphTools/l3/GraphBranch.s
-          - ../proto/dwtools/amid/l1/graphTools/l3/GraphNode.s
-          - ../proto/dwtools/amid/l1/graphTools/l3/GraphSystem.s
-          - ../proto/dwtools/amid/l1/graphTools/l5
-          - ../proto/dwtools/amid/l1/graphTools/l5/LogicalExpression.s
-          - ../proto/dwtools/amid/l1/graphTools/l5/SimpleTree.s
-          - ../proto/dwtools/amid/l1/graphTools/l5_live
-          - ../proto/dwtools/amid/l1/graphTools/l5_live/LiveNode.s
-          - ../proto/dwtools/amid/l1/graphTools/l5_live/LiveNodeIn.s
-          - ../proto/dwtools/amid/l1/graphTools/l5_live/LiveNodeOut.s
-          - ../proto/dwtools/amid/l1/graphTools/l5_live/LiveSystem.s
-          - ../proto/dwtools/atop
+          - ../proto/wtools
+          - ../proto/wtools/Tools.s
+          - ../proto/wtools/abase
+          - ../proto/wtools/amid
+          - ../proto/wtools/amid/l1
+          - ../proto/wtools/amid/l1/graph.test
+          - ../proto/wtools/amid/l1/graph.test/LogicalExpression.test.s
+          - ../proto/wtools/amid/l1/graphTools
+          - ../proto/wtools/amid/l1/graphTools/IncludeBase.s
+          - ../proto/wtools/amid/l1/graphTools/IncludeLive.s
+          - ../proto/wtools/amid/l1/graphTools/IncludeTop.s
+          - ../proto/wtools/amid/l1/graphTools/l3
+          - ../proto/wtools/amid/l1/graphTools/l3/GraphBranch.s
+          - ../proto/wtools/amid/l1/graphTools/l3/GraphNode.s
+          - ../proto/wtools/amid/l1/graphTools/l3/GraphSystem.s
+          - ../proto/wtools/amid/l1/graphTools/l5
+          - ../proto/wtools/amid/l1/graphTools/l5/LogicalExpression.s
+          - ../proto/wtools/amid/l1/graphTools/l5/SimpleTree.s
+          - ../proto/wtools/amid/l1/graphTools/l5_live
+          - ../proto/wtools/amid/l1/graphTools/l5_live/LiveNode.s
+          - ../proto/wtools/amid/l1/graphTools/l5_live/LiveNodeIn.s
+          - ../proto/wtools/amid/l1/graphTools/l5_live/LiveNodeOut.s
+          - ../proto/wtools/amid/l1/graphTools/l5_live/LiveSystem.s
+          - ../proto/wtools/atop
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -920,7 +920,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/amid/agraph/UseTop.s
+        path: proto/wtools/amid/agraph/UseTop.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -930,13 +930,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/agraph/UseTop.s'
+        path: '{path::out.*=1}/source/wtools/amid/agraph/UseTop.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/amid/agraph/UseTop.s'
+        path: '{path::out.*=1}/source/wtools/amid/agraph/UseTop.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
