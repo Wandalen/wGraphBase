@@ -1507,6 +1507,4 @@ module:
       ../.im.will.yml:
         hash: dcddb8d7a866ab220ad21e6bad803085
         size: 5006
-      wGraphBase.out.will.yml:
-        hash: a306e75e7b3f4645a4c8c886482b5b18
-        size: 38934
+      wGraphBase.out.will.yml: *ref_0
