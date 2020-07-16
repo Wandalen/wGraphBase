@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 
   require( './IncludeBase.s' );
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   // require( './UseAbstractMid.s' );
 

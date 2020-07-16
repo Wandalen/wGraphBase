@@ -7,21 +7,21 @@ if( typeof module !== 'undefined' )
 
   require( '../../../wtools/Tools.s' );
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   _.include( 'wGraph' );
   // require( '../UseBase.s' );
 
 }
 
-var _ = _global_.wTools;
+let _ = _global_.wTools;
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 //
 
-var _ = _global_.wTools;
-var Parent = null;
-var Self = function wLogicalExpression( o )
+let _ = _global_.wTools;
+let Parent = null;
+let Self = function wLogicalExpression( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }

@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _ = _global_.wTools;
+let _ = _global_.wTools;
 
 // --
 // tests
@@ -61,7 +61,7 @@ function trivial( test )
 // declaration
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Tools.mid.LogicalExpression',

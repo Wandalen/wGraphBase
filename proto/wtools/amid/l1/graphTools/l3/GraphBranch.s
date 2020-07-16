@@ -2,7 +2,7 @@
 
 'use strict';
 
-var _ = _global_.wTools;
+let _ = _global_.wTools;
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 // if( typeof module !== 'undefined' )
@@ -419,7 +419,7 @@ var Supplement =
 
 //
 
-var Self =
+let Self =
 {
 
   onMixinApply : onMixinApply,

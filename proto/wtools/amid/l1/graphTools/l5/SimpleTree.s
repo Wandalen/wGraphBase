@@ -7,15 +7,15 @@ if( typeof module !== 'undefined' )
 
   require( '../../../../../wtools/Tools.s' );
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
 }
 
 //
 
-var _ = _global_.wTools;
-var Parent = null;
-var Self = _global_.wTools.graph || Object.create( null );
+let _ = _global_.wTools;
+let Parent = null;
+let Self = _global_.wTools.graph || Object.create( null );
 
 // --
 // inter

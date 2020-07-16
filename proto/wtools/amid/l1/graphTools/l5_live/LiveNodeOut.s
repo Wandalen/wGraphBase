@@ -3,9 +3,9 @@
 'use strict';
 
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
-var _ = _global_.wTools;
-var Parent = wLiveNode;
-var Self = function wLiveOut( o )
+let _ = _global_.wTools;
+let Parent = wLiveNode;
+let Self = function wLiveOut( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
