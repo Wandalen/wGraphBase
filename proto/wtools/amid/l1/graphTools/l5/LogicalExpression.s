@@ -439,7 +439,7 @@ var Statics =
 // declare
 // --
 
-var Extend =
+var Extension =
 {
 
   init : init,
@@ -480,7 +480,7 @@ _.classDeclare
 ({
   cls : Self,
   parent : Parent,
-  extend : Extend,
+  extend : Extension,
 });
 
 _.Copyable.mixin( Self );
