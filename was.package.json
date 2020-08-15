@@ -1,1 +1,27 @@
-{"name":"wgraphbase","version":"0.3.206","engine":"node >= 10.0.0","description":"Sketch. Collection of routines and classes to operate graphs.","author":"Kostiantyn Wandalen <wanalen@01.school>","contributors":[{"name":"Kostiantyn Wandalen","email":"wanalen@01.school"}],"license":"MIT","main":"proto/wtools/amid/agraph/UseTop.s","files":["proto/wtools/amid/agraph","proto/wtools/Tools.s","out"],"scripts":{"test":"wtest .run 'proto/**' rapidity:-3","docgen":"wdocgen proto"},"repository":{"type":"git","url":"https://github.com/Wandalen/wGraphBase.git"},"bugs":{"url":"https://github.com/Wandalen/wGraphBase/issues"},"dependencies":{"wTools":"","wCopyable":""},"devDependencies":{"wTesting":""},"keywords":["Graph","Abstract graph","wTools"]}
+{
+  "name" : "wgraphbase",
+  "version" : "0.3.207",
+  "engine" : "node >= 10.0.0",
+  "description" : "Sketch. Collection of routines and classes to operate graphs.",
+  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
+  "contributors" :
+  [
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" }
+  ],
+  "license" : "MIT",
+  "main" : "proto/wtools/amid/agraph/UseTop.s",
+  "files" : [ "proto/wtools/amid/agraph", "proto/wtools/Tools.s", "out" ],
+  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
+  "repository" :
+  {
+    "type" : "git",
+    "url" : "https://github.com/Wandalen/wGraphBase.git"
+  },
+  "bugs" :
+  {
+    "url" : "https://github.com/Wandalen/wGraphBase/issues"
+  },
+  "dependencies" : { "wTools" : "", "wCopyable" : "" },
+  "devDependencies" : { "wTesting" : "" },
+  "keywords" : [ "Graph", "Abstract graph", "wTools" ]
+}
