@@ -1,8 +1,8 @@
 format: outwillfile-2.0
 root:
-  - wGraphBase.out
+  - wGraphExtra.out
 consistency:
-  wGraphBase.out.will.yml: &ref_0
+  wGraphExtra.out.will.yml: &ref_0
     hash: a306e75e7b3f4645a4c8c886482b5b18
     size: 38934
   ../.ex.will.yml: &ref_1
@@ -12,9 +12,9 @@ consistency:
     hash: dcddb8d7a866ab220ad21e6bad803085
     size: 5006
 module:
-  wGraphBase.out:
+  wGraphExtra.out:
     about:
-      name: wGraphBase
+      name: wGraphExtra
       org: noorg
       description: Sketch. Collection of routines and classes to operate graphs.
       enabled: 1
@@ -31,7 +31,7 @@ module:
       author: Kostiantyn Wandalen <wanalen@01.school>
       contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
-      npm.name: wgraphbase
+      npm.name: wgraphextra
       npm.scripts:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
@@ -39,11 +39,11 @@ module:
       module.willfiles:
         criterion:
           predefined: 1
-        path: wGraphBase.out.will.yml
+        path: wGraphExtra.out.will.yml
       module.common:
         criterion:
           predefined: 1
-        path: wGraphBase.out
+        path: wGraphExtra.out
       module.original.willfiles:
         criterion:
           predefined: 1
@@ -67,8 +67,8 @@ module:
         path: 'git+https:///github.com/Wandalen/wGraph.git'
       origins:
         path:
-          - 'git+https:///github.com/Wandalen/wGraphBase.git'
-          - 'npm:///wgraphbase'
+          - 'git+https:///github.com/Wandalen/wGraphExtra.git'
+          - 'npm:///wgraphextra'
       bugtracker:
         path: 'https:///github.com/Wandalen/wGraph/issues'
       in:
@@ -190,7 +190,7 @@ module:
         path: 'npm:///wCopyable'
         autoExporting: 0
         enabled: 0
-      wgraphbase:
+      wgraphextra:
         path: 'hd://..'
         autoExporting: 0
         enabled: 0
@@ -815,12 +815,12 @@ module:
           content: proto
           export: 1
     consistency:
-      wGraphBase.out.will.yml: *ref_0
+      wGraphExtra.out.will.yml: *ref_0
       ../.ex.will.yml: *ref_1
       ../.im.will.yml: *ref_2
   ../:
     about:
-      name: wGraphBase
+      name: wGraphExtra
       org: noorg
       description: Sketch. Collection of routines and classes to operate graphs.
       enabled: 1
@@ -837,7 +837,7 @@ module:
       author: Kostiantyn Wandalen <wanalen@01.school>
       contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
-      npm.name: wgraphbase
+      npm.name: wgraphextra
       npm.scripts:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
@@ -857,7 +857,7 @@ module:
       module.peer.willfiles:
         criterion:
           predefined: 1
-        path: out/wGraphBase.out.will.yml
+        path: out/wGraphExtra.out.will.yml
       module.peer.in:
         criterion:
           predefined: 1
@@ -873,8 +873,8 @@ module:
         path: 'git+https:///github.com/Wandalen/wGraph.git'
       origins:
         path:
-          - 'git+https:///github.com/Wandalen/wGraphBase.git'
-          - 'npm:///wgraphbase'
+          - 'git+https:///github.com/Wandalen/wGraphExtra.git'
+          - 'npm:///wgraphextra'
       bugtracker:
         path: 'https:///github.com/Wandalen/wGraph/issues'
       in:
@@ -958,7 +958,7 @@ module:
         path: 'npm:///wCopyable'
         autoExporting: 0
         enabled: 0
-      wgraphbase:
+      wgraphextra:
         path: 'hd://.'
         autoExporting: 0
         enabled: 0
@@ -1507,4 +1507,4 @@ module:
       ../.im.will.yml:
         hash: dcddb8d7a866ab220ad21e6bad803085
         size: 5006
-      wGraphBase.out.will.yml: *ref_0
+      wGraphExtra.out.will.yml: *ref_0

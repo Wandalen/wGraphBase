@@ -1,9 +1,9 @@
 
 about :
 
-  name : 'wGraphBase'
+  name : 'wGraphExtra'
   description : 'Sketch. Collection of routines and classes to operate graphs.'
-  version : '0.4.0'
+  version : '0.5.0'
   enabled : 1
   interpreters :
   - njs >= 10.0.0
@@ -17,7 +17,7 @@ about :
   author : 'Kostiantyn Wandalen <wanalen@01.school>'
   contributors :
   - 'Kostiantyn Wandalen <wanalen@01.school>'
-  npm.name : 'wgraphbase'
+  npm.name : 'wgraphextra'
   npm.scripts :
     test : 'wtest .run proto/**'
     docgen : 'wdocgen .build proto'
@@ -26,8 +26,8 @@ path :
 
   repository : git+https:///github.com/Wandalen/wGraph.git
   origins :
-   - git+https:///github.com/Wandalen/wGraphBase.git
-   - npm:///wgraphbase
+   - git+https:///github.com/Wandalen/wGraphExtra.git
+   - npm:///wgraphextra
   bugtracker : https:///github.com/Wandalen/wGraph/issues
 
 step :

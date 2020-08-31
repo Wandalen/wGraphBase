@@ -7,7 +7,7 @@ submodule :
   wCopyable :
     path : npm:///wCopyable
     enabled : 0 # submodule
-  wgraphbase :
+  wgraphextra :
     path : hd://.
     enabled : 0 # submodule
     criterion :
