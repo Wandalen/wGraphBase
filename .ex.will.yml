@@ -2,7 +2,7 @@
 about :
 
   name : 'wGraphExtra'
-  description : 'Sketch. Collection of routines and classes to operate graphs.'
+  description : 'Sketch. Collection of cross-platform routines and classes to operate graphs.'
   version : '0.5.0'
   enabled : 1
   interpreters :

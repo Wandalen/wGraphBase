@@ -16,7 +16,7 @@ module:
     about:
       name: wGraphExtra
       org: noorg
-      description: Sketch. Collection of routines and classes to operate graphs.
+      description: Sketch. Collection of cross-platform routines and classes to operate graphs.
       enabled: 1
       version: 0.4.0
       interpreters:
@@ -822,7 +822,7 @@ module:
     about:
       name: wGraphExtra
       org: noorg
-      description: Sketch. Collection of routines and classes to operate graphs.
+      description: Sketch. Collection of cross-platform routines and classes to operate graphs.
       enabled: 1
       version: 0.4.0
       interpreters:

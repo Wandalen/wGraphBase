@@ -215,7 +215,7 @@ function onTerminalsAreIdentical( node1, node2 )
 
 function traverse( o )
 {
-  var o = _.look.pre( traverse, arguments );
+  var o = _.look.head( traverse, arguments );
   var result = _.look( o );
   return result;
 }
