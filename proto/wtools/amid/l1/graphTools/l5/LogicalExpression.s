@@ -14,7 +14,6 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _ = _global_.wTools;
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 //
