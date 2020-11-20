@@ -43,7 +43,7 @@ function trivial( test )
 
   debugger;
 
-  test.is( got !== exp1 );
+  test.true( got !== exp1 );
   test.identical( got, expected );
 
 /*
