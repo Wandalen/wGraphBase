@@ -263,7 +263,7 @@ _.accessor.declare
 ({
 
   object : Self.prototype,
-  readOnly : 1,
+  writable : 0,
   names :
   {
     uniq : 'uniq',
