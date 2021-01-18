@@ -6,7 +6,8 @@
 if( typeof module !== 'undefined' )
 {
 
-  require( '../../../../../wtools/Tools.s' );
+  // require( '../../../../../wtools/Tools.s' );
+  require( '../../../../Tools.s' );
 
   let _ = _global_.wTools;
 
@@ -140,6 +141,7 @@ function _nodeEachAct( iterator, iteration )
 {
   var node = iteration.node;
   var name = iterator.nameGet.call( node, node, iteration, iterator );
+  var iteration0;
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( name ) );
@@ -158,11 +160,11 @@ function _nodeEachAct( iterator, iteration )
 
     for( var i = iterator.iterations.length-1 ; i >= first ; i-- )
     {
-      var iteration0 = iterator.iterations[ i ];
+      iteration0 = iterator.iterations[ i ];
       iteration0.visited += 1;
     }
 
-    var iteration0 = iterator.iterations[ first ];
+    iteration0 = iterator.iterations[ first ];
     _.assert( iteration0.node === node );
     iteration0.visitedInIterations.push( iteration.down );
 
@@ -225,6 +227,8 @@ function goRelative( o )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.axis === 'vertical' || o.axis === 'horizontal' );
 
+  var elements;
+
   if( !o.offset )
   return o.node;
 
@@ -234,7 +238,7 @@ function goRelative( o )
     var element = o.node;
     if( offset > 0 )while( offset !== 0 )
     {
-      var elements = o.elementsGet( element )
+      elements = o.elementsGet( element )
       if( !elements || !elements.length )
       return;
       element = elements[ 0 ];
@@ -255,7 +259,7 @@ function goRelative( o )
   if( !down )
   return;
 
-  var elements = o.elementsGet( down );
+  elements = o.elementsGet( down );
   var index = elements.indexOf( o.node );
 
   _.assert( index >= 0 );

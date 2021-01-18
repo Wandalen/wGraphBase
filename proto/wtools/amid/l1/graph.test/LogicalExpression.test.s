@@ -6,11 +6,13 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../Tools.s' );
+  // let _ = require( '../../../Tools.s' );
+  let _ = require( './../../../Tools.s' );
 
   _.include( 'wTesting' );
 
-  require( '../agraph/l5/LogicalExpression.s' );
+  // require( '../agraph/l5/LogicalExpression.s' );
+  require( '../graphTools/l5/LogicalExpression.s' );
 
 }
 

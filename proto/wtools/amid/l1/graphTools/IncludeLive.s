@@ -6,7 +6,8 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../../wtools/Tools.s' );
+  // let _ = require( '../../../../wtools/Tools.s' );
+  let _ = require( '../../../Tools.s' );
 
   require( './IncludeBase.s' );
 
