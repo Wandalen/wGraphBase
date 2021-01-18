@@ -1,4 +1,5 @@
-( function _LogicalExpression_s_( ) {
+( function _LogicalExpression_s_( )
+{
 
 'use strict';
 
@@ -20,7 +21,8 @@ var _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 let _ = _global_.wTools;
 let Parent = null;
-let Self = function wLogicalExpression( o )
+let Self = wLogicalExpression;
+function wLogicalExpression( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -340,7 +342,6 @@ function rebase( o )
 {
 
 
-
 }
 
 rebase.defaults =
@@ -415,7 +416,7 @@ var Associates =
 
   defaultBranchType : null,
 
-  onTerminalsAreIdentical : onTerminalsAreIdentical,
+  onTerminalsAreIdentical,
 
 }
 
@@ -429,9 +430,9 @@ var Optionals =
 
 var Statics =
 {
-  DefaultBranch : DefaultBranch,
-  DefaultBranchOriginalToAliasMap : DefaultBranchOriginalToAliasMap,
-  DefaultTerminalOriginalToAliasMap : DefaultTerminalOriginalToAliasMap,
+  DefaultBranch,
+  DefaultBranchOriginalToAliasMap,
+  DefaultTerminalOriginalToAliasMap,
 }
 
 // --
@@ -441,37 +442,37 @@ var Statics =
 var Extension =
 {
 
-  init : init,
-  form : form,
+  init,
+  form,
 
   //
 
-  nodeKindGet : nodeKindGet,
-  nodeIsBranch : nodeIsBranch,
-  nodeIsNormalizedBranch : nodeIsNormalizedBranch,
-  nodeIsTerminal : nodeIsTerminal,
-  _branchElements : _branchElements,
-  _branchMake : _branchMake,
-  _branchDescriptor : _branchDescriptor,
-  _terminalDescriptor : _terminalDescriptor,
-  terminalsAreIdentical : terminalsAreIdentical,
-  onTerminalsAreIdentical : onTerminalsAreIdentical,
+  nodeKindGet,
+  nodeIsBranch,
+  nodeIsNormalizedBranch,
+  nodeIsTerminal,
+  _branchElements,
+  _branchMake,
+  _branchDescriptor,
+  _terminalDescriptor,
+  terminalsAreIdentical,
+  onTerminalsAreIdentical,
 
   //
 
-  traverse : traverse,
-  normalize : normalize,
-  _normalizeRoot : _normalizeRoot,
-  rebase : rebase,
+  traverse,
+  normalize,
+  _normalizeRoot,
+  rebase,
 
   //
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Optionals  : Optionals,
-  Statics : Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Optionals,
+  Statics,
 
 }
 

@@ -1,4 +1,5 @@
-( function _SimpleTree_s_( ) {
+( function _SimpleTree_s_( )
+{
 
 'use strict';
 
@@ -50,7 +51,7 @@ function _simpleTreeIteratorMake()
 
   iterator.iterationMake = function iterationMake( iteration )
   {
-    return _simpleTreeIterationMake( this,iteration );
+    return _simpleTreeIterationMake( this, iteration );
   }
 
   /*Object.freeze( iterator );*/
@@ -60,7 +61,7 @@ function _simpleTreeIteratorMake()
 
 //
 
-function _simpleTreeIterationMake( iterator,iteration )
+function _simpleTreeIterationMake( iterator, iteration )
 {
   var newIteration = Object.create( null );
 
@@ -97,7 +98,7 @@ function nodeEach( o )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.routineIs( o.elementsGet ) );
   _.assert( _.routineIs( o.nameGet ) );
-  _.routineOptions( nodeEach,o );
+  _.routineOptions( nodeEach, o );
 
   var iterator = _simpleTreeIteratorMake();
   iterator.root = o.node;
@@ -109,13 +110,13 @@ function nodeEach( o )
   iterator.nameGet = o.nameGet;
 
   if( o.onIterator )
-  iterator = o.onIterator( iterator,o );
+  iterator = o.onIterator( iterator, o );
   _.assert( _.objectIs( iterator ) );
 
   var iteration = _simpleTreeIterationMake( iterator );
   iteration.node = o.node;
 
-  _nodeEachAct( iterator,iteration );
+  _nodeEachAct( iterator, iteration );
 
   o.result = iterator.result;
 
@@ -131,14 +132,14 @@ nodeEach.defaults =
   onIterator : null,
 }
 
-_.mapExtend( nodeEach.defaults,NodeGetters );
+_.mapExtend( nodeEach.defaults, NodeGetters );
 
 //
 
-function _nodeEachAct( iterator,iteration )
+function _nodeEachAct( iterator, iteration )
 {
   var node = iteration.node;
-  var name = iterator.nameGet.call( node,node,iteration,iterator );
+  var name = iterator.nameGet.call( node, node, iteration, iterator );
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( name ) );
@@ -176,7 +177,7 @@ function _nodeEachAct( iterator,iteration )
   {
     if( iterator.onDown )
     {
-      var downReturned = iterator.onDown( node,iteration,iterator );
+      var downReturned = iterator.onDown( node, iteration, iterator );
       if( iteration.down )
       iteration.down.returned.push( downReturned );
     }
@@ -190,21 +191,21 @@ function _nodeEachAct( iterator,iteration )
 
   var keepGoing = true;
   if( iterator.onUp )
-  keepGoing = iterator.onUp( node,iteration,iterator );
+  keepGoing = iterator.onUp( node, iteration, iterator );
 
   /* */
 
   if( !iteration.second && keepGoing !== false )
   {
 
-    var elements = iterator.elementsGet.call( node,node,iteration,iterator );
+    var elements = iterator.elementsGet.call( node, node, iteration, iterator );
     for( var e = 0 ; e < elements.length ; e++ )
     {
-      var newIteration = _simpleTreeIterationMake( iterator,iteration );
+      var newIteration = _simpleTreeIterationMake( iterator, iteration );
       newIteration.key = e;
       newIteration.index = e;
       newIteration.node = elements[ e ];
-      _nodeEachAct( iterator,newIteration );
+      _nodeEachAct( iterator, newIteration );
     }
 
   }
@@ -219,7 +220,7 @@ function _nodeEachAct( iterator,iteration )
 function goRelative( o )
 {
 
-  _.routineOptions( goRelative,o );
+  _.routineOptions( goRelative, o );
   _.assert( _.numberIs( o.offset ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.axis === 'vertical' || o.axis === 'horizontal' );
@@ -231,7 +232,7 @@ function goRelative( o )
   {
     var offset = o.offset;
     var element = o.node;
-    if( offset > 0 ) while( offset !== 0 )
+    if( offset > 0 )while( offset !== 0 )
     {
       var elements = o.elementsGet( element )
       if( !elements || !elements.length )
@@ -266,7 +267,7 @@ function goRelative( o )
   if( l || r )
   if( o.allowHorizontalDuringVertical )
   {
-    var optionsForRelative = _.mapExtend( null,o );
+    var optionsForRelative = _.mapExtend( null, o );
     optionsForRelative.node = down;
     optionsForRelative.offset = l ? newIndex + 1 : newIndex - elements.length + 1;
     return goRelative( optionsForRelative );
@@ -287,7 +288,7 @@ goRelative.defaults =
   allowHorizontalDuringVertical : 0,
 }
 
-_.mapExtend( goRelative.defaults,NodeGetters );
+_.mapExtend( goRelative.defaults, NodeGetters );
 
 // --
 // declare
@@ -296,13 +297,13 @@ _.mapExtend( goRelative.defaults,NodeGetters );
 var Proto =
 {
 
-  _simpleTreeIteratorMake : _simpleTreeIteratorMake,
-  _simpleTreeIterationMake : _simpleTreeIterationMake,
+  _simpleTreeIteratorMake,
+  _simpleTreeIterationMake,
 
-  nodeEach : nodeEach,
-  _nodeEachAct : _nodeEachAct,
+  nodeEach,
+  _nodeEachAct,
 
-  goRelative : goRelative,
+  goRelative,
 
 }
 

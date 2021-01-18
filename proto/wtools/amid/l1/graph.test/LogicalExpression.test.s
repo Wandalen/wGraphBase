@@ -1,11 +1,12 @@
-( function _LogicalExpression_test_s_( ) {
+( function _LogicalExpression_test_s_( )
+{
 
 'use strict';
 
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../wtools/Tools.s' );
+  let _ = require( '../../../Tools.s' );
 
   _.include( 'wTesting' );
 
@@ -23,7 +24,7 @@ function trivial( test )
 {
   var context = this;
 
-  test.identical( 1,1 );
+  test.identical( 1, 1 );
 
   return;
 
@@ -46,14 +47,14 @@ function trivial( test )
   test.true( got !== exp1 );
   test.identical( got, expected );
 
-/*
-  var xor = { or : { and : [ 'a', { not : 'b' } ], and : [ { not : 'a', 'b' ] } };
-  var xor = { or : { and : [ 'a', { not : 'b' } ], and : [ { not : 'a', 'b' ] } };
+  /*
+    var xor = { or : { and : [ 'a', { not : 'b' } ], and : [ { not : 'a', 'b' ] } };
+    var xor = { or : { and : [ 'a', { not : 'b' } ], and : [ { not : 'a', 'b' ] } };
 
-  ( a and not b ) or ( not a and b )
-  not( a or not b ) or not( not a or b )
-  not( a or not b ) or not( not a or b )
-*/
+    ( a and not b ) or ( not a and b )
+    not( a or not b ) or not( not a or b )
+    not( a or not b ) or not( not a or b )
+  */
 
 }
 
@@ -73,7 +74,7 @@ let Self =
 
   tests :
   {
-    trivial : trivial,
+    trivial,
   }
 
 }

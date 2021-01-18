@@ -1,4 +1,5 @@
-( function _IncludeLive_s_( ) {
+( function _IncludeLive_s_( )
+{
 
 'use strict';
 
