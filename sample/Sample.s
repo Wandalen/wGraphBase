@@ -1,6 +1,6 @@
 
-// require( 'wgraphextra' );
-require( '..' );
+require( 'wgraphextra' );
+// require( '..' );
 
 let _ = wTools;
 

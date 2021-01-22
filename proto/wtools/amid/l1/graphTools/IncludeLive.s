@@ -1,11 +1,13 @@
-( function _IncludeLive_s_( ) {
+( function _IncludeLive_s_( )
+{
 
 'use strict';
 
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../../wtools/Tools.s' );
+  // let _ = require( '../../../../wtools/Tools.s' );
+  let _ = require( '../../../Tools.s' );
 
   require( './IncludeBase.s' );
 

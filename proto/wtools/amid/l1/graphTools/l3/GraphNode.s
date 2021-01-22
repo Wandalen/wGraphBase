@@ -1,4 +1,5 @@
-( function _GraphNode_s_( ) {
+( function _GraphNode_s_( )
+{
 
 'use strict';
 
@@ -31,7 +32,7 @@ function onMixinApply( mixinDescriptor, dstClass )
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.routineIs( dstClass ) );
-  _.assert( _.mixinHas( dstPrototype,'wCopyable' ),'wGraphNode : wCopyable should be mixed in first' );
+  _.assert( _.mixinHas( dstPrototype, 'wCopyable' ), 'wGraphNode : wCopyable should be mixed in first' );
 
   _.mixinApply( this, dstPrototype );
   // _.mixinApply
@@ -40,7 +41,7 @@ function onMixinApply( mixinDescriptor, dstClass )
   //   descriptor : Self,
   // });
 
-  _.assert( Object.hasOwnProperty.call( dstPrototype,'cloneEmpty' ) );
+  _.assert( Object.hasOwnProperty.call( dstPrototype, 'cloneEmpty' ) );
 
 }
 
@@ -68,7 +69,7 @@ function detach()
 
   self.downDetachBefore();
 
-  down[ elementsSymbol ] = _.arrayRemoveElementOnceStrictly( down[ elementsSymbol ].slice(),self );
+  down[ elementsSymbol ] = _.arrayRemoveElementOnceStrictly( down[ elementsSymbol ].slice(), self );
 
   return self;
 }
@@ -104,14 +105,14 @@ function downAttachAfter( down )
   _.assert( _.objectIs( down ) );
   _.assert( !self.isFinited() );
 
-  //console.log( 'down added',self.qualifiedName,'to',down.qualifiedName );
+  //console.log( 'down added', self.qualifiedName, 'to',down.qualifiedName );
 
   self.down = down;
 
   _.assert( self.down.elements.indexOf( self ) !== -1 );
   _.assert( self !== down )
 
-  system.systemAttachNodesAfter( down,self );
+  system.systemAttachNodesAfter( down, self );
 
 }
 
@@ -122,7 +123,7 @@ function downDetachBefore()
   var self = this;
   var system = self.system;
 
-  //console.log( 'down removed',self.qualifiedName,'from',( self.down ? self.down.qualifiedName : '' ) );
+  //console.log( 'down removed', self.qualifiedName, 'from',( self.down ? self.down.qualifiedName : '' ) );
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( self.down );
@@ -130,7 +131,7 @@ function downDetachBefore()
 
   var down = self.down;
 
-  system.systemDetachNodesBefore( down,self );
+  system.systemDetachNodesBefore( down, self );
 
   self.down = null;
 
@@ -170,21 +171,19 @@ var Statics =
 var Supplement =
 {
 
-  cloneEmpty : cloneEmpty,
+  cloneEmpty,
 
-  detach : detach,
-  downAttachAfter : downAttachAfter,
-  downDetachBefore : downDetachBefore,
-
-
+  detach,
+  downAttachAfter,
+  downDetachBefore,
 
   //
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
 
 }
 
@@ -193,7 +192,7 @@ var Supplement =
 let Self =
 {
 
-  onMixinApply : onMixinApply,
+  onMixinApply,
   supplement : Supplement,
   name : 'wGraphNode',
   shortName : 'GraphNode',

@@ -1,11 +1,13 @@
-( function _LiveSystem_s_() {
+( function _LiveSystem_s_()
+{
 
 'use strict';
 
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 let _ = _global_.wTools;
 let Parent = null;
-let Self = function wLiveSystem( o )
+let Self = wLiveSystem;
+function wLiveSystem( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -52,7 +54,7 @@ function out( o )
   if( _.strIs( o ) )
   o = { name : o };
 
-  _.routineOptions( out,o );
+  _.routineOptions( out, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   var result = system.nodesMap[ o.name ];
@@ -84,7 +86,7 @@ out.defaults =
 function outBegin( o )
 {
   var system = this;
-  var out = system.out.apply( system,arguments );
+  var out = system.out.apply( system, arguments );
 
   system.fieldPush({ currentOut : out });
 
@@ -98,7 +100,7 @@ outBegin.defaults = out.defaults;
 function outEnd( o )
 {
   var system = this;
-  var out = system.out.apply( system,arguments );
+  var out = system.out.apply( system, arguments );
 
   system.fieldPop({ currentOut : out });
 
@@ -116,7 +118,7 @@ function outDefine( o )
 
   _.assert( out instanceof system.Out );
 
-  _.mapExtend( out,o );
+  _.mapExtend( out, o );
 
   return out;
 }
@@ -186,28 +188,28 @@ var Proto =
 
   // routine
 
-  init : init,
+  init,
 
-  out : out,
-  outBegin : outBegin,
-  outEnd : outEnd,
-  outDefine : outDefine,
+  out,
+  outBegin,
+  outEnd,
+  outDefine,
 
-  inMake : inMake,
+  inMake,
 
-/*
-  systemMakeNodeAfter : systemMakeNodeAfter,
-  systemUnmakeNodeAfter : systemUnmakeNodeAfter,
-*/
+  /*
+    systemMakeNodeAfter : systemMakeNodeAfter,
+    systemUnmakeNodeAfter : systemUnmakeNodeAfter,
+  */
 
   // relations
 
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
 
 }
 

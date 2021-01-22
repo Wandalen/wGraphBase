@@ -1,11 +1,13 @@
-( function _LiveOut_s_() {
+( function _LiveOut_s_()
+{
 
 'use strict';
 
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 let _ = _global_.wTools;
 let Parent = wLiveNode;
-let Self = function wLiveOut( o )
+let Self = wLiveOut;
+function wLiveOut( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -19,7 +21,7 @@ Self.shortName = 'LiveOut';
 function init( o )
 {
   var node = this;
-  Parent.prototype.init.call( node,o );
+  Parent.prototype.init.call( node, o );
 }
 
 //
@@ -36,7 +38,7 @@ function finit()
 
 //
 
-// function _exists( iteration,iterator )
+// function _exists( iteration, iterator )
 // {
 //   var node = this;
 //   var result = true;
@@ -44,7 +46,7 @@ function finit()
 //   if( node.onExists )
 //   {
 //     debugger;
-//     result = node.onExists( iteration,iterator );
+//     result = node.onExists( iteration, iterator );
 //     debugger;
 //   }
 //
@@ -53,7 +55,7 @@ function finit()
 
 //
 
-// function _textMake( iteration,iterator )
+// function _textMake( iteration, iterator )
 // {
 //   var node = this;
 //   var result = '';
@@ -67,7 +69,7 @@ function finit()
 //   if( node.onText )
 //   {
 //     debugger;
-//     result = node.onText( node,iteration,iterator );
+//     result = node.onText( node, iteration, iterator );
 //     debugger;
 //   }
 //
@@ -81,23 +83,23 @@ function textMake( o )
   var node = this;
   var system = node.system;
 
-  _.routineOptions( textMake,o );
+  _.routineOptions( textMake, o );
 
-  function handleDown( node,iteration,iterator )
+  function handleDown( node, iteration, iterator )
   {
     // if( node.kind === 'in' )
     // iteration.value = node.container[ node.key ];
-    node._doesExist = node._exists( iteration,iterator );
+    node._doesExist = node._exists( iteration, iterator );
     return node._doesExist;
   }
 
-  function handleIterator( iterator,options )
+  function handleIterator( iterator, options )
   {
     iterator.result = '';
     return iterator;
   }
 
-  function handleUp( node,iteration,iterator )
+  function handleUp( node, iteration, iterator )
   {
 
     _.assert( _.boolLike( node._doesExist ) );
@@ -105,7 +107,7 @@ function textMake( o )
     if( !node._doesExist )
     return false;
 
-    var r = node._textMake( iteration,iterator );
+    var r = node._textMake( iteration, iterator );
     _.assert( _.strIs( r ) );
     iterator.result += r;
 
@@ -163,22 +165,22 @@ var Proto =
 
   // routine
 
-  init : init,
-  finit : finit,
+  init,
+  finit,
 
-  /* _exists : _exists, */
-  /*_textMake : _textMake,*/
-  textMake : textMake,
+  /* _exists, */
+  /*_textMake,*/
+  textMake,
 
 
   // relations
 
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
 
 }
 

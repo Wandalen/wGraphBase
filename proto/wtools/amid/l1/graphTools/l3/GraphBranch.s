@@ -1,4 +1,5 @@
-( function _GraphBranch_s_( ) {
+( function _GraphBranch_s_( )
+{
 
 'use strict';
 
@@ -19,7 +20,7 @@ function onMixinApply( mixinDescriptor, dstClass )
 
   var dstPrototype = dstClass.prototype;
 
-  _.assert( _.mixinHas( dstPrototype,_.Copyable ) && _.mixinHas( dstPrototype,_.graph.GraphNode ),'wGraphBranch : wCopyable and wGraphNode should be mixed in first' );
+  _.assert( _.mixinHas( dstPrototype, _.Copyable ) && _.mixinHas( dstPrototype, _.graph.GraphNode ), 'wGraphBranch : wCopyable and wGraphNode should be mixed in first' );
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   _.mixinApply( this, dstPrototype );
@@ -29,12 +30,15 @@ function onMixinApply( mixinDescriptor, dstClass )
   //   descriptor : Self,
   // });
 
-  _.assert( Object.hasOwnProperty.call( dstPrototype,'cloneEmpty' ) );
+  _.assert( Object.hasOwnProperty.call( dstPrototype, 'cloneEmpty' ) );
 
-  _.accessor.declare( dstPrototype,
-  {
-    elements : 'elements',
-  });
+  _.accessor.declare
+  (
+    dstPrototype,
+    {
+      elements : 'elements',
+    }
+  );
 
 }
 
@@ -46,8 +50,8 @@ function clone()
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
 
-  var elements = _.methodsCall( self.elements,'clone' );
-  var result = self.cloneExtending({ elements : elements });
+  var elements = _.methodsCall( self.elements, 'clone' );
+  var result = self.cloneExtending({ elements });
 
   return result;
 }
@@ -75,10 +79,10 @@ function _equalAre( original )
 
   _.assert( !!original );
 
-  return function _equalAre( src1,src2,o )
+  return function _equalAre( src1, src2, o )
   {
 
-    var result = original.apply( this,arguments );
+    var result = original.apply( this, arguments );
 
     if( !result )
     return result;
@@ -89,7 +93,7 @@ function _equalAre( original )
     for( var e = 0 ; e < src2.elements.length ; e++ )
     {
       debugger; xxx
-      if( !src1.elements[ e ]._equalAre( src1.elements[ e ],src2.elements[ e ],o ) )
+      if( !src1.elements[ e ]._equalAre( src1.elements[ e ], src2.elements[ e ], o ) )
       return false;
     }
 
@@ -179,7 +183,7 @@ function elementsAppend( element )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( element instanceof self.Node || _.arrayIs( element ) );
 
-  _.arrayAppendArraysOnce( elements,[ element ] );
+  _.arrayAppendArraysOnce( elements, [ element ] );
   self.elements = elements;
 
 }
@@ -225,7 +229,7 @@ function elementsDetach( elements )
   {
     _.assert( selfElements.indexOf( elements[ s ] ) !== -1 );
     elements[ s ].downDetachBefore();
-    _.arrayRemoveOnceStrictly( selfElements,elements[ s ] );
+    _.arrayRemoveOnceStrictly( selfElements, elements[ s ] );
   }
 
 }
@@ -306,7 +310,7 @@ function nucleusOfTypeGet( o )
 
   _.assert( _.arrayIs( o.elements ) );
   _.assert( arguments.length <= 1 );
-  _.routineOptions( nucleusOfTypeGet,o );
+  _.routineOptions( nucleusOfTypeGet, o );
 
   function addElements( es )
   {
@@ -366,7 +370,7 @@ var Restricts =
 
 var Statics =
 {
-  nucleusOfTypeGet : nucleusOfTypeGet,
+  nucleusOfTypeGet,
 }
 
 // --
@@ -376,7 +380,7 @@ var Statics =
 var Functors =
 {
 
-  _equalAre : _equalAre,
+  _equalAre,
 
 }
 
@@ -385,8 +389,8 @@ var Functors =
 var ExtendDstNotOwn =
 {
 
-  clone : clone,
-  cloneEmpty : cloneEmpty,
+  clone,
+  cloneEmpty,
 
 }
 
@@ -395,25 +399,25 @@ var ExtendDstNotOwn =
 var Supplement =
 {
 
-  _elementsSet : _elementsSet,
+  _elementsSet,
 
-  elementAppend : elementsAppend,
-  elementsAppend : elementsAppend,
+  elementAppend,
+  elementsAppend,
 
-  elementsDetach : elementsDetach,
-  elementsFinit : elementsFinit,
+  elementsDetach,
+  elementsFinit,
 
-  nodeEach : nodeEach,
-  nucleusOfTypeGet : nucleusOfTypeGet,
+  nodeEach,
+  nucleusOfTypeGet,
 
 
   /* */
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
 
 }
 
@@ -422,7 +426,7 @@ var Supplement =
 let Self =
 {
 
-  onMixinApply : onMixinApply,
+  onMixinApply,
 
   functors : Functors,
   supplementOwn : ExtendDstNotOwn,
