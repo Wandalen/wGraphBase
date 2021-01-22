@@ -1,11 +1,13 @@
-( function _IncludeBase_s_( ) {
+( function _IncludeBase_s_( )
+{
 
 'use strict';
 
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../../wtools/Tools.s' );
+  // let _ = require( '../../../../wtools/Tools.s' );
+  let _ = require( '../../../Tools.s' );
 
   _.include( 'wProto' );
   _.include( 'wCopyable' );

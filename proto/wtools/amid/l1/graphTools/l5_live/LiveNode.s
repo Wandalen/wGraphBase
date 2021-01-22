@@ -1,11 +1,13 @@
-( function _LiveNode_s_() {
+( function _LiveNode_s_()
+{
 
 'use strict';
 
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 let _ = _global_.wTools;
 let Parent = null;
-let Self = function wLiveNode( o )
+let Self = wLiveNode;
+function wLiveNode( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -39,7 +41,7 @@ function init( o )
   node.name = 'node-' + node._nodeCounter[ 0 ];
 
   _.assert( _.strDefined( node.name ) );
-  _.assert( _.objectIs( node.system ),'each live node should be associated with system' );
+  _.assert( _.objectIs( node.system ), 'each live node should be associated with system' );
 
   node.system.systemMakeNodeAfter( node );
 
@@ -59,14 +61,14 @@ function finit()
 
 //
 
-function _exists( iteration,iterator )
+function _exists( iteration, iterator )
 {
   var node = this;
   var result = true;
 
   if( node.onExists )
   {
-    result = node.onExists( node,iteration,iterator );
+    result = node.onExists( node, iteration, iterator );
   }
 
   return result;
@@ -74,7 +76,7 @@ function _exists( iteration,iterator )
 
 //
 
-function _textMake( iteration,iterator )
+function _textMake( iteration, iterator )
 {
   var node = this;
   var result = '';
@@ -87,7 +89,7 @@ function _textMake( iteration,iterator )
 
   if( node.onText )
   {
-    result = node.onText( node,iteration,iterator );
+    result = node.onText( node, iteration, iterator );
   }
 
   return result;
@@ -100,7 +102,7 @@ function textMake( o )
 {
   var node = this;
 
-  _.routineOptions( textMake,o );
+  _.routineOptions( textMake, o );
 
   debugger;
 
@@ -127,7 +129,7 @@ function iteratorationNew( o )
   var node = this;
   var result = Object.create( null );
 
-  _.routineOptions( iteratorationNew,o ); debugger;
+  _.routineOptions( iteratorationNew, o ); debugger;
 
   // result.value = null;
   // tesult.key = null;
@@ -147,7 +149,7 @@ function iteratorNew( o )
   var node = this;
   var result = Object.create( null );
 
-  _.routineOptions( iteratorNew,o );
+  _.routineOptions( iteratorNew, o );
 
   // result.value = null;
   // tesult.key = null;
@@ -209,27 +211,27 @@ var Proto =
 
   // routine
 
-  init : init,
-  finit : finit,
+  init,
+  finit,
 
-  _exists : _exists,
-  _textMake : _textMake,
-  textMake : textMake,
+  _exists,
+  _textMake,
+  textMake,
 
-  iteratorationNew : iteratorationNew,
-  iteratorNew : iteratorNew,
+  iteratorationNew,
+  iteratorNew,
 
-  uniqGet : uniqGet,
+  uniqGet,
 
 
   // relations
 
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
 
 }
 

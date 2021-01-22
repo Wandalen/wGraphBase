@@ -1,11 +1,13 @@
-( function _LiveNode_s_() {
+( function _LiveNode_s_()
+{
 
 'use strict';
 
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 let _ = _global_.wTools;
 let Parent = wLiveNode;
-let Self = function wLiveIn( o )
+let Self = wLiveIn;
+function wLiveIn( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -19,7 +21,7 @@ Self.shortName = 'wLiveIn';
 function init( o )
 {
   var node = this;
-  Parent.prototype.init.call( node,o );
+  Parent.prototype.init.call( node, o );
 
   _.assert( _.strDefined( node.name ) );
   _.assert( _.strIs( node.key ) || _.numberIs( node.key ) );
@@ -76,19 +78,19 @@ var Proto =
 
   // routine
 
-  init : init,
+  init,
 
-  valueGet : valueGet,
+  valueGet,
 
 
   // relations
 
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
 
 }
 

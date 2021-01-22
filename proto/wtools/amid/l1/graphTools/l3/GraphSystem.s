@@ -1,4 +1,5 @@
-( function _GraphSystem_s_( ) {
+( function _GraphSystem_s_( )
+{
 
 'use strict';
 
@@ -40,7 +41,7 @@ function systemMakeNodeAfter( node )
   _.assert( node instanceof system.Node );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( node.down === null );
-  _.assert( _.strIs( node.uniq ),'Expects string { uniq }' );
+  _.assert( _.strIs( node.uniq ), 'Expects string { uniq }' );
 
   if( system.collectionMap )
   _.prototype.each( node.Self.prototype, function( proto )
@@ -49,23 +50,23 @@ function systemMakeNodeAfter( node )
     var n = proto.constructor.name;
     system.collectionMap[ n ] = system.collectionMap[ n ] || [];
 
-    _.arrayAppendOnceStrictly( system.collectionMap[ n ],node );
+    _.arrayAppendOnceStrictly( system.collectionMap[ n ], node );
 
   });
 
   if( system.nodesMap )
   {
     _.assert( node.uniq !== undefined );
-    _.assert( !system.nodesMap[ node.uniq ],'node already exists',node.uniq );
+    _.assert( !system.nodesMap[ node.uniq ], 'node already exists', node.uniq );
     system.nodesMap[ node.uniq ] = node;
   }
 
   if( system.nodes )
-  _.arrayAppendOnceStrictly( system.nodes,node );
+  _.arrayAppendOnceStrictly( system.nodes, node );
 
   /* */
 
-  system.systemDetachNodesBefore( null,node );
+  system.systemDetachNodesBefore( null, node );
 
 }
 
@@ -84,21 +85,21 @@ function systemUnmakeNodeAfter( node )
   {
 
     var n = proto.constructor.name;
-    _.arrayRemoveElementOnceStrictly( system.collectionMap[ n ],node );
+    _.arrayRemoveElementOnceStrictly( system.collectionMap[ n ], node );
 
   });
 
   if( system.nodesMap )
   {
     _.assert( node.uniq !== undefined );
-    _.assert( system.nodesMap[ node.uniq ],'node was not registered',node.uniq );
+    _.assert( system.nodesMap[ node.uniq ], 'node was not registered', node.uniq );
     delete system.nodesMap[ node.uniq ];
   }
 
   if( system.nodes )
-  _.arrayRemoveElementOnceStrictly( system.nodes,node );
+  _.arrayRemoveElementOnceStrictly( system.nodes, node );
 
-  system.systemAttachNodesAfter( null,node );
+  system.systemAttachNodesAfter( null, node );
 
   _.assert( !node.elements || !node.elements.length );
 
@@ -106,7 +107,7 @@ function systemUnmakeNodeAfter( node )
 
 //
 
-function systemAttachNodesAfter( down,up )
+function systemAttachNodesAfter( down, up )
 {
   var system = this;
 
@@ -121,7 +122,7 @@ function systemAttachNodesAfter( down,up )
   _.assert( up.down === down );
 
   if( system.roots )
-  _.arrayRemoveElementOnceStrictly( system.roots,up );
+  _.arrayRemoveElementOnceStrictly( system.roots, up );
 
   if( system.rootsMap )
   {
@@ -134,7 +135,7 @@ function systemAttachNodesAfter( down,up )
 
 //
 
-function systemDetachNodesBefore( down,up )
+function systemDetachNodesBefore( down, up )
 {
   var system = this;
 
@@ -149,7 +150,7 @@ function systemDetachNodesBefore( down,up )
   _.assert( down === null || down.elements.indexOf( up ) !== -1 );
 
   if( system.roots )
-  _.arrayAppendOnceStrictly( system.roots,up );
+  _.arrayAppendOnceStrictly( system.roots, up );
 
   if( system.rootsMap )
   {
@@ -244,24 +245,24 @@ var Statics =
 var Supplement =
 {
 
-  systemMakeNodeAfter : systemMakeNodeAfter,
-  systemUnmakeNodeAfter : systemUnmakeNodeAfter,
+  systemMakeNodeAfter,
+  systemUnmakeNodeAfter,
 
-  systemAttachNodesAfter : systemAttachNodesAfter,
-  systemDetachNodesBefore : systemDetachNodesBefore,
+  systemAttachNodesAfter,
+  systemDetachNodesBefore,
 
-  elementsDetach : elementsDetach,
-  elementsFinit : elementsFinit,
+  elementsDetach,
+  elementsFinit,
 
 
   //
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Optionals  : Optionals,
-  Statics : Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Optionals,
+  Statics,
 
 }
 
@@ -270,7 +271,7 @@ var Supplement =
 let Self =
 {
 
-  onMixinApply : onMixinApply,
+  onMixinApply,
   supplement : Supplement,
   name : 'wGraphSystem',
   shortName : 'GraphSystem',
