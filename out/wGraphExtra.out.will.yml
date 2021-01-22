@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wGraphExtra.out
 consistency:
-  wGraphExtra.out.will.yml: &ref_0
-    hash: bd91cf6d16510a9bfb808b5b224bbe9f
-    size: 39018
-  ../.ex.will.yml: &ref_1
+  ../.ex.will.yml: &ref_0
     hash: b520375ea5dc7b5fb54cb92f68c8ef30
     size: 1759
-  ../.im.will.yml: &ref_2
-    hash: 257f6ce2cbf39cd6734576faa0500f87
-    size: 5007
+  ../.im.will.yml: &ref_1
+    hash: db705c0905321b84f05aab1b9d0d52f2
+    size: 5115
 module:
   wGraphExtra.out:
     about:
@@ -21,20 +18,20 @@ module:
         graphs.
       enabled: 1
       version: 0.5.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - Graph
         - Abstract graph
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wgraphextra
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -200,6 +197,12 @@ module:
           development: 1
       wTesting:
         path: npm:///wTesting
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
+      eslint:
+        path: npm:///eslint#7.1.0
         autoExporting: 0
         enabled: 0
         criterion:
@@ -711,24 +714,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          filePath: reflector::exported.proto.export
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          filePath: reflector::exported.files.proto.export
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -817,9 +802,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wGraphExtra.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wGraphExtra
@@ -829,22 +813,13 @@ module:
         graphs.
       enabled: 1
       version: 0.5.0
-      interpreters:
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - Graph
-        - Abstract graph
-        - wTools
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
+      contributors: *ref_4
       npm.name: wgraphextra
-      npm.scripts:
-        test: wtest .run proto/**
-        docgen: wdocgen .build proto
+      npm.scripts: *ref_5
     path:
       module.willfiles:
         criterion:
@@ -970,6 +945,12 @@ module:
           development: 1
       wTesting:
         path: npm:///wTesting
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
+      eslint:
+        path: npm:///eslint#7.1.0
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1509,6 +1490,5 @@ module:
         hash: b520375ea5dc7b5fb54cb92f68c8ef30
         size: 1759
       ../.im.will.yml:
-        hash: 257f6ce2cbf39cd6734576faa0500f87
-        size: 5007
-      wGraphExtra.out.will.yml: *ref_0
+        hash: db705c0905321b84f05aab1b9d0d52f2
+        size: 5115
