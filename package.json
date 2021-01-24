@@ -1,27 +1,45 @@
 {
-  "name" : "wgraphextra",
-  "version" : "0.4.26",
-  "engine" : "node >= 10.0.0",
-  "description" : "Sketch. Collection of cross-platform routines and classes to operate graphs.",
-  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
-  "contributors" :
-  [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" }
+  "name": "wgraphextra",
+  "version": "0.4.27",
+  "engine": "node >= 10.0.0",
+  "description": "Sketch. Collection of cross-platform routines and classes to operate graphs.",
+  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "contributors": [
+    {
+      "name": "Kostiantyn Wandalen",
+      "email": "wanalen@01.school"
+    }
   ],
-  "license" : "MIT",
-  "main" : "proto/wtools/amid/agraph/UseTop.s",
-  "files" : [ "proto/wtools/amid/agraph", "proto/wtools/Tools.s", "out" ],
-  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/Wandalen/wGraphExtra.git"
+  "license": "MIT",
+  "main": "proto/wtools/amid/agraph/UseTop.s",
+  "files": [
+    "proto/wtools/amid/agraph",
+    "proto/wtools/Tools.s",
+    "out"
+  ],
+  "scripts": {
+    "test": "wtest .run 'proto/**' rapidity:-3",
+    "docgen": "wdocgen proto"
   },
-  "bugs" :
-  {
-    "url" : "https://github.com/Wandalen/wGraphExtra/issues"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wGraphExtra.git"
   },
-  "dependencies" : { "wTools" : "alpha", "wCopyable" : "alpha" },
-  "devDependencies" : { "eslint" : "7.1.0", "wgraphextra" : "file:.", "wTesting" : "alpha" },
-  "keywords" : [ "Graph", "Abstract graph", "wTools" ]
+  "bugs": {
+    "url": "https://github.com/Wandalen/wGraphExtra/issues"
+  },
+  "dependencies": {
+    "wTools": "alpha",
+    "wCopyable": "alpha"
+  },
+  "devDependencies": {
+    "eslint": "7.1.0",
+    "wTesting": "alpha",
+    "wgraphextra": "file:."
+  },
+  "keywords": [
+    "Graph",
+    "Abstract graph",
+    "wTools"
+  ]
 }

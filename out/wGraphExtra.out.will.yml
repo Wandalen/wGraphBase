@@ -2,10 +2,13 @@ format: outwillfile-2.0
 root:
   - wGraphExtra.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wGraphExtra.out.will.yml: &ref_0
+    hash: 06df8df9632b1965ecc0f03e13fe54b5
+    size: 39058
+  ../.ex.will.yml: &ref_1
     hash: b520375ea5dc7b5fb54cb92f68c8ef30
     size: 1759
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: db705c0905321b84f05aab1b9d0d52f2
     size: 5115
 module:
@@ -18,20 +21,20 @@ module:
         graphs.
       enabled: 1
       version: 0.5.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - Graph
         - Abstract graph
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wgraphextra
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -714,6 +717,24 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          filePath: reflector::exported.proto.export
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          filePath: reflector::exported.files.proto.export
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -802,8 +823,9 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wGraphExtra.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wGraphExtra
@@ -813,13 +835,22 @@ module:
         graphs.
       enabled: 1
       version: 0.5.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - Graph
+        - Abstract graph
+        - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wgraphextra
-      npm.scripts: *ref_5
+      npm.scripts:
+        test: wtest .run proto/**
+        docgen: wdocgen .build proto
     path:
       module.willfiles:
         criterion:
@@ -1492,3 +1523,6 @@ module:
       ../.im.will.yml:
         hash: db705c0905321b84f05aab1b9d0d52f2
         size: 5115
+      wGraphExtra.out.will.yml:
+        hash: 06df8df9632b1965ecc0f03e13fe54b5
+        size: 39058
