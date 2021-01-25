@@ -401,7 +401,7 @@ var Supplement =
 
   _elementsSet,
 
-  elementAppend,
+  elementAppend : elementsAppend,
   elementsAppend,
 
   elementsDetach,
