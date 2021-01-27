@@ -11,7 +11,7 @@
     }
   ],
   "license": "MIT",
-  "main": "proto/wtools/amid/agraph/UseTop.s",
+  "main": "proto/wtools/amid/l1/graphTools/IncludeTop.s",
   "files": [
     "proto/wtools/amid/agraph",
     "proto/wtools/Tools.s",
