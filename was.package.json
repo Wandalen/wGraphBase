@@ -21,7 +21,7 @@
   {
     "url" : "https://github.com/Wandalen/wGraphExtra/issues"
   },
-  "dependencies" : { "wTools" : "", "wCopyable" : "", "wgraphbasic": "alpha" },
+  "dependencies" : { "wTools" : "", "wCopyable" : "", "wgraphbasic": "" },
   "devDependencies" : { "wTesting" : "", "eslint" : "7.1.0", "wgraphextra" : "file:." },
   "keywords" : [ "Graph", "Abstract graph", "wTools" ]
 }
