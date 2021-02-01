@@ -55,8 +55,11 @@ function production( test )
     return;
   }
 
+  if( process.env.GITHUB_WORKFLOW === 'publish' )
+  a.ready.delay( 60000 );
+
   console.log( `Event : ${process.env.GITHUB_EVENT_NAME}` );
-  console.log( `Env :\n${_.toStr( process.env )}` );
+  console.log( `Env :\n${_.toStr( _.mapBut( process.env, { WTOOLS_BOT_TOKEN : null } ) )}` );
 
   /* */
 
@@ -76,29 +79,26 @@ function production( test )
   let mdlPath = a.abs( __dirname, '../package.json' );
   let mdl = a.fileProvider.fileRead({ filePath : mdlPath, encoding : 'json' });
 
-  let version;
   let remotePath = null;
-  let localPath = null;
+  if( _.git.insideRepository( a.abs( __dirname, '..' ) ) )
+  remotePath = _.git.remotePathFromLocal( a.abs( __dirname, '..' ) );
 
-  if( _.git.insideRepository( _.path.join( __dirname, '..' ) ) )
-  {
-    remotePath = _.git.remotePathFromLocal( _.path.join( __dirname, '..' ) );
-    localPath = _.git.localPathFromInside( _.path.join( __dirname, '..' ) );
-  }
-
-  debugger;
-  let remotePathParsed1, remotePathParsed2;
+  let mdlRepoParsed, remotePathParsed;
   if( remotePath )
   {
-    remotePathParsed1 = _.git.pathParse( remotePath );
-    remotePathParsed2 = _.uri.parseFull( remotePath );
-    /* qqq : should be no 2 parse */
+    mdlRepoParsed = _.git.path.parse( mdl.repository.url );
+    remotePathParsed = _.git.path.parse( remotePath );
+
+    /* aaa : should be no 2 parse */ /* Dmytro : 1 parse for each path */
   }
 
-  // if( mdl.repository.url === remotePath.full || remotePath === null )
-  // version = _.npm.versionRemoteRetrive( `npm:///${ mdl.name }!alpha` ) === '' ? 'latest' : 'alpha';
-  // else
-  version = remotePathParsed1.remoteVcsLongerPath;
+  let isFork = mdlRepoParsed.user !== remotePathParsed.user || mdlRepoParsed.repo !== remotePathParsed.repo;
+
+  let version;
+  if( !isFork )
+  version = _.npm.versionRemoteRetrive( `npm:///${ mdl.name }!alpha` ) === '' ? 'latest' : 'alpha';
+  else
+  version = _.git.path.nativize( remotePath );
 
   if( !version )
   throw _.err( 'Cannot obtain version to install' );
@@ -111,6 +111,7 @@ function production( test )
   /* */
 
   a.shell( `npm i --production` )
+  .catch( handleDownloadingError )
   .then( ( op ) =>
   {
     test.case = 'install module';
@@ -144,7 +145,20 @@ function production( test )
 
   }
 
+  /* */
+
+  function handleDownloadingError( err )
+  {
+    if( _.strHas( err.message, 'npm ERR! ERROR: Repository not found' ) )
+    {
+      _.errAttend( err );
+      return a.shell( `npm i --production` );
+    }
+    throw _.err( err );
+  }
 }
+
+production.timeOut = 300000;
 
 //
 
@@ -287,7 +301,7 @@ function eslint( test )
     outputCollecting : 1,
   })
 
-  /**/
+  /* */
 
   ready.then( () =>
   {
@@ -302,7 +316,7 @@ function eslint( test )
     return null;
   })
 
-  /**/
+  /* */
 
   if( fileProvider.fileExists( sampleDir ) )
   ready.then( () =>
