@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 
   let _ = _global_.wTools;
 
-  _.include( 'wGraph' );
+  _.include( 'wGraphBasic' );
   // require( '../UseBase.s' );
 
 }
