@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "wTools": "alpha",
-    "wtemplatetree": "alphaa",
     "wCopyable": "alpha"
   },
   "devDependencies": {
