@@ -30,8 +30,7 @@
   },
   "dependencies": {
     "wTools": "alpha",
-    "wCopyable": "alpha",
-    "wgraphbasic": "alpha"
+    "wCopyable": "alpha"
   },
   "devDependencies": {
     "eslint": "7.1.0",
