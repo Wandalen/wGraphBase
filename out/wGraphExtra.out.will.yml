@@ -1531,6 +1531,4 @@ module:
       ../.im.will.yml:
         hash: 2235f9dc748a4ae7338640e7e5bd3045
         size: 5189
-      wGraphExtra.out.will.yml:
-        hash: 62a038aaa89009e97cab9775a4b5eb47
-        size: 39250
+      wGraphExtra.out.will.yml: *ref_0
