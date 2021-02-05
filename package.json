@@ -1,6 +1,6 @@
 {
   "name": "wgraphextra",
-  "version": "0.4.28",
+  "version": "0.4.39",
   "engine": "node >= 10.0.0",
   "description": "Sketch. Collection of cross-platform routines and classes to operate graphs.",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
@@ -11,7 +11,7 @@
     }
   ],
   "license": "MIT",
-  "main": "proto/wtools/amid/agraph/UseTop.s",
+  "main": "proto/wtools/amid/l1/graphTools/IncludeTop.s",
   "files": [
     "proto/wtools/amid/agraph",
     "proto/wtools/Tools.s",
@@ -30,7 +30,8 @@
   },
   "dependencies": {
     "wTools": "alpha",
-    "wCopyable": "alpha"
+    "wCopyable": "alpha",
+    "wgraphbasic": "alpha"
   },
   "devDependencies": {
     "eslint": "7.1.0",

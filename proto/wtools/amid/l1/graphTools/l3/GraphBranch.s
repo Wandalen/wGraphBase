@@ -71,36 +71,36 @@ function cloneEmpty()
 
 //
 
-function _equalAre( original )
-{
-
-  if( !original )
-  original = wCopyable.prototype._equalAre_functor();
-
-  _.assert( !!original );
-
-  return function _equalAre( src1, src2, o )
-  {
-
-    var result = original.apply( this, arguments );
-
-    if( !result )
-    return result;
-
-    if( src1.elements.length !== src2.elements.length )
-    return false;
-
-    for( var e = 0 ; e < src2.elements.length ; e++ )
-    {
-      debugger; xxx
-      if( !src1.elements[ e ]._equalAre( src1.elements[ e ], src2.elements[ e ], o ) )
-      return false;
-    }
-
-    return true;
-  }
-
-}
+// function _equalAre( original )
+// {
+//
+//   if( !original )
+//   original = wCopyable.prototype._equalAre_functor();
+//
+//   _.assert( !!original );
+//
+//   return function _equalAre( src1, src2, o )
+//   {
+//
+//     var result = original.apply( this, arguments );
+//
+//     if( !result )
+//     return result;
+//
+//     if( src1.elements.length !== src2.elements.length )
+//     return false;
+//
+//     for( var e = 0 ; e < src2.elements.length ; e++ )
+//     {
+//       debugger; xxx
+//       if( !src1.elements[ e ]._equalAre( src1.elements[ e ], src2.elements[ e ], o ) )
+//       return false;
+//     }
+//
+//     return true;
+//   }
+//
+// }
 
 //
 
@@ -380,7 +380,7 @@ var Statics =
 var Functors =
 {
 
-  _equalAre,
+  // _equalAre,
 
 }
 
