@@ -73,20 +73,34 @@ function _simpleTreeIterationMake( iterator, iteration )
   newIteration.key = null;
   newIteration.index = null;
 
-  if( !iteration )
-  {
-    newIteration.level = 0;
-    newIteration.path = '';
-    newIteration.down = null;
-    /*Object.freeze( newIteration );*/
-  }
-  else
+  if( iteration )
   {
     newIteration.path = iteration.path;
     newIteration.level = iteration.level+1;
     newIteration.down = iteration;
     /*Object.freeze( newIteration );*/
   }
+  else
+  {
+    newIteration.level = 0;
+    newIteration.path = '';
+    newIteration.down = null;
+    /*Object.freeze( newIteration );*/
+  }
+  // if( !iteration )
+  // {
+  //   newIteration.level = 0;
+  //   newIteration.path = '';
+  //   newIteration.down = null;
+  //   /*Object.freeze( newIteration );*/
+  // }
+  // else
+  // {
+  //   newIteration.path = iteration.path;
+  //   newIteration.level = iteration.level+1;
+  //   newIteration.down = iteration;
+  //   /*Object.freeze( newIteration );*/
+  // }
 
   return newIteration;
 }
@@ -148,7 +162,8 @@ function _nodeEachAct( iterator, iteration )
   iteration.path += '/' + name;
   iteration.visited = 1;
   iteration.second = 0;
-  iteration.visitedInIterations = iteration.down !== null ? [ iteration.down ] : [];
+  iteration.visitedInIterations = iteration.down === null ? [] : [ iteration.down ];
+  // iteration.visitedInIterations = iteration.down !== null ? [ iteration.down ] : [];
 
   /* */
 
