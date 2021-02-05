@@ -10,7 +10,7 @@
   ],
   "license" : "MIT",
   "main" : "proto/wtools/amid/l1/graphTools/IncludeTop.s",
-  "files" : [ "proto/wtools/amid/agraph", "proto/wtools/Tools.s", "out" ],
+  "files" : [ "proto/wtools/amid/l1/graphTools", "proto/wtools/Tools.s", "out" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
   "repository" :
   {

@@ -24,11 +24,11 @@ about :
 
 path :
 
-  repository : git+https:///github.com/Wandalen/wGraph.git
+  repository : git+https:///github.com/Wandalen/wGraphExtra.git
   origins :
    - git+https:///github.com/Wandalen/wGraphExtra.git
    - npm:///wgraphextra
-  bugtracker : https:///github.com/Wandalen/wGraph/issues
+  bugtracker : https:///github.com/Wandalen/wGraphExtra/issues
 
 step :
 

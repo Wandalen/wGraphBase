@@ -17,6 +17,7 @@ if( typeof module !== 'undefined' )
   require( './l3/GraphSystem.s' );
 
   require( './l5/SimpleTree.s' );
+  require( './l5/LogicalExpression.s' );
 
 }
 
