@@ -44,8 +44,6 @@ function trivial( test )
   var exp1 = { all : [ 'a', 'c' ], any : [ 'c', 'e' ], none : [ 'c', 'g' ] }
   var got = logic.normalize({ src : exp1 });
 
-  debugger;
-
   test.true( got !== exp1 );
   test.identical( got, expected );
 
