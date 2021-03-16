@@ -247,7 +247,6 @@ function normalize()
     if( logic.nodeIsBranch( it.src ) )
     {
       _.assert( logic.nodeIsNormalizedBranch( it.src ) );
-      debugger;
       it.dst = _.mapExtend( null, it.src );
       it.dst = logic._branchDescriptor( it.dst, 0 );
     }
@@ -309,14 +308,12 @@ function normalize()
     }
   }
 
-  debugger;
   var r = logic.traverse
   ({
     src : o.src,
     dst : null,
     onUp : handleUp,
   });
-  debugger;
 
   return src;
 }

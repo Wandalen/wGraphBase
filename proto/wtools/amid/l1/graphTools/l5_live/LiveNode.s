@@ -81,8 +81,8 @@ function _textMake( iteration, iterator )
   var node = this;
   var result = '';
 
-  if( !node._doesExist )
-  debugger;
+  // if( !node._doesExist )
+  // debugger;
 
   if( !node._doesExist )
   return result;
@@ -104,16 +104,12 @@ function textMake( o )
 
   _.routineOptions( textMake, o );
 
-  debugger;
-
   var iterator = node.iteratorNew();
 
   if( !node._exists( iterator ) )
   return;
 
-  debugger;
   var result = node._textMake( iterator );
-  debugger;
 
   return result;
 }
@@ -129,7 +125,7 @@ function iteratorationNew( o )
   var node = this;
   var result = Object.create( null );
 
-  _.routineOptions( iteratorationNew, o ); debugger;
+  _.routineOptions( iteratorationNew, o );
 
   // result.value = null;
   // tesult.key = null;
