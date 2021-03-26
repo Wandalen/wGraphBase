@@ -16,12 +16,12 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _ObjectHasOwnProperty = Object.hasOwnProperty;
+const _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 //
 
 const _ = _global_.wTools;
-let Parent = null;
+const Parent = null;
 const Self = wLogicalExpression;
 function wLogicalExpression( o )
 {

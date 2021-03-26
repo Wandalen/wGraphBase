@@ -4,7 +4,7 @@
 'use strict';
 
 const _ = _global_.wTools;
-var _ObjectHasOwnProperty = Object.hasOwnProperty;
+const _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 // if( typeof module !== 'undefined' )
 // {

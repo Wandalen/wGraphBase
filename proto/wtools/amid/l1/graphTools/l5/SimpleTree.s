@@ -16,7 +16,7 @@ if( typeof module !== 'undefined' )
 //
 
 const _ = _global_.wTools;
-let Parent = null;
+const Parent = null;
 const Self = _global_.wTools.graph || Object.create( null );
 
 // --
@@ -313,7 +313,7 @@ _.mapExtend( goRelative.defaults, NodeGetters );
 // declare
 // --
 
-var Proto =
+const Proto =
 {
 
   _simpleTreeIteratorMake,

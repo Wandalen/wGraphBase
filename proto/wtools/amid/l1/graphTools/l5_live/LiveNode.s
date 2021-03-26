@@ -3,9 +3,9 @@
 
 'use strict';
 
-var _ObjectHasOwnProperty = Object.hasOwnProperty;
+const _ObjectHasOwnProperty = Object.hasOwnProperty;
 const _ = _global_.wTools;
-let Parent = null;
+const Parent = null;
 const Self = wLiveNode;
 function wLiveNode( o )
 {
@@ -202,7 +202,7 @@ var Statics =
 // declare
 // --
 
-var Proto =
+const Proto =
 {
 
   // routine
