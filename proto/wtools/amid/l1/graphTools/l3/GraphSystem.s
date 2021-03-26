@@ -10,7 +10,7 @@
 //
 // }
 
-let _ = _global_.wTools;
+const _ = _global_.wTools;
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 //
@@ -268,7 +268,7 @@ var Supplement =
 
 //
 
-let Self =
+const Self =
 {
 
   onMixinApply,

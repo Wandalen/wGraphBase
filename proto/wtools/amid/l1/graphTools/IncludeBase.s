@@ -19,9 +19,9 @@ if( typeof module !== 'undefined' )
 
 //
 
-let _ = _global_.wTools;
+const _ = _global_.wTools;
 let Parent = null;
-let Self = _global_.wTools.graph = _global_.wTools.graph || Object.create( null );
+const Self = _global_.wTools.graph = _global_.wTools.graph || Object.create( null );
 
 //
 

@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
   // require( '../../../wtools/Tools.s' );
   require( '../../../../Tools.s' );
 
-  let _ = _global_.wTools;
+  const _ = _global_.wTools;
 
   _.include( 'wGraphBasic' );
   // require( '../UseBase.s' );
@@ -20,9 +20,9 @@ var _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 //
 
-let _ = _global_.wTools;
+const _ = _global_.wTools;
 let Parent = null;
-let Self = wLogicalExpression;
+const Self = wLogicalExpression;
 function wLogicalExpression( o )
 {
   return _.workpiece.construct( Self, this, arguments );
@@ -75,8 +75,8 @@ function form()
   logic.terminalOriginalToAliasMap = _.mapInvert( logic.terminalAliasToOriginalMap );
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
-  _.assertMapHasAll( logic.branchOriginalToAliasMap, logic.DefaultBranchOriginalToAliasMap );
-  _.assertMapHasOnly( logic.branchOriginalToAliasMap, logic.DefaultBranchOriginalToAliasMap );
+  _.map.assertHasAll( logic.branchOriginalToAliasMap, logic.DefaultBranchOriginalToAliasMap );
+  _.map.assertHasOnly( logic.branchOriginalToAliasMap, logic.DefaultBranchOriginalToAliasMap );
   _.assert( !!logic.branchOriginalToAliasMap[ logic.defaultBranchType ] );
 
   Object.freeze( logic.branchOriginalToAliasMap );

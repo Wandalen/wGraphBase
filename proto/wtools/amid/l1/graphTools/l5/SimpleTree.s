@@ -9,15 +9,15 @@ if( typeof module !== 'undefined' )
   // require( '../../../../../wtools/Tools.s' );
   require( '../../../../Tools.s' );
 
-  let _ = _global_.wTools;
+  const _ = _global_.wTools;
 
 }
 
 //
 
-let _ = _global_.wTools;
+const _ = _global_.wTools;
 let Parent = null;
-let Self = _global_.wTools.graph || Object.create( null );
+const Self = _global_.wTools.graph || Object.create( null );
 
 // --
 // inter
