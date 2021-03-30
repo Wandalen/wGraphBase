@@ -1,6 +1,6 @@
 {
   "name": "wgraphextra",
-  "version": "0.4.54",
+  "version": "0.4.55",
   "engine": "node >= 10.0.0",
   "description": "Sketch. Collection of cross-platform routines and classes to operate graphs.",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
@@ -15,7 +15,8 @@
   "files": [
     "proto/wtools/amid/l1/graphTools",
     "proto/wtools/Tools.s",
-    "out"
+    "out",
+    "proto/node_modules"
   ],
   "scripts": {
     "test": "wtest .run 'proto/**' rapidity:-3",
@@ -35,8 +36,7 @@
   },
   "devDependencies": {
     "eslint": "7.1.0",
-    "wTesting": "delta",
-    "wgraphextra": "file:."
+    "wTesting": "delta"
   },
   "keywords": [
     "Graph",
