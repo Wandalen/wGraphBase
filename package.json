@@ -1,46 +1,27 @@
 {
-  "name": "wgraphextra",
-  "version": "0.4.56",
-  "engine": "node >= 10.0.0",
-  "description": "Sketch. Collection of cross-platform routines and classes to operate graphs.",
-  "author": "Kostiantyn Wandalen <wanalen@01.school>",
-  "contributors": [
-    {
-      "name": "Kostiantyn Wandalen",
-      "email": "wanalen@01.school"
-    }
+  "name" : "wgraphextra",
+  "version" : "0.4.57",
+  "engine" : "node >= 10.0.0",
+  "description" : "Sketch. Collection of cross-platform routines and classes to operate graphs.",
+  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
+  "contributors" :
+  [
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" }
   ],
-  "license": "MIT",
-  "main": "proto/wtools/amid/l1/graphTools/IncludeTop.s",
-  "files": [
-    "proto/wtools/amid/l1/graphTools",
-    "proto/wtools/Tools.s",
-    "out",
-    "proto/node_modules"
-  ],
-  "scripts": {
-    "test": "wtest .run 'proto/**' rapidity:-3",
-    "docgen": "wdocgen proto"
+  "license" : "MIT",
+  "main" : "/pro/module/wGraphExtra/proto/node_modules/wgraphextra",
+  "files" : [ "proto/wtools/amid/l1/graphTools", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
+  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
+  "repository" :
+  {
+    "type" : "git",
+    "url" : "https://github.com/Wandalen/wGraphExtra.git"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Wandalen/wGraphExtra.git"
+  "bugs" :
+  {
+    "url" : "https://github.com/Wandalen/wGraphExtra/issues"
   },
-  "bugs": {
-    "url": "https://github.com/Wandalen/wGraphExtra/issues"
-  },
-  "dependencies": {
-    "wTools": "delta",
-    "wCopyable": "delta",
-    "wgraphbasic": "delta"
-  },
-  "devDependencies": {
-    "eslint": "7.1.0",
-    "wTesting": "delta"
-  },
-  "keywords": [
-    "Graph",
-    "Abstract graph",
-    "wTools"
-  ]
+  "dependencies" : { "wTools" : "delta", "wCopyable" : "delta", "wgraphbasic" : "delta" },
+  "devDependencies" : { "eslint" : "7.1.0", "wTesting" : "delta" },
+  "keywords" : [ "Graph", "Abstract graph", "wTools" ]
 }
