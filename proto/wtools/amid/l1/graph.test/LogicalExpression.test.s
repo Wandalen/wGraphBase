@@ -24,7 +24,7 @@ const _ = _global_.wTools;
 
 function trivial( test )
 {
-  var context = this;
+  let context = this;
 
   test.identical( 1, 1 );
 
