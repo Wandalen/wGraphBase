@@ -6,8 +6,8 @@
 if( typeof module !== 'undefined' )
 {
 
-  // let _ = require( '../../../Tools.s' );
-  let _ = require( './../../../Tools.s' );
+  // const _ = require( '../../../Tools.s' );
+  const _ = require( './../../../Tools.s' );
 
   _.include( 'wTesting' );
 
