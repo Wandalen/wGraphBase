@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 {
 
   // const _ = require( '../../../../node_modules/Tools' );
-  const _ = require( '../../../Tools.s' );
+  const _ = require( 'Tools' );
 
   require( './IncludeBase.s' );
 

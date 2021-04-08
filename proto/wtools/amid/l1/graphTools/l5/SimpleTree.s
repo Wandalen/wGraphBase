@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 {
 
   // require( '../../../../../node_modules/Tools' );
-  require( '../../../../Tools.s' );
+  require( 'Tools' );
 
   const _ = _global_.wTools;
 
