@@ -285,7 +285,7 @@ function nodeEach( o )
   _.assert( o === undefined || _.mapIs( o ) || _.routineIs( o ) );
 
   if( _.routineIs( arguments[ 0 ] ) )
-  o = { onUp : arguments[ 1 ] };
+  o = { onUp : ( arguments.length > 1 ? arguments[ 1 ] : null ) };
 
   o.node = self;
 
@@ -310,7 +310,7 @@ function nucleusOfTypeGet( o )
 
   _.assert( _.arrayIs( o.elements ) );
   _.assert( arguments.length <= 1 );
-  _.routineOptions( nucleusOfTypeGet, o );
+  _.routine.options_( nucleusOfTypeGet, o );
 
   function addElements( es )
   {

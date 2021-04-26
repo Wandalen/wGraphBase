@@ -102,7 +102,7 @@ function textMake( o )
 {
   var node = this;
 
-  _.routineOptions( textMake, o );
+  _.routine.options_( textMake, o );
 
   var iterator = node.iteratorNew();
 
@@ -125,7 +125,7 @@ function iteratorationNew( o )
   var node = this;
   var result = Object.create( null );
 
-  _.routineOptions( iteratorationNew, o );
+  _.routine.options_( iteratorationNew, o );
 
   // result.value = null;
   // tesult.key = null;
@@ -145,7 +145,7 @@ function iteratorNew( o )
   var node = this;
   var result = Object.create( null );
 
-  _.routineOptions( iteratorNew, o );
+  _.routine.options_( iteratorNew, o );
 
   // result.value = null;
   // tesult.key = null;

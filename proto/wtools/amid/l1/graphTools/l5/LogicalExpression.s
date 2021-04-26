@@ -31,7 +31,7 @@ function wLogicalExpression( o )
 Self.shortName = 'LogicalExpression';
 
 // --
-// routines
+// implementation
 // --
 
 function init( o )
@@ -119,7 +119,7 @@ function nodeIsNormalizedBranch( node )
   _.assert( arguments.length === 1, 'Expects single argument' );
   if( !logic.nodeIsBranch( node ) )
   return false;
-  var keys = _.mapKeys( node );
+  var keys = _.props.keys( node );
   if( keys.length !== 1 )
   return false;
   if( !logic.branchAliasToOriginalMap[ keys[ 0 ] ] )
@@ -142,7 +142,7 @@ function _branchElements( branchNode )
 {
   var logic = this;
   _.assert( logic.nodeIsNormalizedBranch( branchNode ) );
-  return _.mapPairs( branchNode )[ 0 ][ 1 ];
+  return _.props.pairs( branchNode )[ 0 ][ 1 ];
 }
 
 //
@@ -171,7 +171,7 @@ function _branchDescriptor( branchNode, wasShortchut )
   _.assert( logic.nodeIsNormalizedBranch( branchNode ) );
 
   result.kind = 'branch';
-  result.alias = _.mapPairs( branchNode )[ 0 ][ 0 ];
+  result.alias = _.props.pairs( branchNode )[ 0 ][ 0 ];
   result.type = logic.branchAliasToOriginalMap[ result.alias ];
   result.elements = branchNode[ result.alias ];
   result.node = branchNode;
@@ -236,7 +236,7 @@ function normalize()
 {
   var logic = this;
 
-  var o = _.routineOptions( normalize, arguments );
+  var o = _.routine.options_( normalize, arguments );
 
   // var exp1 = { all : [ 'a', 'b', 'c' ], any : [ 'c', 'd', 'e' ], none : [ 'c', 'f', 'g' ] }
   // var got = logic.normalize( exp1 );
@@ -247,7 +247,7 @@ function normalize()
     if( logic.nodeIsBranch( it.src ) )
     {
       _.assert( logic.nodeIsNormalizedBranch( it.src ) );
-      it.dst = _.mapExtend( null, it.src );
+      it.dst = _.props.extend( null, it.src );
       it.dst = logic._branchDescriptor( it.dst, 0 );
     }
     else
@@ -267,7 +267,7 @@ function normalize()
     //   if( logic.nodeIsNormalizedBranch( it.src ) )
     //   {
     //     debugger;
-    //     it.dst = _.mapExtend( null, it.src );
+    //     it.dst = _.props.extend( null, it.src );
     //     it.dst = logic._branchDescriptor( it.dst, 0 );
     //   }
     //   else

@@ -113,7 +113,7 @@ function nodeEach( o )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.routineIs( o.elementsGet ) );
   _.assert( _.routineIs( o.nameGet ) );
-  _.routineOptions( nodeEach, o );
+  _.routine.options_( nodeEach, o );
 
   var iterator = _simpleTreeIteratorMake();
   iterator.root = o.node;
@@ -147,7 +147,7 @@ nodeEach.defaults =
   onIterator : null,
 }
 
-_.mapExtend( nodeEach.defaults, NodeGetters );
+_.props.extend( nodeEach.defaults, NodeGetters );
 
 //
 
@@ -237,7 +237,7 @@ function _nodeEachAct( iterator, iteration )
 function goRelative( o )
 {
 
-  _.routineOptions( goRelative, o );
+  _.routine.options_( goRelative, o );
   _.assert( _.numberIs( o.offset ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.axis === 'vertical' || o.axis === 'horizontal' );
@@ -286,7 +286,7 @@ function goRelative( o )
   if( l || r )
   if( o.allowHorizontalDuringVertical )
   {
-    var optionsForRelative = _.mapExtend( null, o );
+    var optionsForRelative = _.props.extend( null, o );
     optionsForRelative.node = down;
     optionsForRelative.offset = l ? newIndex + 1 : newIndex - elements.length + 1;
     return goRelative( optionsForRelative );
@@ -307,7 +307,7 @@ goRelative.defaults =
   allowHorizontalDuringVertical : 0,
 }
 
-_.mapExtend( goRelative.defaults, NodeGetters );
+_.props.extend( goRelative.defaults, NodeGetters );
 
 // --
 // declare
@@ -328,7 +328,7 @@ const Proto =
 
 //
 
-_.mapExtend( Self, Proto );
+_.props.extend( Self, Proto );
 wTools[ 'graph' ] = Self;
 
 })();

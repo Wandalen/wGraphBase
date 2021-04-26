@@ -52,9 +52,9 @@ function out( o )
   var system = this;
 
   if( _.strIs( o ) )
-  o = { name : o };
+  o = { name : o || null };
 
-  _.routineOptions( out, o );
+  _.routine.options_( out, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   var result = system.nodesMap[ o.name ];
@@ -118,7 +118,7 @@ function outDefine( o )
 
   _.assert( out instanceof system.Out );
 
-  _.mapExtend( out, o );
+  _.props.extend( out, o );
 
   return out;
 }

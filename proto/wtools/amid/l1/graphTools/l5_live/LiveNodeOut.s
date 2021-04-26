@@ -83,7 +83,7 @@ function textMake( o )
   var node = this;
   var system = node.system;
 
-  _.routineOptions( textMake, o );
+  _.routine.options_( textMake, o );
 
   function handleDown( node, iteration, iterator )
   {
