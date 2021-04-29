@@ -106,7 +106,7 @@ function nodeIsBranch( node )
 {
   var logic = this;
   _.assert( arguments.length === 1, 'Expects single argument' );
-  if( _.objectIs( node ) )
+  if( _.object.isBasic( node ) )
   return true;
   return false;
 }
@@ -328,7 +328,7 @@ normalize.defaults =
 function _normalizeRoot( src )
 {
   var logic = this;
-  _.assert( _.objectIs( src ) );
+  _.assert( _.object.isBasic( src ) );
   var result = logic._branchMake( logic.defaultBranchType );
   result[ logic.defaultBranchType ] = src;
   return result;

@@ -41,7 +41,7 @@ function init( o )
   node.name = 'node-' + node._nodeCounter[ 0 ];
 
   _.assert( _.strDefined( node.name ) );
-  _.assert( _.objectIs( node.system ), 'each live node should be associated with system' );
+  _.assert( _.object.isBasic( node.system ), 'each live node should be associated with system' );
 
   node.system.systemMakeNodeAfter( node );
 

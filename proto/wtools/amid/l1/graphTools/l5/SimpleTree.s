@@ -126,7 +126,7 @@ function nodeEach( o )
 
   if( o.onIterator )
   iterator = o.onIterator( iterator, o );
-  _.assert( _.objectIs( iterator ) );
+  _.assert( _.object.isBasic( iterator ) );
 
   var iteration = _simpleTreeIterationMake( iterator );
   iteration.node = o.node;

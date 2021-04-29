@@ -122,11 +122,11 @@ function _elementsSet( src )
   //   set : function set( obj, k, e )
   //   {
   //     debugger;
-  //     if( _.objectIs( obj[ k ] ) )
+  //     if( _.object.isBasic( obj[ k ] ) )
   //     obj[ k ].downDetachBefore();
   //
   //     if( e.down !== self )
-  //     if( _.objectIs( e ) )
+  //     if( _.object.isBasic( e ) )
   //     e.downAttachAfter( self );
   //
   //     debugger;
