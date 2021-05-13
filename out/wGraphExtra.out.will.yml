@@ -2,12 +2,9 @@ format: outwillfile-2.0
 root:
   - wGraphExtra.out
 consistency:
-  ../.ex.will.yml: &ref_0
-    hash: 067921a635458dbee724ed5c6338fc84
-    size: 1769
-  ../.im.will.yml: &ref_1
-    hash: 848ea64e192ff5a297e6068381acb35d
-    size: 5128
+  ../will.yml: &ref_0
+    hash: dc09d7a42e1c915e8d31b3e4f41b47d8
+    size: 6654
 module:
   wGraphExtra.out:
     about:
@@ -18,20 +15,20 @@ module:
         graphs.
       enabled: 1
       version: 0.5.0
-      interpreters: &ref_2
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords: &ref_3
+      license: MIT
+      npm.name: wgraphextra
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: &ref_1
         - Graph
         - Abstract graph
         - wTools
-      license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors: &ref_2
         - Kostiantyn Wandalen <wanalen@01.school>
-      npm.name: wgraphextra
-      npm.scripts: &ref_5
+      interpreters: &ref_3
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      npm.scripts: &ref_4
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -46,15 +43,11 @@ module:
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.in:
         criterion:
           predefined: 1
@@ -196,7 +189,7 @@ module:
         path: 'npm:///wCopyable'
         autoExporting: 0
         enabled: 0
-      wGraphBasic:
+      wgraphbasic:
         path: 'npm:///wgraphbasic'
         autoExporting: 0
         enabled: 0
@@ -813,8 +806,7 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      ../will.yml: *ref_0
   ../:
     about:
       name: wGraphExtra
@@ -824,26 +816,22 @@ module:
         graphs.
       enabled: 1
       version: 0.5.0
-      interpreters: *ref_2
-      keywords: *ref_3
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
       npm.name: wgraphextra
-      npm.scripts: *ref_5
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: *ref_1
+      contributors: *ref_2
+      interpreters: *ref_3
+      npm.scripts: *ref_4
     path:
       module.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
@@ -953,7 +941,7 @@ module:
         path: 'npm:///wCopyable'
         autoExporting: 0
         enabled: 0
-      wGraphBasic:
+      wgraphbasic:
         path: 'npm:///wgraphbasic'
         autoExporting: 0
         enabled: 0
@@ -1506,9 +1494,6 @@ module:
           - 'build::release'
           - 'build::npm'
     consistency:
-      ../.ex.will.yml:
-        hash: 067921a635458dbee724ed5c6338fc84
-        size: 1769
-      ../.im.will.yml:
-        hash: 848ea64e192ff5a297e6068381acb35d
-        size: 5128
+      ../will.yml:
+        hash: dc09d7a42e1c915e8d31b3e4f41b47d8
+        size: 6654
