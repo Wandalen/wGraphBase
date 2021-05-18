@@ -1,6 +1,6 @@
 {
   "name" : "wgraphextra",
-  "version" : "0.4.73",
+  "version" : "0.4.74",
   "engine" : "node >= 10.0.0",
   "description" : "Sketch. Collection of cross-platform routines and classes to operate graphs.",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
@@ -21,7 +21,7 @@
   {
     "url" : "https://github.com/Wandalen/wGraphExtra/issues"
   },
-  "dependencies" : { "wTools" : "delta", "wCopyable" : "delta", "wgraphbasic" : "delta" },
-  "devDependencies" : { "eslint" : "7.1.0", "wTesting" : "delta" },
+  "dependencies" : { "wTools" : "gamma", "wCopyable" : "gamma", "wgraphbasic" : "gamma" },
+  "devDependencies" : { "eslint" : "7.1.0", "wTesting" : "gamma" },
   "keywords" : [ "Graph", "Abstract graph", "wTools" ]
 }
