@@ -17,7 +17,6 @@ if( typeof module !== 'undefined' )
 
 const _ = _global_.wTools;
 const Parent = null;
-const Self = _global_.wTools.graph || Object.create( null );
 
 // --
 // inter
@@ -328,7 +327,8 @@ const Proto =
 
 //
 
-_.props.extend( Self, Proto );
-wTools[ 'graph' ] = Self;
+debugger;
+/* _.props.extend */Object.assign( _.graph, Proto );
+wTools[ 'graph' ] = _.graph;
 
 })();

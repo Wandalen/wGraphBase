@@ -21,7 +21,7 @@ if( typeof module !== 'undefined' )
 
 const _ = _global_.wTools;
 const Parent = null;
-const Self = _global_.wTools.graph = _global_.wTools.graph || Object.create( null );
+const Self = _.graph = _.graph || Object.create( null );
 
 //
 
