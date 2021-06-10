@@ -327,7 +327,6 @@ const Proto =
 
 //
 
-debugger;
 /* _.props.extend */Object.assign( _.graph, Proto );
 wTools[ 'graph' ] = _.graph;
 
