@@ -102,6 +102,8 @@ function textMake( o )
 {
   var node = this;
 
+  o = o || Object.create( null );
+
   _.routine.options_( textMake, o );
 
   var iterator = node.iteratorNew();
