@@ -1,27 +1,47 @@
 {
-  "name" : "wgraphextra",
-  "version" : "0.4.81",
-  "engine" : "node >= 10.0.0",
-  "description" : "Sketch. Collection of cross-platform routines and classes to operate graphs.",
-  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
-  "contributors" :
-  [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" }
+  "name": "wgraphextra",
+  "version": "0.4.82",
+  "engine": "node >= 10.0.0",
+  "description": "Sketch. Collection of cross-platform routines and classes to operate graphs.",
+  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "contributors": [
+    {
+      "name": "Kostiantyn Wandalen",
+      "email": "wanalen@01.school"
+    }
   ],
-  "license" : "MIT",
-  "main" : "proto/node_modules/wgraphextra",
-  "files" : [ "proto/wtools/amid/l1/graphTools", "out", "proto/node_modules", "proto/node_modules/Tools", "proto/node_modules/wgraphextra" ],
-  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/Wandalen/wGraphExtra.git"
+  "license": "MIT",
+  "main": "proto/node_modules/wgraphextra",
+  "files": [
+    "proto/wtools/amid/l1/graphTools",
+    "out",
+    "proto/node_modules",
+    "proto/node_modules/Tools",
+    "proto/node_modules/wgraphextra"
+  ],
+  "scripts": {
+    "test": "wtest .run 'proto/**' rapidity:-3",
+    "docgen": "wdocgen proto"
   },
-  "bugs" :
-  {
-    "url" : "https://github.com/Wandalen/wGraphExtra/issues"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wGraphExtra.git"
   },
-  "dependencies" : { "wTools" : "gamma", "wCopyable" : "gamma", "wgraphbasic" : "gamma" },
-  "devDependencies" : { "eslint" : "7.1.0", "wTesting" : "gamma" },
-  "keywords" : [ "Graph", "Abstract graph", "wTools" ]
+  "bugs": {
+    "url": "https://github.com/Wandalen/wGraphExtra/issues"
+  },
+  "dependencies": {
+    "wTools": "gamma",
+    "wgraphbasic": "gamma",
+    "wCopyable": "gamma"
+  },
+  "devDependencies": {
+    "wTesting": "gamma",
+    "eslint": "7.1.0"
+  },
+  "keywords": [
+    "Graph",
+    "Abstract graph",
+    "wTools"
+  ]
 }
