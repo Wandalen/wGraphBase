@@ -3,8 +3,8 @@ root:
   - wGraphExtra.out
 consistency:
   ../will.yml: &ref_0
-    hash: dc09d7a42e1c915e8d31b3e4f41b47d8
-    size: 6654
+    hash: cc80a9f516d7ab1e33529fb60850f563
+    size: 6513
 module:
   wGraphExtra.out:
     about:
@@ -392,9 +392,6 @@ module:
           content: npm
         inherit:
           - module.export
-      npm.publish:
-        opts:
-          shell: npm publish
       npm.generate.debug.raw:
         opts:
           entryPath: 'path::entry.out.*=1'
@@ -730,12 +727,6 @@ module:
           - 'step::doc.export'
         criterion:
           content: doc
-          export: 1
-      npm.export:
-        steps:
-          - 'step::npm.publish'
-        criterion:
-          content: npm
           export: 1
       export:
         steps:
@@ -1093,9 +1084,6 @@ module:
           content: npm
         inherit:
           - module.export
-      npm.publish:
-        opts:
-          shell: npm publish
       npm.generate.debug.raw:
         opts:
           entryPath: 'path::entry.out.*=1'
@@ -1432,12 +1420,6 @@ module:
         criterion:
           content: doc
           export: 1
-      npm.export:
-        steps:
-          - 'step::npm.publish'
-        criterion:
-          content: npm
-          export: 1
       export:
         steps:
           - 'build::proto.export'
@@ -1495,5 +1477,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: dc09d7a42e1c915e8d31b3e4f41b47d8
-        size: 6654
+        hash: cc80a9f516d7ab1e33529fb60850f563
+        size: 6513
