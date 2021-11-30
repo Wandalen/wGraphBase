@@ -3,8 +3,8 @@ root:
   - wGraphExtra.out
 consistency:
   ../will.yml: &ref_0
-    hash: cc80a9f516d7ab1e33529fb60850f563
-    size: 6513
+    hash: ed94f39a929b686e16aec7b5ffcc74ec
+    size: 6521
 module:
   wGraphExtra.out:
     about:
@@ -1477,5 +1477,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: cc80a9f516d7ab1e33529fb60850f563
-        size: 6513
+        hash: ed94f39a929b686e16aec7b5ffcc74ec
+        size: 6521
